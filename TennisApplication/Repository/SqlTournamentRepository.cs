@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TennisApplication.Database;
 using TennisApplication.Models;
@@ -13,7 +14,12 @@ namespace TennisApplication.Repository
         {
             _context = context;
         }
-        
+
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
+
         public IEnumerable<Tournament> GetAllTournaments()
         {
             return _context.Tournaments.ToList();
@@ -23,5 +29,20 @@ namespace TennisApplication.Repository
         {
             return _context.Tournaments.FirstOrDefault(t => t.Id == id);
         }
+
+        public void CreateTournament(Tournament tournament)
+        {
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            _context.Tournaments.Add(tournament);
+        }
+
+        /*public void UpdateTournament(Tournament tournament)
+        {
+            
+        }*/
     }
 }
