@@ -51,7 +51,7 @@ namespace TennisApplication.Controllers
 
             var tournamentReadDto = _mapper.Map<TournamentReadDto>(tournamentModel);
 
-            return CreatedAtRoute(nameof(GetTournamentById), new {Id = tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
+            return CreatedAtRoute(nameof(GetTournamentById), new {tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
         }
         
         //PUT /tournaments/{id}
