@@ -6,73 +6,22 @@
    {
        <h2>Create new tournament</h2>
        
-
-       
-       
        <label>Name of the tournament:</label>
        @Html.TextBoxFor(t => t.Name, new { required = string.Empty})
        <br>
+       
        <label>Tournament address:</label>
        @Html.TextBoxFor(t => t.Place, new { required = string.Empty})
        <br>
+       
        <label>Date of the tournament:</label>
        @Html.EditorFor(model => model.Date, new { htmlAttributes = new { required = string.Empty } });
        <br>
+       
        <label>Number of players: </label>
        @Html.TextBoxFor(t => t.PlayersNumber, new { @type = "number", required = string.Empty})
        <br> <br>
+            
        <input type="submit" value="Create tournament">           
        
-       
-       @*<div class="form-group input-group-sm">
-           @Html.LabelFor(model => model.Date)
-           @Html.TextBoxFor(model => model.Date, new { @class = "form-control datepicker", placeholder = "Enter Drop-off date here..." })
-           @Html.ValidationMessageFor(model => model.Date)
-       </div>*@
-       @*$1$<div class="form-group">
-           @if (Model != null)
-           {
-               @Html.LabelFor(model => model.Date, htmlAttributes: new {@class = "control-label col-md-2"})
-               <div class="col-md-10">
-                   @Html.TextBoxFor(model => model.Date, new {@type = "date", @class = "form-control datepicker", 
-                       @Value = Model.Date.ToString("yyyy-MM-dd")})
-                   @Html.ValidationMessageFor(model => model.Date, "", new {@class = "text-danger"})
-               </div>
-           }
-       </div>#1#
-       <form method="post">
-           <label for="fname">Name of the tournament:</label>
-           $1$<input type="text">#1#
-           @Html.TextBoxFor(t => t.Name)
-           <br>
-
-           <label for="lname">Tournament address:</label>
-           $1$<input type="text"><br>#1#
-           @Html.TextBoxFor(t => t.Place)
-           <br>
-           <label for="dname">Tournament date: </label>
-           $1$<input type="datetime-local">#1#
-           
-           @#1#Html.TextBoxFor(t => t.Date, "{0:d MMM yyyy}", new { @id="datepicker" })#1#
-           <div class="form-group">
-               @Html.LabelFor(m => m.Date)
-               @Html.TextBoxFor(m => m.Date, new { @class = "form-control", @id = "date-eaten", 
-                   @Value =          DateTime.Today.ToShortDateString() })
-               @Html.ValidationMessageFor(m => m.Date)
-           </div>
-           <br>
-
-           <label for="nname">Number of players: </label>
-           $1$<input type="number" id="number" name="number">#1#
-           
-           @Html.TextBoxFor(t => t.PlayersNumber, "{0:C}")
-           <br><br>
-
-           <input type="submit" value="Create tournament">
-       </form>
-
-
-       <script>
-$("#date-eaten").datepicker();
-</script>*@
    }
