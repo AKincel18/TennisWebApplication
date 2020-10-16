@@ -9,6 +9,7 @@ namespace TennisApplication.Repository
         IEnumerable<Tournament> GetAllTournaments();
         Tournament GetTournamentById(int id);
         void CreateTournament(Tournament tournament);
+        void DeleteTournament(Tournament tournament);
         //void UpdateTournament(Tournament tournament);
     }
 }

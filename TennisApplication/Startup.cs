@@ -1,17 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TennisApplication.Database;
 using TennisApplication.Repository;
+using Newtonsoft.Json.Serialization;
 
 namespace TennisApplication
 {
@@ -30,7 +27,10 @@ namespace TennisApplication
             services.AddDbContext<TournamentContext>(opt => opt.UseMySql(
                 Configuration.GetConnectionString("DatabaseConnection")));
             
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(s =>
+            {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
             
             //services.AddScoped<ITournamentRepository, TournamentRepositoryImpl>();
 

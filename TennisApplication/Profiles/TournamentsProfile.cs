@@ -10,8 +10,9 @@ namespace TennisApplication.Profiles
         {
             //source -> target
             CreateMap<Tournament, TournamentReadDto>();
-            
             CreateMap<TournamentCreateDto, Tournament>();
+            CreateMap<Tournament, TournamentCreateDto>();
+
         }
     }
 }

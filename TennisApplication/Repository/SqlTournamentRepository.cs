@@ -40,6 +40,16 @@ namespace TennisApplication.Repository
             _context.Tournaments.Add(tournament);
         }
 
+        public void DeleteTournament(Tournament tournament)
+        {
+            if (tournament == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            _context.Tournaments.Remove(tournament);
+        }
+
         /*public void UpdateTournament(Tournament tournament)
         {
             

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using TennisApplication.Dtos;
 using TennisApplication.Models;
@@ -67,6 +68,45 @@ namespace TennisApplication.Controllers
             _mapper.Map(tournamentCreateDto, tournamentModelFromRepository); //updating
             
             //_repository.UpdateTournament(tournamentModelFromRepository);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+        
+        //PATCH /tournaments/{id}
+        [HttpPatch("{id}")]
+        public ActionResult PartialTournamentUpdate(int id, JsonPatchDocument<TournamentCreateDto> patchDocument)
+        {
+            var tournamentModelFromRepository = _repository.GetTournamentById(id);
+            if (tournamentModelFromRepository == null)
+            {
+                return NotFound();
+            }
+
+            var tournamentToPatch = _mapper.Map<TournamentCreateDto>(tournamentModelFromRepository);
+            patchDocument.ApplyTo(tournamentToPatch, ModelState);
+            
+            if (!TryValidateModel(tournamentToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+            
+            _mapper.Map(tournamentToPatch, tournamentModelFromRepository); //patching
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+        
+        //DELETE /tournaments/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteTournament(int id)
+        {
+            var tournamentModelFromRepository = _repository.GetTournamentById(id);
+            if (tournamentModelFromRepository == null)
+            {
+                return NotFound();
+            }
+            _repository.DeleteTournament(tournamentModelFromRepository);
             _repository.SaveChanges();
 
             return NoContent();
