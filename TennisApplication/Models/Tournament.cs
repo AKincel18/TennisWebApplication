@@ -14,6 +14,7 @@ namespace TennisApplication.Models
         [Required]
         public string Place { get; set; }
         
+        [DataType(DataType.Date)]
         [Required]
         public DateTime Date { get; set; }
         

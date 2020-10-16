@@ -22,14 +22,20 @@ namespace TennisApplication.Controllers
             _mapper = mapper;
         }
         
+        
         //GET /tournaments
         [HttpGet]
         public ActionResult<IEnumerable<TournamentReadDto>> GetAllTournaments()
         {
             var tournaments = _repository.GetAllTournaments();
-            return Ok(_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
+            return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
         }
-        
+
+        [HttpGet("/createTournament")]
+        public ActionResult CreateTournamentView()
+        {
+            return View();
+        }
         //GET /tournaments/{id}
         [HttpGet("{id}", Name = "GetTournamentById")]
         public ActionResult<TournamentReadDto> GetTournamentById(int id)
@@ -43,15 +49,16 @@ namespace TennisApplication.Controllers
         }
         
         //POST /tournaments
+        
         [HttpPost]
-        public ActionResult<TournamentReadDto> CreateTournament(TournamentCreateDto tournamentCreateDto)
+        public ActionResult<TournamentReadDto> CreateTournament([FromForm]TournamentCreateDto tournamentCreateDto)
         {
             var tournamentModel = _mapper.Map<Tournament>(tournamentCreateDto);
             _repository.CreateTournament(tournamentModel);
             _repository.SaveChanges();
 
             var tournamentReadDto = _mapper.Map<TournamentReadDto>(tournamentModel);
-
+            
             return CreatedAtRoute(nameof(GetTournamentById), new {tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
         }
         

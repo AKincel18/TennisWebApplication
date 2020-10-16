@@ -1,0 +1,10 @@
+﻿@model IEnumerable<TennisApplication.Dtos.TournamentReadDto>
+@{
+    ViewData["Title"] = "All tournament";
+}
+
+<h3>All tournaments view: </h3> 
+@foreach(var tournament in Model)
+    {
+        <p>@tournament.Id | @tournament.Name | @tournament.Place | @tournament.Date | @tournament.PlayersNumber</p>
+    }
