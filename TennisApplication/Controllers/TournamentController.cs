@@ -29,6 +29,7 @@ namespace TennisApplication.Controllers
         {
             var tournaments = _repository.GetAllTournaments();
             return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
+            //return RedirectToPage("./GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
         }
 
         [HttpGet("/createTournament")]
@@ -59,7 +60,8 @@ namespace TennisApplication.Controllers
 
             var tournamentReadDto = _mapper.Map<TournamentReadDto>(tournamentModel);
             
-            return CreatedAtRoute(nameof(GetTournamentById), new {tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
+            //return CreatedAtRoute(nameof(GetTournamentById), new {tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
+            return RedirectToAction(nameof(GetAllTournaments)); //return to GetAllTournaments
         }
         
         //PUT /tournaments/{id}
@@ -116,7 +118,7 @@ namespace TennisApplication.Controllers
             _repository.DeleteTournament(tournamentModelFromRepository);
             _repository.SaveChanges();
 
-            return NoContent();
+            return RedirectToAction(nameof(GetAllTournaments)); //return to GetAllTournaments
         }
     }
 }
