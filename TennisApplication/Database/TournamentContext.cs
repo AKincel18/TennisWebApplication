@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TennisApplication.Models;
 
 namespace TennisApplication.Database
 {
-    public class TournamentContext : DbContext
+    public class TournamentContext : IdentityDbContext
     {
         public TournamentContext(DbContextOptions<TournamentContext> options) : base (options)
         {
