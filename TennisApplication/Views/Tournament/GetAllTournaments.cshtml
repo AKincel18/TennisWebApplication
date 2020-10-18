@@ -1,14 +1,22 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model IEnumerable<TennisApplication.Dtos.TournamentReadDto>
+@model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
 @{
     ViewData["Title"] = "All tournament";
 }
-
+@{
+    bool isUserWithTournamentDirectorRole = 
+      LoggedUser.User != null && LoggedUser.User.Role.Equals(Role.TournamentDirector);
+    
+}
 <h1>All tournament</h1>
 
-<p>
-    <a asp-controller="Tournament" asp-action="CreateTournamentView">Create New</a>
-</p>
+@if (isUserWithTournamentDirectorRole)
+{
+    <p>
+        <a asp-controller="Tournament" asp-action="CreateTournamentView">Create New</a>
+    </p>
+}
+
 <table class="table">
         <tr>
             <th>
@@ -42,12 +50,21 @@
             </td>
             <td>
                 @*todo not working yet*@
+                @if (isUserWithTournamentDirectorRole)
+                {
+                    <a asp-controller="Tournament" asp-action="PartialTournamentUpdate" asp-route-id="@item.Id">Edit |</a> 
+                }
+                <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Details</a> 
                 
-                <a asp-controller="Tournament" asp-action="PartialTournamentUpdate" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Details</a> |
-                <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
-                @*@Html.ActionLink("Delete", "DeleteTournament", "Tournament",
-                    new {id = item.Id}, null)*@
+                @if (isUserWithTournamentDirectorRole)
+                {
+                    
+                    <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">| Delete</a>
+                    @*@Html.ActionLink("Delete", "DeleteTournament", "Tournament",
+                        new {id = item.Id}, null)*@
+                }
+                
+
             </td>
         </tr>
 }

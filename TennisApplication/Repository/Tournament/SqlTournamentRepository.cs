@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using TennisApplication.Database;
-using TennisApplication.Models;
 
-namespace TennisApplication.Repository
+namespace TennisApplication.Repository.Tournament
 {
     public class SqlTournamentRepository : ITournamentRepository
     {
@@ -20,17 +19,17 @@ namespace TennisApplication.Repository
             return (_context.SaveChanges() >= 0);
         }
 
-        public IEnumerable<Tournament> GetAllTournaments()
+        public IEnumerable<Models.Tournament> GetAllTournaments()
         {
             return _context.Tournaments.ToList();
         }
 
-        public Tournament GetTournamentById(int id)
+        public Models.Tournament GetTournamentById(int id)
         {
             return _context.Tournaments.FirstOrDefault(t => t.Id == id);
         }
 
-        public void CreateTournament(Tournament tournament)
+        public void CreateTournament(Models.Tournament tournament)
         {
             if (tournament == null)
             {
@@ -40,7 +39,7 @@ namespace TennisApplication.Repository
             _context.Tournaments.Add(tournament);
         }
 
-        public void DeleteTournament(Tournament tournament)
+        public void DeleteTournament(Models.Tournament tournament)
         {
             if (tournament == null)
             {

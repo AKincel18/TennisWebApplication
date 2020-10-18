@@ -1,0 +1,46 @@
+﻿@model TennisApplication.Dtos.User.UserCreateDto
+
+@{
+    ViewData["Title"] = "Create new user";
+}
+
+
+@using (Html.BeginForm("CreateUser", "Register", FormMethod.Post))
+{
+    <h2>Create account</h2>
+       
+    <label>First name: </label>
+    @Html.TextBoxFor(u => u.FirstName, new { required = string.Empty})
+    <br>
+       
+    <label>Last name: </label>
+    @Html.TextBoxFor(u => u.LastName, new { required = string.Empty})
+    <br>
+       
+    <label>E-mail: </label>
+    @Html.TextBoxFor(u => u.EMail, new { required = string.Empty})
+    <br>
+       
+    <label>Password: </label>
+    @Html.PasswordFor(u => u.Password, new { required = string.Empty})
+    @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
+    <br> 
+    
+    <label>Confirm password: </label>
+    @Html.PasswordFor(u => u.ConfirmPassword, new { required = string.Empty})
+    @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
+    <br> 
+    
+    <label>Role </label>
+    @Html.DropDownListFor(u => u.Role, Enum.GetNames(typeof(Role)).Select(name => new SelectListItem()
+    {
+        Text = name, 
+        Value = name
+    }))
+    <br>
+    
+    
+            
+    <input type="submit" value="Create user">           
+       
+}

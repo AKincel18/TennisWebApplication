@@ -1,23 +1,21 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
-namespace TennisApplication.Dtos
+namespace TennisApplication.Dtos.Tournament
 {
-    public class TournamentCreateDto
+    public class TournamentReadDto
     {
-        [Required]
+        public int Id { get; set; }
+        
         public string Name { get; set; }
         
-        [Required]
         public string Place { get; set; }
         
-        [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
         
+        [Display(Name = "Number of player")]
         public int PlayersNumber { get; set; }
     }
 }

@@ -2,9 +2,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using TennisApplication.Dtos;
+using TennisApplication.Dtos.Tournament;
 using TennisApplication.Models;
 using TennisApplication.Repository;
+using TennisApplication.Repository.Tournament;
 
 namespace TennisApplication.Controllers
 {

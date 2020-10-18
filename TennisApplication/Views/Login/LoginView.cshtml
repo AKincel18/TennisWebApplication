@@ -1,0 +1,18 @@
+﻿@model TennisApplication.Dtos.User.UserReadDto
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+@using (Html.BeginForm("LoggedIn", "Login", FormMethod.Post))
+{
+    <label>E-mail: </label>
+    @Html.TextBoxFor(u => u.EMail, new {required = string.Empty})
+    <br>
+    
+    <label>Password: </label>
+    @Html.PasswordFor(u => u.Password, new {required = string.Empty})
+    <br>
+    
+    <input type="submit" value="Login">   
+}

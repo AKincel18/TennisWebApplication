@@ -25,9 +25,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">All tournament</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create new tournament</a>
-                        </li>
+                        @if (LoggedUser.User != null && LoggedUser.User.Role.Equals(Role.TournamentDirector))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create new tournament</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>

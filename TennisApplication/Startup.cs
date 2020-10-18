@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using TennisApplication.Database;
 using TennisApplication.Repository;
 using Newtonsoft.Json.Serialization;
+using TennisApplication.Repository.Tournament;
+using TennisApplication.Repository.User;
 
 namespace TennisApplication
 {
@@ -28,8 +30,6 @@ namespace TennisApplication
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseMySql(
                 Configuration.GetConnectionString("DatabaseConnection")));
             
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
             
             services.AddControllersWithViews().AddNewtonsoftJson(s =>
             {
@@ -39,6 +39,7 @@ namespace TennisApplication
             //services.AddScoped<ITournamentRepository, TournamentRepositoryImpl>();
 
             services.AddScoped<ITournamentRepository, SqlTournamentRepository>();
+            services.AddScoped<IUserRepository, SqlUserRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
@@ -65,9 +66,6 @@ namespace TennisApplication
 
             app.UseRouting();
 
-            app.UseAuthorization();
-            
-            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
