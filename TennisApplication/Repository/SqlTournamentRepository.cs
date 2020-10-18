@@ -8,9 +8,9 @@ namespace TennisApplication.Repository
 {
     public class SqlTournamentRepository : ITournamentRepository
     {
-        private readonly TournamentContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public SqlTournamentRepository(TournamentContext context)
+        public SqlTournamentRepository(ApplicationDbContext context)
         {
             _context = context;
         }

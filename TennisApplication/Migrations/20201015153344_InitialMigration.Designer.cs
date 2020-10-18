@@ -8,7 +8,7 @@ using TennisApplication.Database;
 
 namespace TennisApplication.Migrations
 {
-    [DbContext(typeof(TournamentContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20201015153344_InitialMigration")]
     partial class InitialMigration
     {

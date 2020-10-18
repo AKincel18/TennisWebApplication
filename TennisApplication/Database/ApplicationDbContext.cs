@@ -4,9 +4,9 @@ using TennisApplication.Models;
 
 namespace TennisApplication.Database
 {
-    public class TournamentContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public TournamentContext(DbContextOptions<TournamentContext> options) : base (options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base (options)
         {
             
         }

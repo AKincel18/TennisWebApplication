@@ -25,11 +25,11 @@ namespace TennisApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TournamentContext>(opt => opt.UseMySql(
+            services.AddDbContext<ApplicationDbContext>(opt => opt.UseMySql(
                 Configuration.GetConnectionString("DatabaseConnection")));
             
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<TournamentContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             
             services.AddControllersWithViews().AddNewtonsoftJson(s =>
             {
