@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using TennisApplication.Database;
 using TennisApplication.Models;
@@ -46,6 +47,30 @@ namespace TennisApplication.Repository.User
         {
             var foundUser = _context.Users.Where(user => user.EMail == eMail).FirstOrDefault(user => user.Password == password);
             return foundUser?.Id ?? -1; //(foundUser != null) ? foundUser.Id : -1;
+        }
+
+        public List<Models.User> GetUsersByTournament(int tournamentId)
+        {
+            var enrolments = _context.Enrolments.Where(t => t.TournamentId == tournamentId);
+            var allUsers = _context.Users.ToList();
+            var users = new List<Models.User>();
+            foreach (var enrolment in enrolments)
+            {
+                foreach (var user in allUsers)
+                {
+                    if (user.Id == enrolment.UserId)
+                    {
+                        users.Add(user);
+                    }
+                }
+
+            }
+            return users;
+        }
+
+        public bool IsUserRegisteredForTournamentById(int userId, int tournamentId)
+        {
+            return _context.Enrolments.Any(e => e.TournamentId == tournamentId && e.UserId == userId);
         }
     }
 }

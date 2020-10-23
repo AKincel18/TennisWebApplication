@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using TennisApplication.Database;
 using TennisApplication.Repository;
 using Newtonsoft.Json.Serialization;
+using TennisApplication.Repository.Enrolment;
 using TennisApplication.Repository.Tournament;
 using TennisApplication.Repository.User;
 
@@ -40,6 +41,7 @@ namespace TennisApplication
 
             services.AddScoped<ITournamentRepository, SqlTournamentRepository>();
             services.AddScoped<IUserRepository, SqlUserRepository>();
+            services.AddScoped<IEnrolmentRepository, SqlEnrolmentRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             

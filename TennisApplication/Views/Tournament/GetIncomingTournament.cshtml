@@ -1,5 +1,4 @@
-﻿@model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
-
+﻿@model List<TennisApplication.Dtos.Enrolment.TournamentUserReadDto>
 @{
     ViewData["Title"] = "Incoming tournament";
 }
@@ -18,43 +17,46 @@
 <body>
 
 <div id="accordion">
-    @foreach (var tournament in Model)
+    @foreach (var tournamentUser in Model)
     {
-        <h3>@tournament.Name</h3>
+        <h3>@tournamentUser.Tournament.Name</h3>
         <div>
-            <a>Save me</a> @*todo*@
+            @if (!tournamentUser.IsRegistered)
+            {
+                <p>
+                    <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.Tournament.Id">Save me</a>
+                </p>
+            }
+
+
+            <p>
+                <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@tournamentUser.Tournament.Id">Tournament detail</a>
+            </p>
             
             <table class="table">
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        <label>First name</label>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Place)
+                        <label>Last name</label>
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Date)
+                        <label>E-mail</label>
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PlayersNumber)
-                    </th>
-                    <th></th>
                 </tr>
                 <tbody>
-                @foreach (var item in Model)
+                @foreach (var user in tournamentUser.Users)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => user.FirstName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Place)
+                            @Html.DisplayFor(modelItem => user.LastName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PlayersNumber)
+                            @Html.DisplayFor(modelItem => user.EMail)
                         </td>
                     </tr>
                 }

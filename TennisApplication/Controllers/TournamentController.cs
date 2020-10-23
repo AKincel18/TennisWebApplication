@@ -2,10 +2,13 @@
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using TennisApplication.Dtos.Enrolment;
 using TennisApplication.Dtos.Tournament;
 using TennisApplication.Models;
 using TennisApplication.Repository;
+using TennisApplication.Repository.Enrolment;
 using TennisApplication.Repository.Tournament;
+using TennisApplication.Repository.User;
 
 namespace TennisApplication.Controllers
 {
@@ -15,12 +18,14 @@ namespace TennisApplication.Controllers
     public class TournamentController : Controller
     {
         private readonly ITournamentRepository _repository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public TournamentController(ITournamentRepository repository, IMapper mapper)
+        public TournamentController(ITournamentRepository repository, IMapper mapper, IUserRepository userRepository)
         {
             _repository = repository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
         
         
@@ -126,7 +131,18 @@ namespace TennisApplication.Controllers
         public ActionResult GetIncomingTournament()
         {
             var tournaments = _repository.GetIncomingTournament();
-            return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
+            List<TournamentUserReadDto> tournamentUserReadDtos = new List<TournamentUserReadDto>();
+            
+            foreach (var tournament in tournaments)
+            {
+                var users = _userRepository.GetUsersByTournament(tournament.Id);
+                var isRegistered = _userRepository.IsUserRegisteredForTournamentById(LoggedUser.User.Id, tournament.Id);
+                tournamentUserReadDtos.Add(new TournamentUserReadDto(tournament, users, isRegistered));
+            }
+            
+            //return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
+            return View(tournamentUserReadDtos);
         }
+
     }
 }

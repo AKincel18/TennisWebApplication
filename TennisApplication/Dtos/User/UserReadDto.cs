@@ -5,6 +5,8 @@ namespace TennisApplication.Dtos.User
 {
     public class UserReadDto
     {
+        public int Id { get; set; }
+        
         public string FirstName { get; set; }
         
         [DataType(DataType.Password)]  

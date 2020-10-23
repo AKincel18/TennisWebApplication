@@ -45,6 +45,7 @@ namespace TennisApplication.Controllers
                     
                     userReadDto.Role = foundUser.Role;
                     userReadDto.FirstName = foundUser.FirstName;
+                    userReadDto.Id = foundUser.Id;
                     LoggedUser.User = userReadDto;
                     
                     Console.WriteLine("logged: " + userReadDto.FirstName);
