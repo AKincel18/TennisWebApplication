@@ -1,0 +1,73 @@
+﻿@model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
+
+@{
+    ViewData["Title"] = "Incoming tournament";
+}
+
+<h1>Incoming tournament</h1>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>accordion demo</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+
+<div id="accordion">
+    @foreach (var tournament in Model)
+    {
+        <h3>@tournament.Name</h3>
+        <div>
+            <a>Save me</a> @*todo*@
+            
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Place)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlayersNumber)
+                    </th>
+                    <th></th>
+                </tr>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Place)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PlayersNumber)
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+
+<script>
+$( "#accordion" ).accordion();
+</script>
+
+</body>
+</html>

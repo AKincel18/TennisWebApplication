@@ -121,5 +121,12 @@ namespace TennisApplication.Controllers
 
             return RedirectToAction(nameof(GetAllTournaments)); //return to GetAllTournaments
         }
+
+        [HttpGet("/incoming")]
+        public ActionResult GetIncomingTournament()
+        {
+            var tournaments = _repository.GetIncomingTournament();
+            return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
+        }
     }
 }

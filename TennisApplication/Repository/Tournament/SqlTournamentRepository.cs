@@ -49,6 +49,13 @@ namespace TennisApplication.Repository.Tournament
             _context.Tournaments.Remove(tournament);
         }
 
+        public IEnumerable<Models.Tournament> GetIncomingTournament()
+        {
+            return _context.Tournaments
+                .Where(tournament => tournament.Date > DateTime.Now)
+                .ToList();
+        }
+
         /*public void UpdateTournament(Tournament tournament)
         {
             

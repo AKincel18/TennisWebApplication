@@ -10,5 +10,6 @@ namespace TennisApplication.Repository.Tournament
         void CreateTournament(Models.Tournament tournament);
         void DeleteTournament(Models.Tournament tournament);
         //void UpdateTournament(Tournament tournament);
+        IEnumerable<Models.Tournament> GetIncomingTournament();
     }
 }
