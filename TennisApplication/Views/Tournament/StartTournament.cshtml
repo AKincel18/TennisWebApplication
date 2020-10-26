@@ -1,0 +1,146 @@
+﻿@using TennisApplication.Others
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model TournamentCourse
+
+@{
+    ViewData["Title"] = "Ongoing tournament";
+
+}
+
+<h1>Ongoing tournament</h1>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>accordion demo</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+
+@{
+    var tournamentCourse = Model;
+    var iterator = 0;
+}
+
+<div id="accordion">
+
+    @for (int round = 1; round <= tournamentCourse.CurrentRound; round++)
+    {
+        
+        bool editable = round == tournamentCourse.CurrentRound;
+        @if (editable)
+        {
+            
+            <h3>Round: @round</h3>
+        }
+        else
+        {
+            <h3>Round: @round - FINISHED</h3>
+        }
+
+        <div>
+
+            <table class="table">
+                <tr>
+                    <th>
+                    <label>Player 1</label>
+                    <th>
+                        <label>Player 2</label>
+                    </th>
+                    <th>
+                        <label>Winner</label>
+                    </th>
+                    <th>
+                        <label>Result</label>
+                    </th>
+                </tr>
+                <tbody>
+
+
+                @using (Html.BeginForm("GetResultsTournament", "Tournament", FormMethod.Post))
+                {
+                    @Html.Hidden("TournamentId", tournamentCourse.Tournament.Id)
+                    
+                    var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round).ToList().Count;
+                    
+                    @for (int i = 0; i < matchesInRound; i++)
+                    {
+                        
+                        @Html.Hidden("MatchDto[" + i + "].Id", tournamentCourse.Matches[iterator].Id)
+                        @Html.Hidden("MatchDto[" + i + "].Player1", tournamentCourse.Matches[iterator].Player1.Id)
+                        @Html.Hidden("MatchDto[" + i + "].Player2", tournamentCourse.Matches[iterator].Player2.Id)
+                        @Html.Hidden("MatchDto[" + i + "].Round", tournamentCourse.Matches[iterator].Round)
+                        
+                        
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player1.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player2.LastName)
+                            </td>
+                            @if (editable)
+                            {
+                                <td>
+                                    @Html.DropDownListFor(modelItem => tournamentCourse.Matches[iterator].Winner,
+                                        Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
+                                        {
+                                            Text = name,
+                                            Value = name
+                                        }))
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(modelItem => tournamentCourse.Matches[iterator].Result,
+                                        new {type = "string", required = string.Empty })
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+
+                                    @Html.DropDownListFor(modelItem => tournamentCourse.Matches[iterator].Winner,
+                                        Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
+                                        {
+                                            Text = name,
+                                            Value = name
+                                        }), new
+                                        {
+                                            disabled = "true"
+                                        })
+                                </td>
+                                
+                                <td>
+                                    @Html.TextBoxFor(modelItem => tournamentCourse.Matches[iterator].Result,
+                                        new {type = "string", required = string.Empty, disabled = "true"})
+                                </td>
+                            }
+                            
+
+
+
+                        </tr>
+                        iterator++;
+                    }
+                    @if (editable)
+                    {
+                        <input type="submit" value="Save results">
+                    }
+                }
+
+
+                </tbody>
+            </table>
+
+        </div>
+    }
+</div>
+<script>
+$( "#accordion" ).accordion();
+</script>
+
+</body>
+</html>

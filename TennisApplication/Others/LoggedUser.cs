@@ -1,6 +1,6 @@
 ﻿using TennisApplication.Dtos.User;
 
-namespace TennisApplication
+namespace TennisApplication.Others
 {
     public static class LoggedUser
     {

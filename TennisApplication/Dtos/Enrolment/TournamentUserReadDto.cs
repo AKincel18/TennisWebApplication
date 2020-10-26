@@ -8,6 +8,12 @@ namespace TennisApplication.Dtos.Enrolment
         public List<Models.User> Users { get; set; }
         public bool IsRegistered { get; set; }
 
+        public TournamentUserReadDto(Models.Tournament tournament, List<Models.User> users)
+        {
+            Tournament = tournament;
+            Users = users;
+        }
+
         public TournamentUserReadDto(Models.Tournament tournament, List<Models.User> users, bool isRegistered)
         {
             Tournament = tournament;

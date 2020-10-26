@@ -27,7 +27,10 @@
                     <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.Tournament.Id">Save me</a>
                 </p>
             }
-
+            
+            <p>
+                <a asp-controller="Tournament" asp-action="StartTournament" asp-route-id="@tournamentUser.Tournament.Id">Start the tournament</a>
+            </p>
 
             <p>
                 <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@tournamentUser.Tournament.Id">Tournament detail</a>

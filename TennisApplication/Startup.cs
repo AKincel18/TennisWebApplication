@@ -2,15 +2,14 @@ using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TennisApplication.Database;
-using TennisApplication.Repository;
 using Newtonsoft.Json.Serialization;
+using TennisApplication.Database;
 using TennisApplication.Repository.Enrolment;
+using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
 using TennisApplication.Repository.User;
 
@@ -42,6 +41,7 @@ namespace TennisApplication
             services.AddScoped<ITournamentRepository, SqlTournamentRepository>();
             services.AddScoped<IUserRepository, SqlUserRepository>();
             services.AddScoped<IEnrolmentRepository, SqlEnrolmentRepository>();
+            services.AddScoped<IMatchRepository, SqlMatchRepository>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             

@@ -12,7 +12,7 @@ namespace TennisApplication.Dtos.User
         
         [Required(ErrorMessage = "Please provide Password", AllowEmptyStrings = false)]  
         [DataType(DataType.Password)]  
-        [StringLength(50, MinimumLength = 4, ErrorMessage = "Password must be 4 char long.")] 
+        //[StringLength(50, MinimumLength = 4, ErrorMessage = "Password must be 4 char long.")] 
         public string Password { get; set; }
         
         [Compare("Password", ErrorMessage = "Confirm password dose not match.")]  

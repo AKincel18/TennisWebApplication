@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TennisApplication.Models
 {
+    [Serializable]
     public class Tournament
     {
         [Key]

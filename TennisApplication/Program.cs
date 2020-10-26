@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TennisApplication.Dtos.User;
+using TennisApplication.Models;
+using TennisApplication.Others;
 
 namespace TennisApplication
 {
@@ -21,6 +24,7 @@ namespace TennisApplication
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    LoggedUser.User = new UserReadDto(9, "Test", "", "", Role.TournamentDirector); //for debugging
                 });
     }
 }

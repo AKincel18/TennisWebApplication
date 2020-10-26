@@ -17,6 +17,18 @@ namespace TennisApplication.Dtos.User
         public string EMail { get; set; }
         
         public Role Role { get; set; }
-        
+
+        public UserReadDto()
+        {
+        }
+
+        public UserReadDto(int id, string firstName, string password, string eMail, Role role)
+        {
+            Id = id;
+            FirstName = firstName;
+            Password = password;
+            EMail = eMail;
+            Role = role;
+        }
     }
 }
