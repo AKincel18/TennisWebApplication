@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -162,31 +163,31 @@ namespace TennisApplication.Controllers
             {
                 tournamentCourse = null;
             }
-            
+
+            var tournament = _repository.GetTournamentById(id);
             if (tournamentCourse == null) //start tournament
             {
-                var tournament = _repository.GetTournamentById(id);
                 var users = _userRepository.GetUsersByTournament(id);
 
                 tournamentCourse = new TournamentCourse(users, tournament);
                 tournamentCourse.DrawFirstRound();
-
-                var matches = new List<Match>();
-                foreach (var match in tournamentCourse.Matches)
-                {
-                    matches.Add(_mapper.Map<Match>(match));
-                }
-
-                for (int i=0; i < matches.Count; i++)
-                {
                 
+                var matchesInRound = tournamentCourse.Matches
+                    .Where(m => m.Round == tournamentCourse.CurrentRound)
+                    .ToList();
+
+                //tournamentCourse.SetTournament(tournament, matchesInRound); //error when tournament from tempData (must be from database)
+            
+                var matches = matchesInRound.Select(match => _mapper.Map<Match>(match)).ToList();
+                for (int i = 0; i < matches.Count; i++)
+                {
                     _matchRepository.SaveMatch(matches[i]);
                     _matchRepository.SaveChanges();
-                
+
                     tournamentCourse.UpdateIds(i, matches[i].Id);
                 }
+                
             }
-
             
             return View(tournamentCourse);
         }
@@ -198,7 +199,6 @@ namespace TennisApplication.Controllers
             Tournament tournament = _repository.GetTournamentById(tournamentId);
             int round = 0;
             int numberOfMatches = tournamentCourse.Matches.Count;
-            
             for (int i = 0; i < numberOfMatches; i++)
             {
                 int id = int.Parse(Request.Form["MatchDto[" + i + "].Id"]);
@@ -206,7 +206,8 @@ namespace TennisApplication.Controllers
                 Match match = _matchRepository.GetMatchById(id);
                 match.Result = tournamentCourse.Matches[i].Result;
                 match.Winner = tournamentCourse.Matches[i].Winner;
-                _matchRepository.SaveChanges();
+                
+                _matchRepository.SaveChanges(); //update finished matches
                 
                 int p1 = int.Parse(Request.Form["MatchDto[" + i + "].Player1"]);
                 int p2 = int.Parse(Request.Form["MatchDto[" + i + "].Player2"]);
@@ -215,11 +216,30 @@ namespace TennisApplication.Controllers
                 //string tournament = Request.Form["MatchDto[" + i + "].Tournament"];
                 round = int.Parse(Request.Form["MatchDto[" + i + "].Round"]);
                 tournamentCourse.UpdateMatches(id, tournament, player1, player2, round, match.Winner, match.Result);
-                
 
             }
 
             tournamentCourse.UpdateOthers(tournament, round);
+            if (!tournamentCourse.isFinished)
+            {
+                //todo duplicates code
+                var matchesInRound = tournamentCourse.Matches
+                    .Where(m => m.Round == tournamentCourse.CurrentRound)
+                    .ToList();
+
+                var matches = matchesInRound.Select(match => _mapper.Map<Match>(match)).ToList();
+
+                foreach (var match in matches)
+                {
+                    _matchRepository.SaveMatch(match);
+                    _matchRepository.SaveChanges();
+                    MatchDto matchDto = _mapper.Map<MatchDto>(match);
+                    tournamentCourse.Matches.Add(matchDto);
+                }
+            
+                tournamentCourse.Matches.RemoveAll(m => m.Id == 0);
+            }
+            
             TempData["Model"] = JsonConvert.SerializeObject(tournamentCourse);
             
             //return Ok();

@@ -14,6 +14,7 @@ namespace TennisApplication.Others
         public List<User> Users { get; set; } 
         public int CurrentRound { get; set; }
         public Tournament Tournament { get; set; }
+        public bool isFinished { get; set; }
 
         public TournamentCourse()
         {
@@ -45,7 +46,7 @@ namespace TennisApplication.Others
         public void UpdateMatches(int id, Tournament tournament, User player1, User player2,
             int round, Winner winner, string result)
         {
-            Matches.Add(new MatchDto(id, tournament, player1, player1, winner, result, round));
+            Matches.Add(new MatchDto(id, tournament, player1, player2, winner, result, round));
         }
 
         public void UpdateOthers(Tournament tournament, int round)
@@ -53,7 +54,14 @@ namespace TennisApplication.Others
             Matches.RemoveAll(m => m.Id == 0);
             Tournament = tournament;
             CurrentRound = round;
-            CreateNextMatches();
+            if ((int)Math.Pow(2, CurrentRound) == Tournament.PlayersNumber) //tournament finished
+            {
+                isFinished = true;
+            }
+            else
+            {
+                CreateNextMatches();
+            }
         }
 
         private void CreateNextMatches()
@@ -73,6 +81,20 @@ namespace TennisApplication.Others
                 
                 Matches.Add(new MatchDto(Tournament, winner1, winner2, CurrentRound));
             }
+        }
+
+        public void SetTournament(Tournament tournament, List<MatchDto> matchesInRound)
+        {
+            foreach (var matchDto in matchesInRound)
+            {
+                matchDto.Tournament = tournament;
+            }
+        }
+
+        public void UpdateIds(MatchDto matchDto, int matchId)
+        {
+            int index = Matches.IndexOf(matchDto);
+            Matches[index].Id = matchId;
         }
     }
 }
