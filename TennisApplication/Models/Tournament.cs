@@ -20,5 +20,7 @@ namespace TennisApplication.Models
         public DateTime Date { get; set; }
         
         public int PlayersNumber { get; set; }
+        
+        public bool Completed { get; set; }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TennisApplication.Dtos.Match;
+using TennisApplication.Dtos.Tournament;
 using TennisApplication.Models;
 using TennisApplication.Others;
 using TennisApplication.Repository.Match;
@@ -33,6 +35,11 @@ namespace TennisApplication.Controllers
         [HttpGet("/ongoing/{id}")]
         public IActionResult StartTournament(int id)
         {
+            var tournament = _tournamentRepository.GetTournamentById(id);
+            if (tournament.Completed)
+            {
+                return RedirectToAction(nameof(CompletedTournamentDetail), new {id = tournament.Id} );
+            }
             TournamentCourse tournamentCourse;
             try
             {
@@ -43,7 +50,6 @@ namespace TennisApplication.Controllers
                 tournamentCourse = null;
             }
 
-            var tournament = _tournamentRepository.GetTournamentById(id);
             if (tournamentCourse == null) //start tournament
             {
                 var users = _userRepository.GetUsersByTournament(id);
@@ -87,14 +93,8 @@ namespace TennisApplication.Controllers
                 match.Winner = tournamentCourse.Matches[i].Winner;
                 
                 _repository.SaveChanges(); //update finished matches
-                
-                int p1 = int.Parse(Request.Form["MatchDto[" + i + "].Player1"]);
-                int p2 = int.Parse(Request.Form["MatchDto[" + i + "].Player2"]);
-                User player1 = _userRepository.GetUserById(p1);
-                User player2 = _userRepository.GetUserById(p2);
-                //string tournament = Request.Form["MatchDto[" + i + "].Tournament"];
-                round = int.Parse(Request.Form["MatchDto[" + i + "].Round"]);
-                tournamentCourse.UpdateMatches(id, tournament, player1, player2, round, match.Winner, match.Result);
+                round = match.Round; //last round 
+                tournamentCourse.UpdateMatches(id, tournament, match.Player1, match.Player2, match.Round, match.Winner, match.Result);
 
             }
 
@@ -118,11 +118,44 @@ namespace TennisApplication.Controllers
             
                 tournamentCourse.Matches.RemoveAll(m => m.Id == 0);
             }
+            else
+            {
+                tournament.Completed = true;
+                _tournamentRepository.SaveChanges();
+            }
             
             TempData["Model"] = JsonConvert.SerializeObject(tournamentCourse);
             
-            //return Ok();
             return RedirectToAction(nameof(StartTournament), new {id = tournament.Id} );
+        }
+
+        [HttpGet("/completed")]
+        public ActionResult CompletedTournamentView()
+        {
+            List<Tournament> tournaments = _tournamentRepository.GetCompletedTournaments();
+            var tournamentReadDtos = tournaments.Select(tournament => _mapper.Map<TournamentReadDto>(tournament));
+
+            return View(tournamentReadDtos);
+        }
+
+        [HttpGet("/completed/{id}")]
+        public ActionResult CompletedTournamentDetail(int id)
+        {
+            Tournament tournament = _tournamentRepository.GetTournamentById(id);
+            
+            TournamentCourse tournamentCourse = new TournamentCourse(tournament);
+            List<Match> matches = _repository.GetMatchesByTournamentId(id);
+            
+            foreach (var match in matches)
+            {
+                match.Player1 =  _userRepository.GetUserById(match.Player1.Id);
+                match.Player2 = _userRepository.GetUserById(match.Player2.Id);
+            }
+
+            tournamentCourse.Matches =  matches.Select(match => _mapper.Map<MatchDto>(match)).ToList();
+            tournamentCourse.CurrentRound = (int) Math.Log2(tournament.PlayersNumber); //set the last round
+            
+            return View(tournamentCourse);
         }
     }
 }

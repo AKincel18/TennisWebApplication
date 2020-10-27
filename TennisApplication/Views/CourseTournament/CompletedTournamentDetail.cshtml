@@ -1,0 +1,107 @@
+﻿@model TennisApplication.Others.TournamentCourse
+
+@{
+    ViewData["Title"] = "Completed tournament";
+}
+
+<h2>Tournament detail</h2>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>accordion demo</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+
+@{
+    var iterator = 0;
+    var tournamentCourse = Model;
+}
+
+    <div id="accordion">
+
+        @for (int round = 1; round <= tournamentCourse.CurrentRound; round++)
+        {
+
+            
+            <h3>Round: @round</h3>
+            
+
+            <div>
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            <label>Player 1</label>
+                        </th>
+                        <th>
+                            <label>Player 2</label>
+                        </th>
+                        <th>
+                            <label>Winner</label>
+                        </th>
+                        <th>
+                            <label>Result</label>
+                        </th>
+                    </tr>
+                    <tbody>
+
+
+
+
+                    @{
+                        var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round).ToList().Count;
+                    }    
+
+                    @for (int i = 0; i < matchesInRound; i++)
+                    {
+
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player1.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player2.LastName)
+                            </td>
+
+                            <td>
+
+                                @Html.DropDownListFor(modelItem => tournamentCourse.Matches[iterator].Winner,
+                                    Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
+                                    {
+                                        Text = name,
+                                        Value = name
+                                    }), new
+                                    {
+                                        disabled = "true"
+                                    })
+                            </td>
+
+                            <td>
+                                @Html.TextBoxFor(modelItem => tournamentCourse.Matches[iterator].Result,
+                                    new {type = "string", required = string.Empty, disabled = "true"})
+                            </td>
+                            
+
+                        </tr>
+                        iterator++;
+                    }
+
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        }
+    </div>
+    
+<script>
+$( "#accordion" ).accordion();
+</script>
+
+</body>
+</html>

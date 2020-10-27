@@ -37,10 +37,11 @@
                     {
                         <partial name="_TournamentLayout"/>
                     }
-                    else
-                    {
-                        <partial name="_PlayerLayout"/>
-                    }
+                    <partial name="_PlayerLayout"/>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="CourseTournament" asp-action="CompletedTournamentView">Completed tournament</a>
+                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>

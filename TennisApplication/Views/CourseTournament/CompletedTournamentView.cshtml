@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
+
+@{
+    ViewData["Title"] = "All completed tournament";
+}
+
+<h1>Completed tournament</h1>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PlayersNumber)
+        </th>
+        <th></th>
+    </tr>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Place)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayersNumber)
+            </td>
+            <td>
+                <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

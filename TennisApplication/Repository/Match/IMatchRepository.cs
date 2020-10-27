@@ -6,8 +6,7 @@ namespace TennisApplication.Repository.Match
     {
         bool SaveChanges();
         void SaveMatch(Models.Match match);
-        List<Models.Match> GetNotFinishedMatches();
-
         Models.Match GetMatchById(int id);
+        List<Models.Match> GetMatchesByTournamentId(int id);
     }
 }

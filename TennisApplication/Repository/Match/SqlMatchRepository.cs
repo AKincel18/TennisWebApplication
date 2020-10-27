@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TennisApplication.Database;
 
 namespace TennisApplication.Repository.Match
@@ -29,14 +30,21 @@ namespace TennisApplication.Repository.Match
             _context.Matches.Add(match);
         }
 
-        public List<Models.Match> GetNotFinishedMatches()
-        {
-            return _context.Matches.Where(m => m.Result == null).ToList();
-        }
-
         public Models.Match GetMatchById(int id)
         {
-            return _context.Matches.FirstOrDefault(m => m.Id == id);
+            return _context.Matches
+                .Include(m => m.Player1) //fetch players
+                .Include(m => m.Player2) 
+                .FirstOrDefault(m => m.Id == id);
+        }
+
+        public List<Models.Match> GetMatchesByTournamentId(int id)
+        {
+            return _context.Matches
+                .Include(m => m.Player1) //fetch players
+                .Include(m => m.Player2) 
+                .Where(m => m.Tournament.Id == id)
+                .ToList();
         }
     }
 }

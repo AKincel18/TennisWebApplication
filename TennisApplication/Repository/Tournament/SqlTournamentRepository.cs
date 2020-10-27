@@ -53,6 +53,14 @@ namespace TennisApplication.Repository.Tournament
         {
             return _context.Tournaments
                 .Where(tournament => tournament.Date > DateTime.Now)
+                .Where(tournament => tournament.Completed == false)
+                .ToList();
+        }
+
+        public List<Models.Tournament> GetCompletedTournaments()
+        {
+            return _context.Tournaments
+                .Where(t => t.Completed == true)
                 .ToList();
         }
 

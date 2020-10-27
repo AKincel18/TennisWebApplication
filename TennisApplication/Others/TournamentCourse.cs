@@ -20,6 +20,11 @@ namespace TennisApplication.Others
         {
         }
 
+        public TournamentCourse(Tournament tournament)
+        {
+            Tournament = tournament;
+        }
+
         public TournamentCourse(List<User> users, Tournament tournament)
         {
             Users = users;
@@ -96,5 +101,6 @@ namespace TennisApplication.Others
             int index = Matches.IndexOf(matchDto);
             Matches[index].Id = matchId;
         }
+
     }
 }

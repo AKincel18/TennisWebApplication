@@ -11,5 +11,7 @@ namespace TennisApplication.Repository.Tournament
         void DeleteTournament(Models.Tournament tournament);
         //void UpdateTournament(Tournament tournament);
         IEnumerable<Models.Tournament> GetIncomingTournament();
+
+        List<Models.Tournament> GetCompletedTournaments();
     }
 }
