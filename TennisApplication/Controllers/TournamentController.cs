@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using TennisApplication.Dtos.Enrolment;
-using TennisApplication.Dtos.Match;
 using TennisApplication.Dtos.Tournament;
 using TennisApplication.Models;
 using TennisApplication.Others;
-using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
 using TennisApplication.Repository.User;
 
@@ -23,16 +18,14 @@ namespace TennisApplication.Controllers
     {
         private readonly ITournamentRepository _repository;
         private readonly IUserRepository _userRepository;
-        private readonly IMatchRepository _matchRepository;
         private readonly IMapper _mapper;
 
         public TournamentController(ITournamentRepository repository, IMapper mapper, 
-            IUserRepository userRepository, IMatchRepository matchRepository)
+            IUserRepository userRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _userRepository = userRepository;
-            _matchRepository = matchRepository;
         }
         
         
@@ -150,102 +143,6 @@ namespace TennisApplication.Controllers
             //return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
             return View(tournamentUserReadDtos);
         }
-
-        [HttpGet("/ongoing/{id}")]
-        public IActionResult StartTournament(int id)
-        {
-            TournamentCourse tournamentCourse;
-            try
-            {
-                tournamentCourse = JsonConvert.DeserializeObject<TournamentCourse>((string) TempData["Model"]);
-            }
-            catch (ArgumentNullException)
-            {
-                tournamentCourse = null;
-            }
-
-            var tournament = _repository.GetTournamentById(id);
-            if (tournamentCourse == null) //start tournament
-            {
-                var users = _userRepository.GetUsersByTournament(id);
-
-                tournamentCourse = new TournamentCourse(users, tournament);
-                tournamentCourse.DrawFirstRound();
-                
-                var matchesInRound = tournamentCourse.Matches
-                    .Where(m => m.Round == tournamentCourse.CurrentRound)
-                    .ToList();
-
-                //tournamentCourse.SetTournament(tournament, matchesInRound); //error when tournament from tempData (must be from database)
-            
-                var matches = matchesInRound.Select(match => _mapper.Map<Match>(match)).ToList();
-                for (int i = 0; i < matches.Count; i++)
-                {
-                    _matchRepository.SaveMatch(matches[i]);
-                    _matchRepository.SaveChanges();
-
-                    tournamentCourse.UpdateIds(i, matches[i].Id);
-                }
-                
-            }
-            
-            return View(tournamentCourse);
-        }
-        
-        [HttpPost("/ongoing")]
-        public IActionResult GetResultsTournament([FromForm] TournamentCourse tournamentCourse)
-        {
-            var tournamentId = int.Parse(Request.Form["TournamentId"]);
-            Tournament tournament = _repository.GetTournamentById(tournamentId);
-            int round = 0;
-            int numberOfMatches = tournamentCourse.Matches.Count;
-            for (int i = 0; i < numberOfMatches; i++)
-            {
-                int id = int.Parse(Request.Form["MatchDto[" + i + "].Id"]);
-                
-                Match match = _matchRepository.GetMatchById(id);
-                match.Result = tournamentCourse.Matches[i].Result;
-                match.Winner = tournamentCourse.Matches[i].Winner;
-                
-                _matchRepository.SaveChanges(); //update finished matches
-                
-                int p1 = int.Parse(Request.Form["MatchDto[" + i + "].Player1"]);
-                int p2 = int.Parse(Request.Form["MatchDto[" + i + "].Player2"]);
-                User player1 = _userRepository.GetUserById(p1);
-                User player2 = _userRepository.GetUserById(p2);
-                //string tournament = Request.Form["MatchDto[" + i + "].Tournament"];
-                round = int.Parse(Request.Form["MatchDto[" + i + "].Round"]);
-                tournamentCourse.UpdateMatches(id, tournament, player1, player2, round, match.Winner, match.Result);
-
-            }
-
-            tournamentCourse.UpdateOthers(tournament, round);
-            if (!tournamentCourse.isFinished)
-            {
-                //todo duplicates code
-                var matchesInRound = tournamentCourse.Matches
-                    .Where(m => m.Round == tournamentCourse.CurrentRound)
-                    .ToList();
-
-                var matches = matchesInRound.Select(match => _mapper.Map<Match>(match)).ToList();
-
-                foreach (var match in matches)
-                {
-                    _matchRepository.SaveMatch(match);
-                    _matchRepository.SaveChanges();
-                    MatchDto matchDto = _mapper.Map<MatchDto>(match);
-                    tournamentCourse.Matches.Add(matchDto);
-                }
-            
-                tournamentCourse.Matches.RemoveAll(m => m.Id == 0);
-            }
-            
-            TempData["Model"] = JsonConvert.SerializeObject(tournamentCourse);
-            
-            //return Ok();
-            return RedirectToAction(nameof(StartTournament), new {id = tournament.Id} );
-        }
-
         
         
         
