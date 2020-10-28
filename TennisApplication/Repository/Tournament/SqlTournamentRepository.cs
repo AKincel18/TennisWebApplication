@@ -64,6 +64,25 @@ namespace TennisApplication.Repository.Tournament
                 .ToList();
         }
 
+        public IEnumerable<Models.Tournament> GetTournamentByUserId(int id)
+        {
+            List<int> tournamentIds =
+                _context.Enrolments
+                    .Where(e => e.UserId == id)
+                    .Select(e => e.TournamentId)
+                    .ToList();
+
+            List<Models.Tournament> tournaments = _context.Tournaments.ToList();
+
+            var query = from tournament in tournaments
+                join id1 in tournamentIds on tournament.Id equals id1
+                select new {Tournament = tournament};
+
+            return query.Select(t => t.Tournament);
+
+
+        }
+
         /*public void UpdateTournament(Tournament tournament)
         {
             

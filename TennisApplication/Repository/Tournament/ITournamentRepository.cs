@@ -13,5 +13,7 @@ namespace TennisApplication.Repository.Tournament
         IEnumerable<Models.Tournament> GetIncomingTournament();
 
         List<Models.Tournament> GetCompletedTournaments();
+
+        IEnumerable<Models.Tournament> GetTournamentByUserId(int id);
     }
 }

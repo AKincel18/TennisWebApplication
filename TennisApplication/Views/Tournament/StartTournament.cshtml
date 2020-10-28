@@ -74,14 +74,16 @@
                     @for (int i = 0; i < matchesInRound; i++)
                     {
 
+                        var player1 = tournamentCourse.Matches[iterator].Player1.FirstName + " " + tournamentCourse.Matches[iterator].Player1.LastName;
+                        var player2 = tournamentCourse.Matches[iterator].Player2.FirstName + " " + tournamentCourse.Matches[iterator].Player2.LastName;
                         @Html.Hidden("MatchDto[" + iterator + "].Id", tournamentCourse.Matches[iterator].Id)
 
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player1.LastName)
+                                @Html.DisplayFor(modelItem => player1)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player2.LastName)
+                                @Html.DisplayFor(modelItem => player2)
                             </td>
 
                             <td>

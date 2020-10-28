@@ -2,14 +2,14 @@
 @using TennisApplication.Others
 @model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
 @{
-    ViewData["Title"] = "All tournament";
+    ViewData["Title"] = "Tournament";
 }
 @{
     bool isUserWithTournamentDirectorRole = 
       LoggedUser.User != null && LoggedUser.User.Role.Equals(Role.TournamentDirector);
     
 }
-<h1>All tournament</h1>
+<h1>Tournaments</h1>
 
 @if (isUserWithTournamentDirectorRole)
 {

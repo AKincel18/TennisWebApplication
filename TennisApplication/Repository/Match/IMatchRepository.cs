@@ -8,5 +8,6 @@ namespace TennisApplication.Repository.Match
         void SaveMatch(Models.Match match);
         Models.Match GetMatchById(int id);
         List<Models.Match> GetMatchesByTournamentId(int id);
+        List<Models.Match> GetMatchesByUserId(int id);
     }
 }

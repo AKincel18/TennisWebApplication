@@ -1,0 +1,35 @@
+﻿@model TennisApplication.Dtos.User.UserEditDto
+
+@{
+    ViewData["Title"] = "Edit account";
+}
+
+<h2>Edit account</h2>
+@using (Html.BeginForm("EditAccount", "Login", FormMethod.Post))
+{
+       
+    <label>First name: </label>
+    @Html.TextBoxFor(u => u.FirstName, new { required = string.Empty})
+    <br>
+       
+    <label>Last name: </label>
+    @Html.TextBoxFor(u => u.LastName, new { required = string.Empty})
+    <br>
+       
+    <label>E-mail: </label>
+    @Html.TextBoxFor(u => u.EMail, new { required = string.Empty})
+    <br>
+       
+    <label>Password: </label>
+    @Html.PasswordFor(u => u.Password)
+    @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
+    <br> 
+    
+    <label>Confirm password: </label>
+    @Html.PasswordFor(u => u.ConfirmPassword)
+    @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
+    <br> 
+    
+    <input type="submit" value="Edit account">           
+       
+}

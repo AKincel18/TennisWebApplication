@@ -1,3 +1,10 @@
-﻿<li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Tournament" asp-action="GetIncomingTournament">Incoming tournament</a>
+﻿<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        My achievements
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" asp-area="" asp-controller="UserAchievements" asp-action="MyTournaments">My tournaments</a>
+        <a class="dropdown-item" asp-area="" asp-controller="UserAchievements" asp-action="MyMatches">My matches</a>
+    </div>
+    
 </li>

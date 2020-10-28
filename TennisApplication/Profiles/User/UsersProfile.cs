@@ -9,6 +9,7 @@ namespace TennisApplication.Profiles.User
         {
             CreateMap<UserCreateDto, Models.User>();
             CreateMap<UserCreateDto, UserReadDto>();
+            CreateMap<Models.User, UserEditDto>();
         }
 
     }

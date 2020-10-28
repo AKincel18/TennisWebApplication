@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
@@ -12,10 +13,12 @@ namespace TennisApplication.Controllers
     public class LoginController : Controller
     {
         private readonly IUserRepository _repository;
+        private readonly IMapper _mapper;
 
-        public LoginController(IUserRepository repository)
+        public LoginController(IUserRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -24,7 +27,7 @@ namespace TennisApplication.Controllers
             return View();
         }
         
-        [HttpPost]
+        [HttpGet("/out")]
         public ActionResult LoggedOut()
         {
             LoggedUser.User = null;
@@ -56,6 +59,30 @@ namespace TennisApplication.Controllers
 
             Console.WriteLine("not found user with given parameters");
             return BadRequest();
+        }
+
+        [HttpGet("/edit")]
+        public ActionResult EditAccountView()
+        {
+            User user = _repository.GetUserById(LoggedUser.User.Id);
+            return View(_mapper.Map<UserEditDto>(user));
+        }
+
+        [HttpPost("/editAction")]
+        public ActionResult EditAccount([FromForm] UserEditDto userEditDto)
+        {
+            User user = _repository.GetUserById(LoggedUser.User.Id);
+            user.FirstName = userEditDto.FirstName;
+            user.LastName = userEditDto.LastName;
+            user.EMail = userEditDto.EMail;
+            
+            if (userEditDto.Password != null)
+            {
+                user.Password = userEditDto.Password;
+            }
+            
+            _repository.SaveChanges();
+            return RedirectToAction("Index", "Home", new {area = ""});
         }
     }
 }

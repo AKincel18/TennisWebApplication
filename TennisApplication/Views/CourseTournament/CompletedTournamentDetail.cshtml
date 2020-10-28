@@ -59,30 +59,23 @@
                     @for (int i = 0; i < matchesInRound; i++)
                     {
 
+                        var player1 = tournamentCourse.Matches[iterator].Player1.FirstName + " " + tournamentCourse.Matches[iterator].Player1.LastName;
+                        var player2 = tournamentCourse.Matches[iterator].Player2.FirstName + " " + tournamentCourse.Matches[iterator].Player2.LastName;
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player1.LastName)
+                                @Html.DisplayFor(modelItem => player1)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Player2.LastName)
-                            </td>
-
-                            <td>
-
-                                @Html.DropDownListFor(modelItem => tournamentCourse.Matches[iterator].Winner,
-                                    Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
-                                    {
-                                        Text = name,
-                                        Value = name
-                                    }), new
-                                    {
-                                        disabled = "true"
-                                    })
+                                @Html.DisplayFor(modelItem => player2)
                             </td>
 
                             <td>
-                                @Html.TextBoxFor(modelItem => tournamentCourse.Matches[iterator].Result,
-                                    new {type = "string", required = string.Empty, disabled = "true"})
+
+                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Winner)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Result)
                             </td>
                             
 

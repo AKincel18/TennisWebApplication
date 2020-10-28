@@ -1,0 +1,75 @@
+﻿@model System.Collections.Generic.List<TennisApplication.Dtos.Match.MatchDto>
+
+@{
+    ViewData["Title"] = "My matches";
+}
+<h1>My matches</h1>
+
+<table class="table">
+                    <tr>
+                        <th>
+                            <label>Player 1</label>
+                        </th>
+                        <th>
+                            <label>Player 2</label>
+                        </th>
+                        <th>
+                            <label>Result</label>
+                        </th>
+                        <th>
+                            <label>Round</label>
+                        </th>
+                        <th>
+                            <label>Tournament</label>
+                        </th>
+                        <th>
+                            <label>Tournament details</label>
+                        </th>
+                    </tr>
+                    <tbody>
+
+
+
+                    @foreach(var match in Model)
+                    {
+                        var player1 = match.Player1.FirstName + " " + match.Player1.LastName;
+                        var player2 = match.Player2.FirstName + " " + match.Player2.LastName;
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => player1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => player2)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => match.Result)
+                            </td>
+                            <td>
+                                
+                                @Html.DisplayFor(modelItem => match.Round)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => match.Tournament.Name)
+                            </td>
+                            @if (match.Tournament.Completed)
+                            {
+                                <td>
+                                    <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@match.Tournament.Id">Click</a> 
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@match.Tournament.Id">Click</a> 
+                                </td>
+                            }
+
+                            
+                        </tr>
+                    }
+
+
+
+
+                    </tbody>
+                </table>

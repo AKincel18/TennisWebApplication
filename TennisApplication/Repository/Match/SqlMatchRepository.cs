@@ -46,5 +46,15 @@ namespace TennisApplication.Repository.Match
                 .Where(m => m.Tournament.Id == id)
                 .ToList();
         }
+
+        public List<Models.Match> GetMatchesByUserId(int id)
+        {
+            return _context.Matches
+                .Include(m => m.Player1)
+                .Include(m => m.Player2)
+                .Include(m => m.Tournament)
+                .Where(m => m.Player1.Id == id || m.Player2.Id == id)
+                .ToList();
+        }
     }
 }
