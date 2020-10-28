@@ -5,7 +5,7 @@
 }
 
 <h2>Edit account</h2>
-@using (Html.BeginForm("EditAccount", "Login", FormMethod.Post))
+@using (Html.BeginForm("EditAccount", "Login", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
        
     <label>First name: </label>
@@ -30,6 +30,24 @@
     @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
     <br> 
     
+
+    @if (Model.Photo.Length != 0)
+    {
+        <label>Photo</label>
+        <br>
+        <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)" />
+    }
+    else
+    {
+        <label>No photo</label>
+    }
+                                                                                                            
+    <br>
+    
+    <input type="file" name="upload" />
+                                    
+    <br>
+    <br>                                      
     <input type="submit" value="Edit account">           
        
 }

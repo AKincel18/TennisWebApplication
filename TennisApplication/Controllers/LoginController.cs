@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.IO;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
@@ -56,8 +57,9 @@ namespace TennisApplication.Controllers
         }
 
         [HttpPost("/editAction")]
-        public ActionResult EditAccount([FromForm] UserEditDto userEditDto)
+        public ActionResult EditAccount([FromForm] UserEditDto userEditDto, IFormFile upload)
         {
+            
             User user = _repository.GetUserById(LoggedUser.User.Id);
             user.FirstName = userEditDto.FirstName;
             user.LastName = userEditDto.LastName;
@@ -68,7 +70,16 @@ namespace TennisApplication.Controllers
                 user.Password = userEditDto.Password;
             }
             
+            if (upload != null)
+            {
+                using var ms = new MemoryStream();
+                upload.CopyTo(ms);
+                user.Photo = ms.ToArray();
+            }
+
             _repository.SaveChanges();
+            LoggedUser.User = _mapper.Map<UserReadDto>(user);
+            
             return RedirectToAction("Index", "Home", new {area = ""});
         }
     }

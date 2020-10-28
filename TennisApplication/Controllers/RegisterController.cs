@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
+using System.Net.Mime;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 using TennisApplication.Others;
 using TennisApplication.Repository.User;
+using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace TennisApplication.Controllers
 {   
@@ -28,8 +32,16 @@ namespace TennisApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser([FromForm] UserCreateDto userCreateDto)
+        public ActionResult CreateUser([FromForm] UserCreateDto userCreateDto, IFormFile  upload)
         {
+            if (upload != null)
+            {
+                using var ms = new MemoryStream();
+                upload.CopyTo(ms);
+                userCreateDto.Photo = ms.ToArray();
+            }
+
+
             if (ModelState.IsValid)
             {
                 LoggedUser.User = _mapper.Map<UserReadDto>(userCreateDto);

@@ -21,5 +21,7 @@ namespace TennisApplication.Dtos.User
         public string ConfirmPassword { get; set; }
         
         public Role Role { get; set; }
+        
+        public byte[] Photo { get; set; }
     }
 }

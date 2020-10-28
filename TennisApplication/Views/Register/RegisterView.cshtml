@@ -5,7 +5,7 @@
 }
 
 
-@using (Html.BeginForm("CreateUser", "Register", FormMethod.Post))
+@using (Html.BeginForm("CreateUser", "Register", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     <h2>Create account</h2>
        
@@ -39,8 +39,11 @@
     }))
     <br>
     
+    <label>Photo</label>
+    <input type="file" name="upload" />
+    <br>
+    <br>    
     
-            
     <input type="submit" value="Create user">           
        
 }

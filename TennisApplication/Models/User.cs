@@ -29,6 +29,8 @@ namespace TennisApplication.Models
         
         [EnumDataType(typeof(Role))]
         public Role Role { get; set; }
-        
+
+        public byte[] Photo { get; set; }
+
     }
 }

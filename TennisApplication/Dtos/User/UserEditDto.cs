@@ -19,5 +19,7 @@ namespace TennisApplication.Dtos.User
         [NotMapped]
         public string ConfirmPassword { get; set; }
         
+        public byte[] Photo { get; set; }
+        
     }
 }
