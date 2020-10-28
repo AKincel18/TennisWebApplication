@@ -22,4 +22,8 @@
       <_ContentIncludedByDefault Remove="Pages\Login\LoginView.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\js\fileScript.js" />
+    </ItemGroup>
+
 </Project>

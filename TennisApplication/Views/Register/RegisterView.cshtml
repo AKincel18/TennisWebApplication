@@ -4,7 +4,12 @@
     ViewData["Title"] = "Create new user";
 }
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+<script src="js/fileScript.js"></script>
+
+<html>
+<body>
 @using (Html.BeginForm("CreateUser", "Register", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     <h2>Create account</h2>
@@ -38,12 +43,26 @@
         Value = name
     }))
     <br>
-    
-    <label>Photo</label>
-    <input type="file" name="upload" />
-    <br>
-    <br>    
+        
+
+    <div class="btn btn-primary">
+        <label for="upload" class="custom-file-upload" id="choose-file-label">
+            Choose photo
+        </label>
+        <input type="file" id="upload" style="display: none" name="upload"/>
+    </div>
+        
+    <br><br>
+    <div id="imgPreview" class="thumbnail" style="display:none">
+        <img class="img-responsive" id="targetImg" />
+        <div class="caption">
+            <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
+            <span id="description"></span>
+        </div>
+    </div>
     
     <input type="submit" value="Create user">           
        
 }
+</body>
+</html>
