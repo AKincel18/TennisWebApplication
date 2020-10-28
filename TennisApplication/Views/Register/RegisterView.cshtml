@@ -5,6 +5,9 @@
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+
 
 <script src="js/fileScript.js"></script>
 
@@ -22,16 +25,24 @@
     @Html.TextBoxFor(u => u.LastName, new { required = string.Empty})
     <br>
        
-    <label>E-mail: </label>
+    @Html.LabelFor(u => u.EMail)
     @Html.TextBoxFor(u => u.EMail, new { required = string.Empty})
+    @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
+    if (!ViewData.ModelState.IsValid)
+    {
+        <span class="text-danger">
+            @ViewData.ModelState["EMailExists"].Errors[0].ErrorMessage
+        </span>
+    }
     <br>
        
-    <label>Password: </label>
+    
+    @Html.LabelFor(u => u.Password)
     @Html.PasswordFor(u => u.Password, new { required = string.Empty})
     @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
     <br> 
     
-    <label>Confirm password: </label>
+    @Html.LabelFor(u => u.ConfirmPassword)
     @Html.PasswordFor(u => u.ConfirmPassword, new { required = string.Empty})
     @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
     <br> 
