@@ -37,28 +37,15 @@ namespace TennisApplication.Controllers
         [HttpPost("/in")]
         public ActionResult LoggedIn([FromForm] UserReadDto userReadDto)
         {
-            var users = _repository.GetAllUsers();
-            foreach (var user in users)
+            var user = _repository.GetUserByEMail(userReadDto.EMail);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(userReadDto.Password, user.Password))
             {
-                if (user.EMail.Equals(userReadDto.EMail) &&
-                    user.Password.Equals(userReadDto.Password))
-                {
-                    User foundUser = _repository.GetUserById(_repository.FindIdByEMailAndPassword(
-                        userReadDto.EMail,
-                        userReadDto.Password));
-                    
-                    userReadDto.Role = foundUser.Role;
-                    userReadDto.FirstName = foundUser.FirstName;
-                    userReadDto.Id = foundUser.Id;
-                    LoggedUser.User = userReadDto;
-                    
-                    Console.WriteLine("logged: " + userReadDto.FirstName);
-                    return RedirectToAction("Index", "Home", new {area = ""});
-                }
+                return BadRequest();
             }
 
-            Console.WriteLine("not found user with given parameters");
-            return BadRequest();
+            LoggedUser.User = _mapper.Map<UserReadDto>(user);
+            return RedirectToAction("Index", "Home", new {area = ""});
+            
         }
 
         [HttpGet("/edit")]

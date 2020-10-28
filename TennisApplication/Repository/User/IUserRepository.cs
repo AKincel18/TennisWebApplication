@@ -12,5 +12,6 @@ namespace TennisApplication.Repository.User
         
         List<Models.User> GetUsersByTournament(int tournamentId);
         bool IsUserRegisteredForTournamentById(int userId, int tournamentId);
+        Models.User GetUserByEMail(string email);
     }
 }

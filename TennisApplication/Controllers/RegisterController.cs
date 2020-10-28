@@ -35,16 +35,16 @@ namespace TennisApplication.Controllers
                 LoggedUser.User = _mapper.Map<UserReadDto>(userCreateDto);
                 
                 var userModel = _mapper.Map<User>(userCreateDto);
+                userModel.Password = BCrypt.Net.BCrypt.HashPassword(userCreateDto.Password); //hash password
+                
                 _repository.CreateUser(userModel);
                 _repository.SaveChanges();
                 
                 return RedirectToAction("Index", "Home", new {area = ""});
             }
-            else
-            {
-                Console.WriteLine("error");
-                return BadRequest();
-            }
+
+            Console.WriteLine("error");
+            return BadRequest();
 
         }
 

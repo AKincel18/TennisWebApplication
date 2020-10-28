@@ -72,5 +72,10 @@ namespace TennisApplication.Repository.User
         {
             return _context.Enrolments.Any(e => e.TournamentId == tournamentId && e.UserId == userId);
         }
+
+        public Models.User GetUserByEMail(string email)
+        {
+            return _context.Users.FirstOrDefault(u => u.EMail == email);
+        }
     }
 }
