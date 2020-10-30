@@ -41,7 +41,8 @@ namespace TennisApplication.Controllers
             var user = _repository.GetUserByEMail(userReadDto.EMail);
             if (user == null || !BCrypt.Net.BCrypt.Verify(userReadDto.Password, user.Password))
             {
-                return BadRequest();
+                ModelState.AddModelError("WrongEMailOrPassword", "Wrong e-mail or password");
+                return View("/Views/Login/LoginView.cshtml", userReadDto);
             }
 
             LoggedUser.User = _mapper.Map<UserReadDto>(user);

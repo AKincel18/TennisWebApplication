@@ -24,7 +24,7 @@ namespace TennisApplication
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    LoggedUser.User = new UserReadDto(9, "Test", "", "", Role.TournamentDirector); //for debugging
+                    //LoggedUser.User = new UserReadDto(9, "Test", "", "", Role.TournamentDirector); //for debugging
                 });
     }
 }
