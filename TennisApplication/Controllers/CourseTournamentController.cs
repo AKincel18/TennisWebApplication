@@ -36,44 +36,19 @@ namespace TennisApplication.Controllers
         public IActionResult StartTournament(int id)
         {
             var tournament = _tournamentRepository.GetTournamentById(id);
-            if (tournament.Completed)
+            var users = _userRepository.GetUsersByTournament(id);
+
+            TournamentCourse tournamentCourse = new TournamentCourse(users, tournament);
+
+            var matches = tournamentCourse.GetMatchesInCurrentRound()
+                .Select(match => _mapper.Map<Match>(match)).ToList();
+            for (int i = 0; i < matches.Count; i++)
             {
-                return RedirectToAction(nameof(CompletedTournamentDetail), new {id = tournament.Id} );
-            }
-            TournamentCourse tournamentCourse;
-            try
-            {
-                tournamentCourse = JsonConvert.DeserializeObject<TournamentCourse>((string) TempData["Model"]);
-            }
-            catch (ArgumentNullException)
-            {
-                tournamentCourse = null;
+                _repository.SaveMatch(matches[i]);
+                _repository.SaveChanges();
+                tournamentCourse.UpdateIds(i, matches[i].Id);
             }
 
-            if (tournamentCourse == null) //start tournament
-            {
-                var users = _userRepository.GetUsersByTournament(id);
-
-                tournamentCourse = new TournamentCourse(users, tournament);
-                tournamentCourse.DrawFirstRound();
-                
-                var matchesInRound = tournamentCourse.Matches
-                    .Where(m => m.Round == tournamentCourse.CurrentRound)
-                    .ToList();
-
-                //tournamentCourse.SetTournament(tournament, matchesInRound); //error when tournament from tempData (must be from database)
-            
-                var matches = matchesInRound.Select(match => _mapper.Map<Match>(match)).ToList();
-                for (int i = 0; i < matches.Count; i++)
-                {
-                    _repository.SaveMatch(matches[i]);
-                    _repository.SaveChanges();
-
-                    tournamentCourse.UpdateIds(i, matches[i].Id);
-                }
-                
-            }
-            
             return View("/Views/Tournament/StartTournament.cshtml", tournamentCourse);
         }
         
@@ -101,12 +76,8 @@ namespace TennisApplication.Controllers
             tournamentCourse.UpdateOthers(tournament, round);
             if (!tournamentCourse.isFinished)
             {
-                //todo duplicates code
-                var matchesInRound = tournamentCourse.Matches
-                    .Where(m => m.Round == tournamentCourse.CurrentRound)
-                    .ToList();
-
-                var matches = matchesInRound.Select(match => _mapper.Map<Match>(match)).ToList();
+                var matches = tournamentCourse.GetMatchesInCurrentRound()
+                    .Select(match => _mapper.Map<Match>(match)).ToList();
 
                 foreach (var match in matches)
                 {
@@ -122,11 +93,11 @@ namespace TennisApplication.Controllers
             {
                 tournament.Completed = true;
                 _tournamentRepository.SaveChanges();
+                return RedirectToAction(nameof(CompletedTournamentDetail), new {id = tournament.Id} );
+                
             }
             
-            TempData["Model"] = JsonConvert.SerializeObject(tournamentCourse);
-            
-            return RedirectToAction(nameof(StartTournament), new {id = tournament.Id} );
+            return View("/Views/Tournament/StartTournament.cshtml", tournamentCourse);
         }
 
         [HttpGet("/completed")]

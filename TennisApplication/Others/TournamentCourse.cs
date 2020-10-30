@@ -29,10 +29,11 @@ namespace TennisApplication.Others
         {
             Users = users;
             Tournament = tournament;
+            DrawFirstRound();
         }
 
         //todo drawing
-        public void DrawFirstRound()
+        private void DrawFirstRound()
         {
             CurrentRound = 1;
             Matches = new List<MatchDto>();
@@ -100,6 +101,13 @@ namespace TennisApplication.Others
         {
             int index = Matches.IndexOf(matchDto);
             Matches[index].Id = matchId;
+        }
+
+        public List<MatchDto> GetMatchesInCurrentRound()
+        {
+             return Matches
+                .Where(m => m.Round == CurrentRound)
+                .ToList();
         }
 
     }
