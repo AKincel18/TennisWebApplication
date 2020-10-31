@@ -15,5 +15,6 @@ namespace TennisApplication.Repository.Tournament
         List<Models.Tournament> GetCompletedTournaments();
 
         IEnumerable<Models.Tournament> GetTournamentByUserId(int id);
+        IEnumerable<Models.Tournament> GetOngoingTournaments();
     }
 }

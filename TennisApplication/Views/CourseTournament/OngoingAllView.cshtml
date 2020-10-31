@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Tournament>
+
+@{
+    ViewBag.Title = "Ongoing all tournaments";
+}
+
+<h2>Ongoing tournaments</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PlayersNumber)
+        </th>
+        <th></th>
+    </tr>
+    <tbody>
+    
+    @foreach (var item in Model)
+    {
+@using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
+{
+    
+    @Html.Hidden("TournamentId", item.Id)
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Place)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PlayersNumber)
+        </td>
+        <td>
+            <input type="submit" value="Resume tournament">
+        </td>
+    </tr>
+    
+}
+    }
+    </tbody>
+</table>

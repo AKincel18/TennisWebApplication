@@ -56,5 +56,10 @@ namespace TennisApplication.Repository.Match
                 .Where(m => m.Player1.Id == id || m.Player2.Id == id)
                 .ToList();
         }
+
+        public bool IsAnyMatchInTheTournament(int id)
+        {
+            return _context.Matches.Any(m => m.Tournament.Id == id);
+        }
     }
 }

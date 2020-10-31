@@ -186,5 +186,12 @@ namespace TennisApplication.Others
                 }
             }
         }
+
+        public void updateOngoing()
+        {
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            InitNameOfRound();
+            CurrentRound = Matches.Max(m => m.Round);
+        }
     }
 }

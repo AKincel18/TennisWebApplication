@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using TennisApplication.Dtos.Match;
 using TennisApplication.Dtos.Tournament;
 using TennisApplication.Models;
@@ -50,7 +49,7 @@ namespace TennisApplication.Controllers
                 tournamentCourse.UpdateIds(i, matches[i].Id);
             }
 
-            return View("/Views/Tournament/StartTournament.cshtml", tournamentCourse);
+            return View("/Views/CourseTournament/CourseTournament.cshtml", tournamentCourse);
         }
         
         [HttpPost("/ongoing")]
@@ -58,6 +57,16 @@ namespace TennisApplication.Controllers
         {
             var tournamentId = int.Parse(Request.Form["TournamentId"]);
             Tournament tournament = _tournamentRepository.GetTournamentById(tournamentId);
+            
+            if (tournamentCourse.Matches == null) //from /ongoingAll
+            {
+                tournamentCourse.Tournament = tournament;
+                tournamentCourse.Matches = _repository.GetMatchesByTournamentId(tournamentId)
+                    .Select(match => _mapper.Map<MatchDto>(match)).ToList();
+                tournamentCourse.updateOngoing();
+
+                return View("/Views/CourseTournament/CourseTournament.cshtml", tournamentCourse);
+            }
             int round = 0;
             int numberOfMatches = tournamentCourse.Matches.Count;
             for (int i = 0; i < numberOfMatches; i++)
@@ -98,7 +107,7 @@ namespace TennisApplication.Controllers
                 
             }
             
-            return View("/Views/Tournament/StartTournament.cshtml", tournamentCourse);
+            return View("/Views/CourseTournament/CourseTournament.cshtml", tournamentCourse);
         }
 
         [HttpGet("/completed")]
@@ -129,5 +138,12 @@ namespace TennisApplication.Controllers
             
             return View(tournamentCourse);
         }
+        [HttpGet("/ongoingAll")]
+        public ActionResult OngoingAllView()
+        {
+            return View(_tournamentRepository.GetOngoingTournaments());
+        }
+        
+        
     }
 }
