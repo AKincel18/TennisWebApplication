@@ -68,8 +68,8 @@ namespace TennisApplication.Repository.Tournament
         {
             List<int> tournamentIds =
                 _context.Enrolments
-                    .Where(e => e.UserId == id)
-                    .Select(e => e.TournamentId)
+                    .Where(e => e.User.Id == id)
+                    .Select(e => e.Tournament.Id)
                     .ToList();
 
             List<Models.Tournament> tournaments = _context.Tournaments.ToList();

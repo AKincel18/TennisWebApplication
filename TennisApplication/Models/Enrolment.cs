@@ -1,14 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TennisApplication.Models
 {
     public class Enrolment
     {
         [Key]
-        public int TournamentId { get; set; }
+        [Column("TournamentId")]
+        public Tournament Tournament { get; set; }
         
         [Key]
-        public int UserId { get; set; }
+        [Column("UserId")]
+        public User User { get; set; }
+
+        [NotMapped] 
+        public int TournamentId { get; set; }
         
+        [NotMapped] 
+        public int UserId { get; set; }
+
     }
 }

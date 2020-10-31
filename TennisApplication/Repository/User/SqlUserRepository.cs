@@ -51,14 +51,15 @@ namespace TennisApplication.Repository.User
 
         public List<Models.User> GetUsersByTournament(int tournamentId)
         {
-            var enrolments = _context.Enrolments.Where(t => t.TournamentId == tournamentId);
+            //todo change this method
+            var enrolments = _context.Enrolments.Where(t => t.Tournament.Id == tournamentId);
             var allUsers = _context.Users.ToList();
             var users = new List<Models.User>();
             foreach (var enrolment in enrolments)
             {
                 foreach (var user in allUsers)
                 {
-                    if (user.Id == enrolment.UserId)
+                    if (user.Id == enrolment.User.Id)
                     {
                         users.Add(user);
                     }
@@ -70,7 +71,7 @@ namespace TennisApplication.Repository.User
 
         public bool IsUserRegisteredForTournamentById(int userId, int tournamentId)
         {
-            return _context.Enrolments.Any(e => e.TournamentId == tournamentId && e.UserId == userId);
+            return _context.Enrolments.Any(e => e.Tournament.Id == tournamentId && e.User.Id == userId);
         }
 
         public Models.User GetUserByEMail(string email)
