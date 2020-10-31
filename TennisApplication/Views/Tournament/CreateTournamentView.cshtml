@@ -1,11 +1,25 @@
 ﻿@model TennisApplication.Dtos.Tournament.TournamentCreateDto
 @{
-    ViewData["Title"] = "Create new tournament";
+    if (Model != null)
+    {
+        ViewData["Title"] = "Edit tournament";
+    }
+    else
+    {
+        ViewData["Title"] = "Create new tournament";
+    }
 }
    @using (Html.BeginForm("CreateTournament", "Tournament", FormMethod.Post))
    {
-       <h2>Create new tournament</h2>
-       
+       if (Model != null)
+       {
+           <h2>Edit tournament</h2>
+           @Html.HiddenFor(t => t.Id)
+       }
+       else
+       {
+           <h2>Create new tournament</h2>
+       }
        <label>Name of the tournament:</label>
        @Html.TextBoxFor(t => t.Name, new { required = string.Empty})
        <br>
@@ -15,13 +29,27 @@
        <br>
        
        <label>Date of the tournament:</label>
-       @Html.EditorFor(model => model.Date, new { htmlAttributes = new { required = string.Empty } })
+       if (Model != null)
+       {
+           @Html.EditorFor(model => model.Date)
+       }
+       else
+       {
+           @Html.EditorFor(model => model.Date, new { htmlAttributes = new { required = string.Empty } })
+       }
        <br>
        
        <label>Number of players: </label>
        @Html.TextBoxFor(t => t.PlayersNumber, new { @type = "number", required = string.Empty})
        <br> <br>
-            
-       <input type="submit" value="Create tournament">           
+
+       if (Model != null)
+       {
+           <input type="submit" value="Edit tournament">   
+       }
+       else
+       {
+           <input type="submit" value="Create tournament">   
+       }
        
    }

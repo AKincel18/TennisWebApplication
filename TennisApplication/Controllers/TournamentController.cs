@@ -63,37 +63,52 @@ namespace TennisApplication.Controllers
         [HttpPost]
         public ActionResult<TournamentReadDto> CreateTournament([FromForm]TournamentCreateDto tournamentCreateDto)
         {
-            var tournamentModel = _mapper.Map<Tournament>(tournamentCreateDto);
-            _repository.CreateTournament(tournamentModel);
+            Tournament tournament;
+            if (tournamentCreateDto.Id != 0)
+            {
+                tournament = _repository.GetTournamentById(tournamentCreateDto.Id);
+                tournament.Name = tournamentCreateDto.Name;
+                tournament.Date = tournamentCreateDto.Date;
+                tournament.Place = tournamentCreateDto.Place;
+                tournament.PlayersNumber = tournamentCreateDto.PlayersNumber;
+            }
+            else
+            {
+                tournament = _mapper.Map<Tournament>(tournamentCreateDto);
+                _repository.CreateTournament(tournament);
+            }
             _repository.SaveChanges();
 
-            var tournamentReadDto = _mapper.Map<TournamentReadDto>(tournamentModel);
+            //var tournamentReadDto = _mapper.Map<TournamentReadDto>(tournamentModel);
             
             //return CreatedAtRoute(nameof(GetTournamentById), new {tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
             return RedirectToAction(nameof(GetAllTournaments)); //return to GetAllTournaments
         }
         
         //PUT /tournaments/{id}
-        [HttpPut("{id}")]
-        public ActionResult UpdateTournament(int id, TournamentCreateDto tournamentCreateDto)
+        [HttpGet("/edit/{id}")]
+        public ActionResult UpdateTournamentView(int id /*[FromForm] TournamentCreateDto tournamentCreateDto*/)
         {
+            
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(tournamentCreateDto, tournamentModelFromRepository); //updating
+            TournamentCreateDto tournamentCreateDto = _mapper.Map<TournamentCreateDto>(tournamentModelFromRepository);
+            
+            //_mapper.Map(tournamentCreateDto, tournamentModelFromRepository); //updating
             
             //_repository.UpdateTournament(tournamentModelFromRepository);
-            _repository.SaveChanges();
+            //_repository.SaveChanges();
 
-            return NoContent();
+            return View("CreateTournamentView", tournamentCreateDto);
         }
         
         //PATCH /tournaments/{id}
-        [HttpPatch("{id}")]
-        public ActionResult PartialTournamentUpdate(int id, JsonPatchDocument<TournamentCreateDto> patchDocument)
+        [HttpPatch]
+        public ActionResult PartialTournamentUpdate(int id, [FromForm] JsonPatchDocument<TournamentReadDto> patchDocument)
         {
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
@@ -101,7 +116,7 @@ namespace TennisApplication.Controllers
                 return NotFound();
             }
 
-            var tournamentToPatch = _mapper.Map<TournamentCreateDto>(tournamentModelFromRepository);
+            var tournamentToPatch = _mapper.Map<TournamentReadDto>(tournamentModelFromRepository);
             patchDocument.ApplyTo(tournamentToPatch, ModelState);
             
             if (!TryValidateModel(tournamentToPatch))
@@ -116,7 +131,7 @@ namespace TennisApplication.Controllers
         }
         
         //DELETE /tournaments/{id}
-        [HttpDelete("{id}")]
+        [HttpGet("/delete/{id}")]
         public ActionResult DeleteTournament(int id)
         {
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
@@ -124,6 +139,15 @@ namespace TennisApplication.Controllers
             {
                 return NotFound();
             }
+
+            if (_matchRepository.IsAnyMatchInTheTournament(id))
+            {
+                ModelState.AddModelError("CantDelete", "Cannot delete tournament: '" + 
+                                                       tournamentModelFromRepository.Name + "' with matches!");
+                //return RedirectToAction(nameof(GetAllTournaments));
+                return View("GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetAllTournaments()));
+            }
+            
             _repository.DeleteTournament(tournamentModelFromRepository);
             _repository.SaveChanges();
 
@@ -155,7 +179,6 @@ namespace TennisApplication.Controllers
             return View(tournamentUserReadDtos);
         }
         
-        
-        
+
     }
 }

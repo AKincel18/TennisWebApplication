@@ -17,7 +17,13 @@
         <a asp-controller="Tournament" asp-action="CreateTournamentView">Create New</a>
     </p>
 }
-
+@if (!ViewData.ModelState.IsValid)
+{
+    <span class="text-danger">
+        @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage
+        <br>
+    </span>
+}
 <table class="table">
         <tr>
             <th>
@@ -53,14 +59,12 @@
                 @*todo not working yet*@
                 @if (isUserWithTournamentDirectorRole)
                 {
-                    <a asp-controller="Tournament" asp-action="PartialTournamentUpdate" asp-route-id="@item.Id">Edit |</a> 
+                    <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a> 
                 }
-                <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Details</a> 
-                
                 @if (isUserWithTournamentDirectorRole)
                 {
                     
-                    <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">| Delete</a>
+                    <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
                     @*@Html.ActionLink("Delete", "DeleteTournament", "Tournament",
                         new {id = item.Id}, null)*@
                 }
