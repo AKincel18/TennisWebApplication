@@ -78,5 +78,10 @@ namespace TennisApplication.Repository.User
         {
             return _context.Users.FirstOrDefault(u => u.EMail == email);
         }
+
+        public Models.User GetByePlayer()
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == -1);
+        }
     }
 }

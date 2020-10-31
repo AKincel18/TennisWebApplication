@@ -29,20 +29,20 @@
     @Html.Hidden("TournamentId", tournamentCourse.Tournament.Id)
     <div id="accordion">
 
-        @for (int round = 1; round <= tournamentCourse.CurrentRound; round++)
+        @for (int round = 0; round < tournamentCourse.CurrentRound; round++)
         {
 
             
-            bool editable = round == tournamentCourse.CurrentRound && !tournamentCourse.isFinished;
+            bool editable = round + 1 == tournamentCourse.CurrentRound && !tournamentCourse.IsFinished;
             
             @if (editable)
             {
 
-                <h3>Round: @round</h3>
+                <h3>@tournamentCourse.RoundsName[round]</h3>
             }
             else
             {
-                <h3>Round: @round - FINISHED</h3>
+                <h3>@tournamentCourse.RoundsName[round] - FINISHED</h3>
             }
 
             <div>
@@ -68,7 +68,7 @@
 
 
                     @{
-                        var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round).ToList().Count;
+                        var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
                     }    
 
                     @for (int i = 0; i < matchesInRound; i++)
@@ -172,7 +172,7 @@
             </div>
         }
     </div>
-    @if (!tournamentCourse.isFinished)
+    @if (!tournamentCourse.IsFinished)
     {
         <input type="submit" value="Save results">
     }

@@ -37,8 +37,9 @@ namespace TennisApplication.Controllers
         {
             var tournament = _tournamentRepository.GetTournamentById(id);
             var users = _userRepository.GetUsersByTournament(id);
+            var byeUser = _userRepository.GetByePlayer();
 
-            TournamentCourse tournamentCourse = new TournamentCourse(users, tournament);
+            TournamentCourse tournamentCourse = new TournamentCourse(users, tournament, byeUser);
 
             var matches = tournamentCourse.GetMatchesInCurrentRound()
                 .Select(match => _mapper.Map<Match>(match)).ToList();
@@ -74,7 +75,7 @@ namespace TennisApplication.Controllers
             }
 
             tournamentCourse.UpdateOthers(tournament, round);
-            if (!tournamentCourse.isFinished)
+            if (!tournamentCourse.IsFinished)
             {
                 var matches = tournamentCourse.GetMatchesInCurrentRound()
                     .Select(match => _mapper.Map<Match>(match)).ToList();
@@ -124,7 +125,7 @@ namespace TennisApplication.Controllers
             }
 
             tournamentCourse.Matches =  matches.Select(match => _mapper.Map<MatchDto>(match)).ToList();
-            tournamentCourse.CurrentRound = (int) Math.Log2(tournament.PlayersNumber); //set the last round
+            tournamentCourse.RoundsNumber = (int)Math.Ceiling(Math.Log2(tournament.PlayersNumber));
             
             return View(tournamentCourse);
         }

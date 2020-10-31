@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace TennisApplication.Repository.User
 {
@@ -13,5 +14,6 @@ namespace TennisApplication.Repository.User
         List<Models.User> GetUsersByTournament(int tournamentId);
         bool IsUserRegisteredForTournamentById(int userId, int tournamentId);
         Models.User GetUserByEMail(string email);
+        Models.User GetByePlayer();
     }
 }

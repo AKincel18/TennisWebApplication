@@ -14,7 +14,10 @@ namespace TennisApplication.Others
         public List<User> Users { get; set; } 
         public int CurrentRound { get; set; }
         public Tournament Tournament { get; set; }
-        public bool isFinished { get; set; }
+        public bool IsFinished { get; set; }
+        public List<string> RoundsName { get; set; }
+        public int RoundsNumber { get; set; }
+        private User _byeUser;
 
         public TournamentCourse()
         {
@@ -23,12 +26,17 @@ namespace TennisApplication.Others
         public TournamentCourse(Tournament tournament)
         {
             Tournament = tournament;
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            InitNameOfRound();
         }
 
-        public TournamentCourse(List<User> users, Tournament tournament)
+        public TournamentCourse(List<User> users, Tournament tournament, User byeUser)
         {
             Users = users;
             Tournament = tournament;
+            _byeUser = byeUser;
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            InitNameOfRound();
             DrawFirstRound();
         }
 
@@ -36,11 +44,56 @@ namespace TennisApplication.Others
         private void DrawFirstRound()
         {
             CurrentRound = 1;
-            Matches = new List<MatchDto>();
-            for (int i = 0; i < Users.Count; i += 2)
+            int sizeDraw = (int) Math.Pow(2.0, RoundsNumber);
+            List<User> draw = new List<User>();
+            
+            for (int i = 0; i < sizeDraw; i++)
             {
-                Matches.Add(new MatchDto(Tournament, Users[i], Users[i + 1], CurrentRound));
+                draw.Add(new User(-1));
             }
+            
+            for (int i = Users.Count; i < sizeDraw; i++)
+            {
+                Users.Add(new User(-1));
+            }
+            
+            List<MatchDto> matchesTmp = new List<MatchDto>();
+            for (int i = 0; i < sizeDraw / 2; i++)
+            {
+                matchesTmp.Add(new MatchDto(Tournament, Users[i], Users[Users.Count - 1 - i], CurrentRound));
+            }
+            
+
+            var upperHalf = 0;
+            var bottomHalf = sizeDraw - 1;
+            for (int i = 0; i < sizeDraw / 2; i++)
+            {
+                MatchDto match = matchesTmp[i];
+                if (i % 2 == 0)
+                {
+                    draw[upperHalf] = match.Player1;
+                    draw[upperHalf + 1] = match.Player2;
+                    upperHalf+=2;
+                }
+                else
+                {
+                    draw[bottomHalf] = match.Player1;
+                    draw[bottomHalf - 1] = match.Player2;
+                    bottomHalf-=2;
+                }
+
+            }
+            
+
+            Matches = new List<MatchDto>();
+            for (int i = 0; i < draw.Count; i += 2)
+            {
+                User p1 = draw[i].Id == - 1 ? _byeUser : draw[i];
+                User p2 = draw[i + 1].Id == - 1 ? _byeUser : draw[i + 1];
+                Matches.Add(new MatchDto(Tournament, p1, p2, CurrentRound));
+            }
+            
+            
         }
         
         
@@ -60,9 +113,11 @@ namespace TennisApplication.Others
             Matches.RemoveAll(m => m.Id == 0);
             Tournament = tournament;
             CurrentRound = round;
-            if ((int)Math.Pow(2, CurrentRound) == Tournament.PlayersNumber) //tournament finished
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            InitNameOfRound();
+            if (CurrentRound == RoundsNumber) //tournament finished
             {
-                isFinished = true;
+                IsFinished = true;
             }
             else
             {
@@ -110,5 +165,26 @@ namespace TennisApplication.Others
                 .ToList();
         }
 
+        private void InitNameOfRound()
+        {
+            RoundsName = new List<string>();
+            for (int i = 1;  i <= RoundsNumber; i++)
+            {
+                if (i == RoundsNumber)
+                {
+                    RoundsName.Add("Final");
+                } else if (i == RoundsNumber - 1)
+                {
+                    RoundsName.Add("Semi-final");
+                } else if (i == RoundsNumber - 2)
+                {
+                    RoundsName.Add("Quarter-final");
+                }
+                else
+                {
+                    RoundsName.Add("Round " + i);
+                }
+            }
+        }
     }
 }
