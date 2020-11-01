@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using TennisApplication.Dtos.Match;
 using TennisApplication.Dtos.Tournament;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
+using TennisApplication.Others;
 using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
 
@@ -29,11 +31,11 @@ namespace TennisApplication.Controllers
         [HttpGet("/myTournaments")]
         public ActionResult MyTournaments()
         {
-            UserReadDto loggedUser =
-                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""});
+                return RedirectToAction("Index", "Home", new {area = ""}); 
             }
             
             IEnumerable<Tournament> tournaments =  _tournamentRepository.GetTournamentByUserId(loggedUser.Id);
@@ -45,11 +47,11 @@ namespace TennisApplication.Controllers
         [HttpGet("/myMatches")]
         public ActionResult MyMatches()
         {
-            UserReadDto loggedUser =
-                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""});
+                return RedirectToAction("Index", "Home", new {area = ""}); 
             }
             List<Match> matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);
             return View(_mapper.Map<List<MatchDto>>(matches));

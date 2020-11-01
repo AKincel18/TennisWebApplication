@@ -1,6 +1,7 @@
 ﻿@using TennisApplication.Dtos.User
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http
+@using TennisApplication.Others
 @inject IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html lang="en">
@@ -22,9 +23,8 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 @{
-                    UserReadDto loggedUser = HttpContextAccessor.HttpContext.Session.GetString("SessionUser") == null ? 
-                        null : JsonConvert.DeserializeObject<UserReadDto>(HttpContextAccessor.HttpContext.Session.GetString("SessionUser"));
-
+                    DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+                    UserReadDto loggedUser = deserializable.GetLoggedUser();
                     if (loggedUser != null)
                     {
                         <partial name="_LoginPartial"/>

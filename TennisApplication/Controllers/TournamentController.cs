@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -8,6 +9,7 @@ using TennisApplication.Dtos.Enrolment;
 using TennisApplication.Dtos.Tournament;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
+using TennisApplication.Others;
 using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
 using TennisApplication.Repository.User;
@@ -159,8 +161,8 @@ namespace TennisApplication.Controllers
         [HttpGet("/incoming")]
         public ActionResult GetIncomingTournament()
         {
-            UserReadDto loggedUser =
-                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 

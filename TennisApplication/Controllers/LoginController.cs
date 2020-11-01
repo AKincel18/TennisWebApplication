@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
+using TennisApplication.Others;
 using TennisApplication.Repository.User;
 
 namespace TennisApplication.Controllers
@@ -54,11 +55,11 @@ namespace TennisApplication.Controllers
         [HttpGet("/edit")]
         public ActionResult EditAccountView()
         {
-            UserReadDto loggedUser =
-                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""});
+                return RedirectToAction("Index", "Home", new {area = ""}); 
             }
             User user = _repository.GetUserById(loggedUser.Id);
             return View(_mapper.Map<UserEditDto>(user));
@@ -67,8 +68,9 @@ namespace TennisApplication.Controllers
         [HttpPost("/editAction")]
         public ActionResult EditAccount([FromForm] UserEditDto userEditDto, IFormFile upload)
         {
-            UserReadDto loggedUser =
-                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
+            
             if (loggedUser != null)
             {
                 User user = _repository.GetUserById(loggedUser.Id);

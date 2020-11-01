@@ -1,10 +1,10 @@
 ﻿@using TennisApplication.Dtos.User
-@using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http
+@using TennisApplication.Others
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-    var loggedUser = HttpContextAccessor.HttpContext.Session.GetString("SessionUser") == null ? 
-        null : JsonConvert.DeserializeObject<UserReadDto>(HttpContextAccessor.HttpContext.Session.GetString("SessionUser"));
+    DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+    UserReadDto loggedUser = deserializable.GetLoggedUser();
 }
 <li class="nav-item dropdown">
     

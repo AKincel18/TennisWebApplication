@@ -1,13 +1,13 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using TennisApplication.Dtos.User
-@using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http
+@using TennisApplication.Others
 @inject IHttpContextAccessor HttpContextAccessor
 @model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
 @{
     ViewData["Title"] = "Tournament";
-    var loggedUser = HttpContextAccessor.HttpContext.Session.GetString("SessionUser") == null ? 
-        null : JsonConvert.DeserializeObject<UserReadDto>(HttpContextAccessor.HttpContext.Session.GetString("SessionUser"));
+    DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+    UserReadDto loggedUser = deserializable.GetLoggedUser();
 
 }
 @{
@@ -31,6 +31,9 @@
     </span>
 }
 <table class="table">
+    <thead class="thead-dark">
+
+
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -44,10 +47,17 @@
             <th>
                 @Html.DisplayNameFor(model => model.PlayersNumber)
             </th>
-            <th></th>
+            <th>
+                
+            </th>
+
         </tr>
+    
+    </thead>
+    
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -67,10 +77,10 @@
                     <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
                     <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
                 }
-                
+
 
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

@@ -27,12 +27,13 @@ namespace TennisApplication.Controllers
         [HttpGet("{id}")]
         public IActionResult EnrolTournament(int id)
         {            
-            UserReadDto loggedUser =
-                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""});
+                return RedirectToAction("Index", "Home", new {area = ""}); 
             }
+            
             var enrolmentWriteDto = new EnrolmentWriteDto(id, loggedUser.Id);
             var enrolmentModel = _mapper.Map<Enrolment>(enrolmentWriteDto);
             _repository.SaveEnrolment(enrolmentModel);
