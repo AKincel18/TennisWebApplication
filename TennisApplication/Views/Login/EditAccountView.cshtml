@@ -14,64 +14,102 @@
     <title></title>
 </head>
 <body>
-<h2>Edit account</h2>
-@using (Html.BeginForm("EditAccount", "Login", FormMethod.Post, new {enctype = "multipart/form-data"}))
+
+@using (Html.BeginForm("EditAccount", "Login", FormMethod.Post, new
 {
+    enctype = "multipart/form-data",
+    @class = "text-center border border-light w-50 p-3"
+}))
+{
+    <p class="h4 mb-4">Edit account</p>
+    <div class="form-row mb-4">
+        <div class="col">
+            @Html.TextBoxFor(u => u.FirstName, new { 
+                required = string.Empty, 
+                @class = "form-control",
+                placeholder= "First name"
+            
+            })
+        </div>
+        <div class="col">
+            @Html.TextBoxFor(u => u.LastName, new
+            {
+                required = string.Empty,
+                @class = "form-control",
+                placeholder= "Last name"
+            })
+        </div>
+    </div>
 
-    <label>First name: </label>
-    @Html.TextBoxFor(u => u.FirstName, new {required = string.Empty})
-    <br>
+    @Html.TextBoxFor(u => u.EMail, new
+    {
+        required = string.Empty,
+        @class = "form-control mb-4",
+        placeholder = "E-mail"
+    })
+    @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
+    
+    if (!ViewData.ModelState.IsValid)
+    {
+        <span class="text-danger">
+            @ViewData.ModelState["EMailExists"].Errors[0].ErrorMessage
+        </span>
+    }
+       
+    @Html.PasswordFor(u => u.Password, new
+    {
+        required = string.Empty,
+        @class = "form-control mb-4",
+        placeholder = "Password",
+        aria_describedby="defaultRegisterFormPasswordHelpBlock"
 
-    <label>Last name: </label>
-    @Html.TextBoxFor(u => u.LastName, new {required = string.Empty})
-    <br>
-
-    <label>E-mail: </label>
-    @Html.TextBoxFor(u => u.EMail, new {required = string.Empty})
-    <br>
-
-    <label>Password: </label>
-    @Html.PasswordFor(u => u.Password)
+    })
+    @*<small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+        To do
+    </small>*@
     @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
-    <br>
 
-    <label>Confirm password: </label>
-    @Html.PasswordFor(u => u.ConfirmPassword)
+    @Html.PasswordFor(u => u.ConfirmPassword, new
+    {
+        required = string.Empty,
+        @class = "form-control mb-4",
+        placeholder = "Confirm password",
+        aria_describedby="defaultRegisterFormPasswordHelpBlock2"
+
+    })
+    @*<small id="defaultRegisterFormPasswordHelpBlock2" class="form-text text-muted mb-4">
+        To do 2
+    </small>*@
     @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
-    <br>
 
 
     @if (Model.Photo.Length != 0)
     {
-        <label>Photo</label>
-        <br>
         <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)"/>
     }
-    else
-    {
-        <label>No photo</label>
-    }
-    <br>
-        
 
-        <div class="btn btn-primary">
+
+    <br>
+    <br>
+    <div class="text-left">
+        <div class="btn btn-outline-secondary">
             <label for="upload" id="choose-file-label">
                 Choose a new photo
             </label>
             <input type="file" id="upload" style="display: none" name="upload"/>
         </div>
-    <br><br>
-        <div id="imgPreview" class="thumbnail" style="display:none">
-            <img class="img-responsive" id="targetImg" />
-            <div class="caption">
-                <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
-                <span id="description"></span>
-            </div>
-        </div>
-        
-    <br><br>
-    <input type="submit" value="Edit account">  
+    </div>
     
+    <div id="imgPreview" class="thumbnail" style="display:none">
+        <img class="img-responsive" id="targetImg"/>
+        <div class="caption">
+            <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
+            <span id="description"></span>
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-info my-4 btn-block" value="Edit account">
+
 }
 
 
