@@ -1,4 +1,7 @@
-﻿@using TennisApplication.Others
+﻿@using TennisApplication.Dtos.User
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,21 +21,27 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                @if (LoggedUser.User != null)
-                {
-                    <partial name="_LoginPartial"/>
+                @{
+                    UserReadDto loggedUser = HttpContextAccessor.HttpContext.Session.GetString("SessionUser") == null ? 
+                        null : JsonConvert.DeserializeObject<UserReadDto>(HttpContextAccessor.HttpContext.Session.GetString("SessionUser"));
+
+                    if (loggedUser != null)
+                    {
+                        <partial name="_LoginPartial"/>
+                    }
+                    else
+                    {
+                        <partial name="_LoggedOutPartial"/>
+                    }
                 }
-                else
-                {
-                    <partial name="_LoggedOutPartial"/>
-                }
+
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <partial name="_TournamentLayout"/>
                     <partial name="_PlayerLayout"/>
-                   
+
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>

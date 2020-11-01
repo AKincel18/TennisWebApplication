@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TennisApplication.Dtos.Match;
 using TennisApplication.Dtos.Tournament;
+using TennisApplication.Dtos.User;
 using TennisApplication.Models;
-using TennisApplication.Others;
 using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
 
@@ -27,7 +29,14 @@ namespace TennisApplication.Controllers
         [HttpGet("/myTournaments")]
         public ActionResult MyTournaments()
         {
-            IEnumerable<Tournament> tournaments =  _tournamentRepository.GetTournamentByUserId(LoggedUser.User.Id);
+            UserReadDto loggedUser =
+                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            if (loggedUser == null)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""});
+            }
+            
+            IEnumerable<Tournament> tournaments =  _tournamentRepository.GetTournamentByUserId(loggedUser.Id);
 
             return View("/Views/Tournament/GetAllTournaments.cshtml",
                 _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
@@ -36,7 +45,13 @@ namespace TennisApplication.Controllers
         [HttpGet("/myMatches")]
         public ActionResult MyMatches()
         {
-            List<Match> matches = _matchRepository.GetMatchesByUserId(LoggedUser.User.Id);
+            UserReadDto loggedUser =
+                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            if (loggedUser == null)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""});
+            }
+            List<Match> matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);
             return View(_mapper.Map<List<MatchDto>>(matches));
         }
     }

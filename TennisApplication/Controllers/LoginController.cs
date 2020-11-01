@@ -2,9 +2,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
-using TennisApplication.Others;
 using TennisApplication.Repository.User;
 
 namespace TennisApplication.Controllers
@@ -31,7 +31,8 @@ namespace TennisApplication.Controllers
         [HttpGet("/out")]
         public ActionResult LoggedOut()
         {
-            LoggedUser.User = null;
+            HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(null,
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore}));
             return RedirectToAction("Index", "Home", new {area = ""});
         }
 
@@ -45,7 +46,7 @@ namespace TennisApplication.Controllers
                 return View("/Views/Login/LoginView.cshtml", userReadDto);
             }
 
-            LoggedUser.User = _mapper.Map<UserReadDto>(user);
+            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(_mapper.Map<UserReadDto>(user)));
             return RedirectToAction("Index", "Home", new {area = ""});
             
         }
@@ -53,33 +54,43 @@ namespace TennisApplication.Controllers
         [HttpGet("/edit")]
         public ActionResult EditAccountView()
         {
-            User user = _repository.GetUserById(LoggedUser.User.Id);
+            UserReadDto loggedUser =
+                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            if (loggedUser == null)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""});
+            }
+            User user = _repository.GetUserById(loggedUser.Id);
             return View(_mapper.Map<UserEditDto>(user));
         }
 
         [HttpPost("/editAction")]
         public ActionResult EditAccount([FromForm] UserEditDto userEditDto, IFormFile upload)
         {
-            
-            User user = _repository.GetUserById(LoggedUser.User.Id);
-            user.FirstName = userEditDto.FirstName;
-            user.LastName = userEditDto.LastName;
-            user.EMail = userEditDto.EMail;
-            
-            if (userEditDto.Password != null)
+            UserReadDto loggedUser =
+                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            if (loggedUser != null)
             {
-                user.Password = userEditDto.Password;
-            }
+                User user = _repository.GetUserById(loggedUser.Id);
+                user.FirstName = userEditDto.FirstName;
+                user.LastName = userEditDto.LastName;
+                user.EMail = userEditDto.EMail;
             
-            if (upload != null)
-            {
-                using var ms = new MemoryStream();
-                upload.CopyTo(ms);
-                user.Photo = ms.ToArray();
-            }
+                if (userEditDto.Password != null)
+                {
+                    user.Password = userEditDto.Password;
+                }
+            
+                if (upload != null)
+                {
+                    using var ms = new MemoryStream();
+                    upload.CopyTo(ms);
+                    user.Photo = ms.ToArray();
+                }
 
-            _repository.SaveChanges();
-            LoggedUser.User = _mapper.Map<UserReadDto>(user);
+                _repository.SaveChanges();
+                HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(_mapper.Map<UserReadDto>(user)));
+            }
             
             return RedirectToAction("Index", "Home", new {area = ""});
         }

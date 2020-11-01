@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TennisApplication.Dtos.Enrolment;
+using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 using TennisApplication.Others;
 using TennisApplication.Repository.Enrolment;
@@ -23,13 +26,21 @@ namespace TennisApplication.Controllers
         
         [HttpGet("{id}")]
         public IActionResult EnrolTournament(int id)
-        {
-            var enrolmentWriteDto = new EnrolmentWriteDto(id, LoggedUser.User.Id);
+        {            
+            UserReadDto loggedUser =
+                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            if (loggedUser == null)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""});
+            }
+            var enrolmentWriteDto = new EnrolmentWriteDto(id, loggedUser.Id);
             var enrolmentModel = _mapper.Map<Enrolment>(enrolmentWriteDto);
             _repository.SaveEnrolment(enrolmentModel);
             _repository.SaveChanges();
             
             return RedirectToAction("GetIncomingTournament","Tournament");
+            
+
         }
     }
 }

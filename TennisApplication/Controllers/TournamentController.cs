@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TennisApplication.Dtos.Enrolment;
 using TennisApplication.Dtos.Tournament;
+using TennisApplication.Dtos.User;
 using TennisApplication.Models;
-using TennisApplication.Others;
 using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
 using TennisApplication.Repository.User;
@@ -157,7 +159,9 @@ namespace TennisApplication.Controllers
         [HttpGet("/incoming")]
         public ActionResult GetIncomingTournament()
         {
-            if (LoggedUser.User == null)
+            UserReadDto loggedUser =
+                JsonConvert.DeserializeObject<UserReadDto>(HttpContext.Session.GetString("SessionUser"));
+            if (loggedUser == null)
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }
@@ -168,7 +172,7 @@ namespace TennisApplication.Controllers
             foreach (var tournament in tournaments)
             {
                 var users = _userRepository.GetUsersByTournament(tournament.Id);
-                var isRegistered = _userRepository.IsUserRegisteredForTournamentById(LoggedUser.User.Id, tournament.Id);
+                var isRegistered = _userRepository.IsUserRegisteredForTournamentById(loggedUser.Id, tournament.Id);
                 if (!_matchRepository.IsAnyMatchInTheTournament(tournament.Id))
                 {
                     tournamentUserReadDtos.Add(new TournamentUserReadDto(tournament, users, isRegistered));

@@ -32,6 +32,10 @@ namespace TennisApplication.Models
 
         public byte[] Photo { get; set; }
 
+        public User()
+        {
+        }
+
         public User(int id)
         {
             Id = id;

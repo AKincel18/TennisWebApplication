@@ -1,8 +1,15 @@
-﻿@using TennisApplication.Others
+﻿@using TennisApplication.Dtos.User
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using Newtonsoft.Json
+@{
+    var loggedUser = HttpContextAccessor.HttpContext.Session.GetString("SessionUser") == null ? 
+        null : JsonConvert.DeserializeObject<UserReadDto>(HttpContextAccessor.HttpContext.Session.GetString("SessionUser"));
+}
 <ul class="navbar-nav">
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Hello @LoggedUser.User.FirstName!
+            Hello @loggedUser?.FirstName!
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="EditAccountView">Edit account</a>

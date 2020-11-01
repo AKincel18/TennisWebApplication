@@ -1,4 +1,11 @@
-﻿@using TennisApplication.Others
+﻿@using TennisApplication.Dtos.User
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var loggedUser = HttpContextAccessor.HttpContext.Session.GetString("SessionUser") == null ? 
+        null : JsonConvert.DeserializeObject<UserReadDto>(HttpContextAccessor.HttpContext.Session.GetString("SessionUser"));
+}
 <li class="nav-item dropdown">
     
     <a class="nav-link dropdown" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -6,7 +13,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
     
-    @if (LoggedUser.User != null && LoggedUser.User.Role.Equals(Role.TournamentDirector))
+    @if (loggedUser != null && loggedUser.Role.Equals(Role.TournamentDirector))
     {
         <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create new tournament</a>
         

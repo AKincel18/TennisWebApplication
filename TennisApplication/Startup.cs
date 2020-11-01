@@ -2,9 +2,11 @@ using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using TennisApplication.Database;
@@ -42,10 +44,16 @@ namespace TennisApplication
             services.AddScoped<IUserRepository, SqlUserRepository>();
             services.AddScoped<IEnrolmentRepository, SqlEnrolmentRepository>();
             services.AddScoped<IMatchRepository, SqlMatchRepository>();
+            
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
             services.AddRazorPages();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(3600);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +75,7 @@ namespace TennisApplication
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
 
             app.UseEndpoints(endpoints =>
