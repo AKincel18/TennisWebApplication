@@ -3,46 +3,53 @@
 @{
     ViewData["Title"] = "All completed tournament";
 }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
+<script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
 
 <h1>Completed tournament</h1>
+<div class="container">
+    
 
-<table class="table">
-<thead class="thead-dark">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Place)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PlayersNumber)
-        </th>
-        <th></th>
-    </tr>
-<thead class="thead-dark">
-    <tbody>
-    @foreach (var item in Model) {
+    <table class="table sortable">
+        <thead class="thead-dark">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Place)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlayersNumber)
-            </td>
-            <td>
-                <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Details</a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Place)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayersNumber)
+            </th>
+            <th></th>
         </tr>
-    }
-    </tbody>
-</table>
+        <thead class="thead-dark">
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Place)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlayersNumber)
+                </td>
+                <td>
+                    <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

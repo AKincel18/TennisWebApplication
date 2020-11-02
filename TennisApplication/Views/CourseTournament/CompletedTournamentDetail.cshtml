@@ -20,82 +20,96 @@
     var iterator = 0;
     var tournamentCourse = Model;
 }
-
-    <div id="accordion">
-
-        @for (int round = 0; round < tournamentCourse.RoundsNumber; round++)
-        {
-
-            
-            <h3>@tournamentCourse.RoundsName[round]</h3>
-            
-
-            <div>
-
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>
-                                <label>Player 1</label>
-                            </th>
-                            <th>
-                                <label>Player 2</label>
-                            </th>
-                            <th>
-                                <label>Winner</label>
-                            </th>
-                            <th>
-                                <label>Result</label>
-                            </th>
-                        </tr>
-                    <thead class="thead-dark">
-                    <tbody>
-
-
-
-
-                    @{
-                        var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
-                    }
-
-                    @for (int i = 0; i < matchesInRound; i++)
-                    {
-
-                        var player1 = tournamentCourse.Matches[iterator].Player1.FirstName + " " + tournamentCourse.Matches[iterator].Player1.LastName;
-                        var player2 = tournamentCourse.Matches[iterator].Player2.FirstName + " " + tournamentCourse.Matches[iterator].Player2.LastName;
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => player1)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => player2)
-                            </td>
-
-                            <td>
-
-                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Winner)
-                            </td>
-
-                            <td>
-                                @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Result)
-                            </td>
-
-
-                        </tr>
-                        iterator++;
-                    }
-
-
-
-                    </tbody>
-                </table>
-
+<!--Accordion wrapper-->
+<div id="accordion">
+    @for (int round = 0; round < tournamentCourse.RoundsNumber; round++)
+    {
+        var bodyId = "Body" + round;
+        
+        <div class="card">
+            <div class="card-header" id="@round">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
+                        @tournamentCourse.RoundsName[round]
+                    </button>
+                </h5>
             </div>
-        }
-    </div>
-    
+    @{
+        var openFirstCollapse = round == 0 ? "collapse show" : "collapse"; 
+    }
+            
+            <div id="@bodyId" class="@openFirstCollapse" aria-labelledby="@round" data-parent="#accordion">
+                <div class="card-body">
+                    <div>
+                    
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>
+                                    <label>Player 1</label>
+                                </th>
+                                <th>
+                                    <label>Player 2</label>
+                                </th>
+                                <th>
+                                    <label>Winner</label>
+                                </th>
+                                <th>
+                                    <label>Result</label>
+                                </th>
+                            </tr>
+                            <thead class="thead-dark">
+                            <tbody>
+                    
+                    
+                    
+                    
+                            @{
+                                var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
+                            }
+                    
+                            @for (int i = 0; i < matchesInRound; i++)
+                            {
+                    
+                                var player1 = tournamentCourse.Matches[iterator].Player1.FirstName + " " + tournamentCourse.Matches[iterator].Player1.LastName;
+                                var player2 = tournamentCourse.Matches[iterator].Player2.FirstName + " " + tournamentCourse.Matches[iterator].Player2.LastName;
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => player1)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => player2)
+                                    </td>
+                    
+                                    <td>
+                    
+                                        @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Winner)
+                                    </td>
+                    
+                                    <td>
+                                        @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Result)
+                                    </td>
+                    
+                    
+                                </tr>
+                                iterator++;
+                            }
+                    
+                    
+                    
+                            </tbody>
+                        </table>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+   
 <script>
-$( "#accordion" ).accordion();
+//$( "#accordion" ).accordion();
 </script>
 
 </body>

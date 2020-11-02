@@ -3,10 +3,16 @@
 @{
     ViewData["Title"] = "My matches";
 }
-<h1>My matches</h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
+<script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
 
-<table class="table">
-    <thead class="thead-dark">
+<h1>My matches</h1>
+<div class="container">
+    
+    <table class="table sortable">
+        <thead class="thead-dark">
         <tr>
             <th>
                 <label>Player 1</label>
@@ -27,51 +33,53 @@
                 <label>Tournament details</label>
             </th>
         </tr>
-    <thead class="thead-dark">
-    <tbody>
+        <thead class="thead-dark">
+        <tbody>
 
 
 
-    @foreach (var match in Model)
-    {
-        var player1 = match.Player1.FirstName + " " + match.Player1.LastName;
-        var player2 = match.Player2.FirstName + " " + match.Player2.LastName;
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => player1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => player2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => match.Result)
-            </td>
-            <td>
-
-                @Html.DisplayFor(modelItem => match.Round)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => match.Tournament.Name)
-            </td>
-            @if (match.Tournament.Completed)
-            {
+        @foreach (var match in Model)
+        {
+            var player1 = match.Player1.FirstName + " " + match.Player1.LastName;
+            var player2 = match.Player2.FirstName + " " + match.Player2.LastName;
+            <tr>
                 <td>
-                    <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@match.Tournament.Id">Click</a>
+                    @Html.DisplayFor(modelItem => player1)
                 </td>
-            }
-            else
-            {
                 <td>
-                    <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@match.Tournament.Id">Click</a>
+                    @Html.DisplayFor(modelItem => player2)
                 </td>
-            }
+                <td>
+                    @Html.DisplayFor(modelItem => match.Result)
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => match.Round)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => match.Tournament.Name)
+                </td>
+                @if (match.Tournament.Completed)
+                {
+                    <td>
+                        <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@match.Tournament.Id">Click</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@match.Tournament.Id">Click</a>
+                    </td>
+                }
 
 
-        </tr>
-    }
+            </tr>
+        }
 
 
 
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+</div>

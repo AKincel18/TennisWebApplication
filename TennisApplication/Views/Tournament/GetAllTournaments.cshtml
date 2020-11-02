@@ -15,6 +15,22 @@
       loggedUser != null && loggedUser.Role.Equals(Role.TournamentDirector);
     
 }
+<!DOCTYPE html>
+ <head>
+ 
+     @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+     <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
+     <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+     $1$<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">#1#*@
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
+      <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+ </head>
+ <html>
 <h1>Tournaments</h1>
 
 @if (isUserWithTournamentDirectorRole)
@@ -30,8 +46,10 @@
         <br>
     </span>
 }
-<table class="table">
-    <thead class="thead-dark">
+<body>
+<div class="container">
+    <table class="table sortable">
+        <thead class="thead-dark">
 
 
         <tr>
@@ -53,34 +71,39 @@
 
         </tr>
     
-    </thead>
+        </thead>
     
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Place)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlayersNumber)
-            </td>
-            <td>
-                @if (isUserWithTournamentDirectorRole)
-                {
-                    <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
-                    <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
-                }
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Place)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlayersNumber)
+                </td>
+                <td>
+                    @if (isUserWithTournamentDirectorRole)
+                    {
+                        <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
+                        <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
+                    }
 
 
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+</div>
+</body>
+
+</html>
