@@ -40,20 +40,24 @@
                 <div class="card-body">
                     <div>
 
-                        @if (!tournamentUser.IsRegistered && loggedUser.Role == Role.Player)
+                        @if (loggedUser!=null )
                         {
-                            <p>
-                                <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.Tournament.Id">Save me</a>
-                            </p>
+                            @if (!tournamentUser.IsRegistered && loggedUser.Role == Role.Player)
+                            {
+                                <p>
+                                    <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.Tournament.Id">Save me</a>
+                                </p>
+                            }
+                            @if (loggedUser.Role == Role.TournamentDirector)
+                            {
+                                <p>
+                                    <a asp-controller="CourseTournament" asp-action="StartTournament" asp-route-id="@tournamentUser.Tournament.Id">
+                                        Start the tournament
+                                    </a>
+                                </p>
+                            }
                         }
-                        @if (loggedUser.Role == Role.TournamentDirector)
-                        {
-                            <p>
-                                <a asp-controller="CourseTournament" asp-action="StartTournament" asp-route-id="@tournamentUser.Tournament.Id">
-                                    Start the tournament
-                                </a>
-                            </p>
-                        }
+
 
 
                         <p>

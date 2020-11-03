@@ -1,12 +1,17 @@
-﻿@model IEnumerable<Tournament>
+﻿@using TennisApplication.Others
+@using Microsoft.AspNetCore.Http
+@using TennisApplication.Dtos.User
+@model IEnumerable<Tournament>
 
 @{
     ViewBag.Title = "Ongoing all tournaments";
+    DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+    UserReadDto loggedUser = deserializable.GetLoggedUser();
 }
 
 <h2>Ongoing tournaments</h2>
 <div class="container">
-    
+
     <table class="table">
         <thead class="table-info">
         <tr>
@@ -25,32 +30,35 @@
             <th></th>
         </tr>
         <tbody>
-    
+
         @foreach (var item in Model)
         {
-@using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
-{
-    
-    @Html.Hidden("TournamentId", item.Id)
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Place)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PlayersNumber)
-        </td>
-        <td>
-            <input type="submit" class="btn btn-info btn-block" value="Resume tournament">
-        </td>
-    </tr>
-    
-}
+            @using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
+            {
+                @Html.Hidden("TournamentId", item.Id)
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Place)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PlayersNumber)
+                    </td>
+                    <td>
+
+                        <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Detail</a>
+                        @if (loggedUser != null && loggedUser.Role == Role.TournamentDirector)
+                        {
+                            <input type="submit" class="btn btn-info btn-block" value="Resume tournament">
+                        }
+                    </td>
+                </tr>
+            }
         }
         </tbody>
     </table>

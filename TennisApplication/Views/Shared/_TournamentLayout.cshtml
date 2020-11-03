@@ -7,25 +7,24 @@
     UserReadDto loggedUser = deserializable.GetLoggedUser();
 }
 <li class="nav-item dropdown">
-    
+
     <a class="nav-link dropdown" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Tournament
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-    
-    @if (loggedUser != null && loggedUser.Role.Equals(Role.TournamentDirector))
-    {
-        <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create new tournament</a>
-        
-    }
-        <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">All tournament</a>
+
+        @if (loggedUser != null && loggedUser.Role.Equals(Role.TournamentDirector))
+        {
+            <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create new tournament</a>
+        }
+        <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">All tournaments</a>
 
 
         <a class="dropdown-item" asp-area="" asp-controller="CourseTournament" asp-action="CompletedTournamentView">Completed tournament</a>
 
 
-    <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetIncomingTournament">Incoming tournament</a>
-    
+        <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetIncomingTournament">Incoming tournament</a>
+
         <a class="dropdown-item" asp-area="" asp-controller="CourseTournament" asp-action="OngoingAllView">Ongoing tournament</a>
 
     </div>

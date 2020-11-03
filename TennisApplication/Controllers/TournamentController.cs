@@ -48,7 +48,14 @@ namespace TennisApplication.Controllers
         [HttpGet("/createTournament")]
         public ActionResult CreateTournamentView()
         {
-            return View();
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
+            if (loggedUser != null && loggedUser.Role == Role.TournamentDirector)
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home", new {area = ""}); 
+            
         }
         //GET /tournaments/{id}
         [HttpGet("{id}", Name = "GetTournamentById")]
@@ -93,7 +100,12 @@ namespace TennisApplication.Controllers
         [HttpGet("/edit/{id}")]
         public ActionResult UpdateTournamentView(int id /*[FromForm] TournamentCreateDto tournamentCreateDto*/)
         {
-            
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
+            if (loggedUser == null || loggedUser.Role == Role.Player)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""}); 
+            }
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
             {
@@ -138,6 +150,13 @@ namespace TennisApplication.Controllers
         [HttpGet("/delete/{id}")]
         public ActionResult DeleteTournament(int id)
         {
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
+            if (loggedUser == null || loggedUser.Role == Role.Player)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""}); 
+            }
+            
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
             {
@@ -163,10 +182,10 @@ namespace TennisApplication.Controllers
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            if (loggedUser == null)
+            /*if (loggedUser == null)
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 
-            }
+            }*/
             
             var tournaments = _repository.GetIncomingTournament();
             List<TournamentUserReadDto> tournamentUserReadDtos = new List<TournamentUserReadDto>();
@@ -174,7 +193,9 @@ namespace TennisApplication.Controllers
             foreach (var tournament in tournaments)
             {
                 var users = _userRepository.GetUsersByTournament(tournament.Id);
-                var isRegistered = _userRepository.IsUserRegisteredForTournamentById(loggedUser.Id, tournament.Id);
+                var isRegistered = loggedUser != null && _userRepository.IsUserRegisteredForTournamentById(loggedUser.Id,
+                    tournament.Id);
+                
                 if (!_matchRepository.IsAnyMatchInTheTournament(tournament.Id))
                 {
                     tournamentUserReadDtos.Add(new TournamentUserReadDto(tournament, users, isRegistered));

@@ -33,7 +33,7 @@ namespace TennisApplication.Controllers
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            if (loggedUser == null)
+            if (loggedUser == null || loggedUser.Role == Role.TournamentDirector)
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }
@@ -49,7 +49,7 @@ namespace TennisApplication.Controllers
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            if (loggedUser == null)
+            if (loggedUser == null || loggedUser.Role == Role.TournamentDirector)
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }
