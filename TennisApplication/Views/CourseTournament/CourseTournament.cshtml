@@ -25,10 +25,10 @@
     var tournamentCourse = Model;
 }
 <div id="accordion"> 
-@using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
-{
+    @using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
+    {
     
-    @Html.Hidden("TournamentId", tournamentCourse.Tournament.Id)
+        @Html.Hidden("TournamentId", tournamentCourse.Tournament.Id)
 @for (int round = 0; round < tournamentCourse.CurrentRound; round++)
 {
 
@@ -36,6 +36,7 @@
     bool editable = round + 1 == tournamentCourse.CurrentRound && !tournamentCourse.IsFinished;
     var header = editable ? tournamentCourse.RoundsName[round] : tournamentCourse.RoundsName[round] + " - FINISHED";
     var openCollapse = tournamentCourse.CurrentRound - 1 == round ? "collapse show" : "collapse";
+    var test = editable ? "true" : "false";
 
     <div class="card">
         <div class="card-header" id="@round">
@@ -50,126 +51,87 @@
     
     <div id="@bodyId" class="@openCollapse" aria-labelledby="@round" data-parent="#accordion">
         <div class="card-body">
-            <div>
-                <table class="table">
-                    <tr>
-                        <th>
-                            <label>Player 1</label>
-                        </th>
-                        <th>
-                            <label>Player 2</label>
-                        </th>
-                        <th>
-                            <label>Winner</label>
-                        </th>
-                        <th>
-                            <label>Result</label>
-                        </th>
-                    </tr>
-                    <tbody>
+        <div>
+            <table class="table">
+            <tr>
+                <th style="width: 30%">
+                    <label>Player 1</label>
+                </th>
+                <th style="width: 30%">
+                    <label>Player 2</label>
+                </th>
+                <th style="width: 10%">
+                    <label>Winner</label>
+                </th>
+                <th style="width: 30%">
+                    <label>Result</label>
+                </th>
+            </tr>
+            <tbody>
 
 
 
 
-                    @{
-                        var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
-                    }
+            @{
+                var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
+            }
 
-                    @for (int i = 0; i < matchesInRound; i++)
-                    {
+            @for (int i = 0; i < matchesInRound; i++)
+            {
 
-                        var player1 = tournamentCourse.Matches[iterator].Player1.FirstName 
-                                      + " " + tournamentCourse.Matches[iterator].Player1.LastName;
-                        var player2 = tournamentCourse.Matches[iterator].Player2.FirstName 
-                                      + " " + tournamentCourse.Matches[iterator].Player2.LastName;
+                var player1 = tournamentCourse.Matches[iterator].Player1.FirstName 
+                              + " " + tournamentCourse.Matches[iterator].Player1.LastName;
+                var player2 = tournamentCourse.Matches[iterator].Player2.FirstName 
+                              + " " + tournamentCourse.Matches[iterator].Player2.LastName;
                         
-                        @Html.Hidden("MatchDto[" + iterator + "].Id", tournamentCourse.Matches[iterator].Id)
+                @Html.Hidden("MatchDto[" + iterator + "].Id", tournamentCourse.Matches[iterator].Id)
 
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => player1)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => player2)
-                            </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => player1, new
+                        {
+                            @class = "form-control mb-4"
+                        })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => player2, new
+                        {
+                            @class = "form-control mb-4"
+                        })
+                    </td>
 
-                            <td>
-                                @Html.DropDownListFor(modelItem => modelItem.Matches[iterator].Winner,
-                                    Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
-                                    {
-                                        Text = name,
-                                        Value = name
-                                    }))
-                            </td>
-                            <td>
-                                @Html.TextBoxFor(modelItem => modelItem.Matches[iterator].Result,
-                                    new {type = "string", required = string.Empty}
-                                    )
+                    <td>
+                        @if (editable)
+                        {
+                            <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
+                                    class="form-control mb-4" >
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
+                                    class="form-control mb-4" disabled>
+                            </select>
+                        }
 
-                            </td>
-                            
-                            
-                            
-                            @*<td>
-                                                @Html.DropDownListFor(modelItem => modelItem.Matches[iterator].Winner,
-                                                    Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
-                                                    {
-                                                        Text = name,
-                                                        Value = name
-                                                    }), 
-                                                    editable ? 
-                                                        (object) new { } : new {disabled = true })
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(modelItem => modelItem.Matches[iterator].Result,
-                                                    editable ? 
-                                                        (object) new { type = "string", required = string.Empty} 
-                                                        : 
-                                                        new {type = "string", required = string.Empty, disabled = true }
-                                                    )
+
+
+
+                    </td>
+                        
+                    <td>
+                        @Html.TextBoxFor(modelItem => modelItem.Matches[iterator].Result,
+                            new {
+                                type = "string", 
+                                required = string.Empty, 
+                                @class="form-control mb-4"
+
+                            }
+                            )
+
+                    </td>
+                </tr>
                 
-                                            </td>*@
-
-                            @*@if (editable)
-                                            {
-                                                <td>
-                                                    @Html.DropDownListFor(modelItem => tournamentCourse.Matches[iterator].Winner,
-                                                        Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
-                                                        {
-                                                            Text = name,
-                                                            Value = name
-                                                        }))
-                                                </td>
-                                                <td>
-                                                    @Html.TextBoxFor(modelItem => tournamentCourse.Matches[iterator].Result,
-                                                        new {type = "string", required = string.Empty })
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                
-                                                    @Html.DropDownListFor(modelItem => tournamentCourse.Matches[iterator].Winner,
-                                                        Enum.GetNames(typeof(Winner)).Select(name => new SelectListItem()
-                                                        {
-                                                            Text = name,
-                                                            Value = name
-                                                        }), new
-                                                        {
-                                                            disabled = "true"
-                                                        })
-                                                </td>
-                                                
-                                                <td>
-                                                    @Html.TextBoxFor(modelItem => tournamentCourse.Matches[iterator].Result,
-                                                        new {type = "string", required = string.Empty, disabled = "true"})
-                                                </td>
-                                            }*@
-
-
-
-
-                        </tr>
                         iterator++;
                     }
 
@@ -186,11 +148,11 @@
 
 
 }
-    @if (!tournamentCourse.IsFinished)
-    {
-        <input type="submit" class="btn btn-info my-4 btn-block" value="Save results">
+        @if (!tournamentCourse.IsFinished)
+        {
+            <input type="submit" class="btn btn-info my-4 btn-block" value="Save results">
+        }
     }
-}
 </div>
 
 </body>

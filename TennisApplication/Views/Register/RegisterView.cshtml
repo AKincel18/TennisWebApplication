@@ -83,15 +83,19 @@
     </small>*@
     @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
     
+    <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Role>()" class="form-control mb-4">
+                
+    </select>
     
-    @Html.DropDownListFor(u => u.Role, Enum.GetNames(typeof(Role)).Select(name => new SelectListItem()
+
+    @*@Html.DropDownListFor(u => u.Role, Enum.GetNames(typeof(Role)).Select(name => new SelectListItem()
     {
         Text = name, 
         Value = name
     }), new
     {
         @class = "form-control mb-4"
-    })
+    })*@
     
     <div class="text-left">
            <div class="btn btn-outline-secondary">

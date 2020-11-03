@@ -3,26 +3,23 @@
 @{
     ViewBag.Title = "Ongoing all tournaments";
 }
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
-<script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+
 <h2>Ongoing tournaments</h2>
 <div class="container">
     
-    <table class="table sortable">
+    <table class="table">
         <thead class="table-info">
         <tr>
-            <th>
+            <th style="width: 30%">
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            <th style="width: 30%">
                 @Html.DisplayNameFor(model => model.Place)
             </th>
-            <th>
+            <th style="width: 20%">
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            <th>
+            <th style="width: 20%">
                 @Html.DisplayNameFor(model => model.PlayersNumber)
             </th>
             <th></th>

@@ -51,7 +51,7 @@
                                 <th>
                                     <label>Player 2</label>
                                 </th>
-                                <th>
+                                <th style="text-align: center">
                                     <label>Winner</label>
                                 </th>
                                 <th>
@@ -80,12 +80,11 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => player2)
                                     </td>
-                    
-                                    <td>
-                    
+                                    <td style="text-align: center">
+                                                            
                                         @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Winner)
                                     </td>
-                    
+                                    
                                     <td>
                                         @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Result)
                                     </td>

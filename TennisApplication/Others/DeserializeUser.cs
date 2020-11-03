@@ -24,7 +24,7 @@ namespace TennisApplication.Others
                 loggedUser =
                     JsonConvert.DeserializeObject<UserReadDto>(_contextAccessor.HttpContext.Session.GetString("SessionUser"));
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 return null;
             }
