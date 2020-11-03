@@ -1,8 +1,12 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Processing;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 using TennisApplication.Others;
@@ -82,14 +86,25 @@ namespace TennisApplication.Controllers
                 {
                     user.Password = userEditDto.Password;
                 }
-            
+                
+                
                 if (upload != null)
                 {
-                    using var ms = new MemoryStream();
-                    upload.CopyTo(ms);
-                    user.Photo = ms.ToArray();
+                    var image = Image.Load(upload.OpenReadStream());
+                    image.Mutate(x => x.Resize(256, 256));
+                    
+                    //using var ms = new MemoryStream();
+                    MemoryStream stream = new MemoryStream();
+                    image.SaveAsPng(stream);
+                    //var _IMemoryGroup = image.Ge
+                    //var _MemoryGroup = _IMemoryGroup.ToArray()[0];
+                    //var PixelData = MemoryMarshal.AsBytes(_MemoryGroup.Span).ToArray();
+                    
+                    //upload.CopyTo(ms);
+                    user.Photo = stream.ToArray();
+                    
                 }
-
+                
                 _repository.SaveChanges();
                 HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(_mapper.Map<UserReadDto>(user)));
             }

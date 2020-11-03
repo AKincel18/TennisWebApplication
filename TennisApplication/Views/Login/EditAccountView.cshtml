@@ -83,7 +83,9 @@
 
     @if (Model.Photo.Length != 0)
     {
-        <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)"/>
+        <div class="text-left">
+            <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)"/>
+        </div>
     }
 
 
@@ -99,12 +101,17 @@
     </div>
     
     <div id="imgPreview" class="thumbnail" style="display:none">
-        <br><br>
+    <br><br>
+    <div class="text-left">
         <img class="img-responsive" id="targetImg"/>
+    
+        
         <div class="caption">
             <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
             <span id="description"></span>
         </div>
+    </div>
+    
     </div>
 
     <input type="submit" class="btn btn-info my-4 btn-block" value="Edit account">
