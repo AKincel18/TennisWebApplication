@@ -61,5 +61,10 @@ namespace TennisApplication.Repository.Match
         {
             return _context.Matches.Any(m => m.Tournament.Id == id);
         }
+
+        public int GetTournamentRound(int tournamentId)
+        {
+            return _context.Matches.Where(m => m.Tournament.Id == tournamentId).Max(m => m.Round);
+        }
     }
 }

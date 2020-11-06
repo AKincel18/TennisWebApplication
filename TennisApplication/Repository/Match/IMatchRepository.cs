@@ -10,5 +10,6 @@ namespace TennisApplication.Repository.Match
         List<Models.Match> GetMatchesByTournamentId(int id);
         List<Models.Match> GetMatchesByUserId(int id);
         bool IsAnyMatchInTheTournament(int id);
+        int GetTournamentRound(int tournamentId);
     }
 }

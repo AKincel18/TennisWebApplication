@@ -94,6 +94,16 @@ namespace TennisApplication.Repository.Tournament
                 .ToList();
         }
 
+        public IEnumerable<Models.Tournament> GetNotStartedTournaments()
+        {
+            List<Models.Tournament> tournaments = _context.Tournaments
+                .Where(t => t.Completed == false).ToList();
+
+            return (from tournament in tournaments let match = _context.Matches
+                        .FirstOrDefault(m => m.Tournament == tournament) 
+                    where match == null select tournament)
+                .ToList();
+        }
         /*public void UpdateTournament(Tournament tournament)
         {
             

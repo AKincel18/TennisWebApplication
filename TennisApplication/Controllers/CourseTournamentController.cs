@@ -119,7 +119,7 @@ namespace TennisApplication.Controllers
             return View(tournamentReadDtos);
         }
 
-        [HttpGet("/completed/{id}")]
+        [HttpGet("/results/{id}")]
         public ActionResult CompletedTournamentDetail(int id)
         {
             Tournament tournament = _tournamentRepository.GetTournamentById(id);
@@ -135,6 +135,8 @@ namespace TennisApplication.Controllers
 
             tournamentCourse.Matches =  matches.Select(match => _mapper.Map<MatchDto>(match)).ToList();
             tournamentCourse.RoundsNumber = (int)Math.Ceiling(Math.Log2(tournament.PlayersNumber));
+            tournamentCourse.IsFinished = tournament.Completed;
+            tournamentCourse.CurrentRound = _repository.GetTournamentRound(tournament.Id);
             
             return View(tournamentCourse);
         }

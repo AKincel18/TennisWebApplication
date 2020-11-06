@@ -22,7 +22,7 @@
 }
 <!--Accordion wrapper-->
 <div id="accordion">
-    @for (int round = 0; round < tournamentCourse.RoundsNumber; round++)
+    @for (int round = 0; round < tournamentCourse.CurrentRound; round++)
     {
         var bodyId = "Body" + round;
         
@@ -70,7 +70,7 @@
                     
                             @for (int i = 0; i < matchesInRound; i++)
                             {
-                    
+                                bool notFinished = !tournamentCourse.IsFinished && tournamentCourse.CurrentRound == round + 1;
                                 var player1 = tournamentCourse.Matches[iterator].Player1.FirstName + " " + tournamentCourse.Matches[iterator].Player1.LastName;
                                 var player2 = tournamentCourse.Matches[iterator].Player2.FirstName + " " + tournamentCourse.Matches[iterator].Player2.LastName;
                                 <tr>
@@ -81,8 +81,15 @@
                                         @Html.DisplayFor(modelItem => player2)
                                     </td>
                                     <td style="text-align: center">
-                                                            
-                                        @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Winner)
+                                        @if (notFinished)
+                                        {
+                                            @Html.DisplayName("")
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(modelItem => tournamentCourse.Matches[iterator].Winner)
+                                        }
+                                        
                                     </td>
                                     
                                     <td>

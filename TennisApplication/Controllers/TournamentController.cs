@@ -40,8 +40,29 @@ namespace TennisApplication.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<TournamentReadDto>> GetAllTournaments()
         {
-            var tournaments = _repository.GetAllTournaments();
-            return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
+            //var tournaments = _repository.GetAllTournaments();
+            var ongoing = _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetOngoingTournaments());
+            var notStarted = _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetNotStartedTournaments());
+            var completed = _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetCompletedTournaments());
+            var all = new List<TournamentReadDto>();
+            foreach (var tournamentReadDto in ongoing)
+            {
+                tournamentReadDto.Started = true;
+                all.Add(tournamentReadDto);
+            }
+            
+            foreach (var tournamentReadDto in notStarted)
+            {
+                tournamentReadDto.Started = false;
+                all.Add(tournamentReadDto);
+            }
+            foreach (var tournamentReadDto in completed)
+            {
+                tournamentReadDto.Started = true;
+                all.Add(tournamentReadDto);
+            }
+            
+            return View(all);
             //return RedirectToPage("./GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
         }
 

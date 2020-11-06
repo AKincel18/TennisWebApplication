@@ -17,5 +17,9 @@ namespace TennisApplication.Dtos.Tournament
         
         [Display(Name = "Number of player")]
         public int PlayersNumber { get; set; }
+        
+        public bool Completed { get; set; }
+        
+        public bool Started { get; set; }
     }
 }

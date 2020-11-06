@@ -13,6 +13,8 @@
 @{
     bool isUserWithTournamentDirectorRole = 
       loggedUser != null && loggedUser.Role.Equals(Role.TournamentDirector);
+    bool isUserWithPlayerRole = 
+        loggedUser != null && loggedUser.Role.Equals(Role.Player);
     
 }
 <!DOCTYPE html>
@@ -66,6 +68,9 @@
                 @Html.DisplayNameFor(model => model.PlayersNumber)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Completed)
+            </th>
+            <th>
                 
             </th>
 
@@ -90,6 +95,29 @@
                     @Html.DisplayFor(modelItem => item.PlayersNumber)
                 </td>
                 <td>
+                    @Html.DisplayName(item.Completed ? "Yes" : "No")
+                </td>
+                <td>
+                    @if (item.Completed)
+                    {
+                        <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Detail</a>
+                    }
+                    else
+                    {
+                        @if (item.Started)
+                        {
+                            <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Live</a>
+                        }
+                        else
+                        {
+                            @if (isUserWithPlayerRole && item.Date > DateTime.Now)
+                            {
+                                <a asp-controller="Tournament" asp-action="GetIncomingTournament">Go to the enrolments</a>
+                            }
+                        }
+                    }
+
+                    
                     @if (isUserWithTournamentDirectorRole)
                     {
                         <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
