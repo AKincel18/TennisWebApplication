@@ -64,6 +64,8 @@ namespace TennisApplication.Controllers
             var tournament = _repository.GetTournamentById(id);
             if (tournament != null)
             {
+
+                //return View("/Views/Tournament/TournamentDetail.cshtml",_mapper.Map<TournamentReadDto>(tournament) );
                 return Ok(_mapper.Map<TournamentReadDto>(tournament));
             }
             return NotFound();

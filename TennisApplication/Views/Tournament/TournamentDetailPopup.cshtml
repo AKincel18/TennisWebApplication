@@ -1,0 +1,36 @@
+﻿@model Tournament
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border border-info ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail tournament <b>'@Model.Name'</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label class="label-info">
+                    Place: @Model.Place
+                </label>
+                <br>
+                <label class="label-info">
+                    Date: @Model.Date
+                </label>
+                <br>
+                <label class="label-info">
+                    Players number: @Model.PlayersNumber
+                </label>
+                <br>
+                <label class="label-info">
+                    @{
+                        var isCompleted = Model.Completed ? "yes" : "no";
+                    }
+                    Completed: @isCompleted
+                    
+                </label>
+
+            </div>
+
+        </div>
+    </div>
+</div>

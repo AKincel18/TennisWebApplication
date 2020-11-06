@@ -60,11 +60,15 @@
 
 
 
-                        <p>
-                            <a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@tournamentUser.Tournament.Id">
+                                
+                                @*<a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@tournamentUser.Tournament.Id">
                                 Tournament detail
-                            </a>
-                        </p>
+                            </a>*@
+                            <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">
+                                Detail
+                            </button>
+                            <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.Tournament"/>
+                        
 
                         <table class="table">
                             <thead class="thead-dark">
