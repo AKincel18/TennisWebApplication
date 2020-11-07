@@ -35,7 +35,8 @@ namespace TennisApplication.Controllers
         [HttpGet("/ongoing/{id}")]
         public IActionResult StartTournament(int id)
         {
-            var tournamentDto = _mapper.Map<TournamentReadDto>(_tournamentRepository.GetTournamentById(id));
+            var tournament = _tournamentRepository.GetTournamentById(id);
+            var tournamentDto = _mapper.Map<TournamentReadDto>(tournament);
             var usersDto = _mapper.Map<List<UserReadDto>>(_userRepository.GetUsersByTournament(id));
             var byeUser = _mapper.Map<UserReadDto>(_userRepository.GetByePlayer());
 
@@ -45,6 +46,8 @@ namespace TennisApplication.Controllers
                 .Select(match => _mapper.Map<Match>(match)).ToList();
             for (int i = 0; i < matches.Count; i++)
             {
+                matches[i].Tournament = tournament;
+                _repository.DetachLocal(matches[i], matches[i].Id);
                 _repository.SaveMatch(matches[i]);
                 _repository.SaveChanges();
                 tournamentCourse.UpdateIds(i, matches[i].Id);
@@ -57,7 +60,8 @@ namespace TennisApplication.Controllers
         public IActionResult GetResultsTournament([FromForm] TournamentCourse tournamentCourse)
         {
             var tournamentId = int.Parse(Request.Form["TournamentId"]);
-            TournamentReadDto tournamentDto = _mapper.Map<TournamentReadDto>(_tournamentRepository.GetTournamentById(tournamentId));
+            Tournament tournament = _tournamentRepository.GetTournamentById(tournamentId);
+            TournamentReadDto tournamentDto = _mapper.Map<TournamentReadDto>(tournament);
             
             if (tournamentCourse.Matches == null) //from /ongoingAll
             {
@@ -94,6 +98,8 @@ namespace TennisApplication.Controllers
 
                 foreach (var match in matches)
                 {
+                    match.Tournament = tournament;
+                    _repository.DetachLocal(match, match.Id);
                     _repository.SaveMatch(match);
                     _repository.SaveChanges();
                     MatchDto matchDto = _mapper.Map<MatchDto>(match);
@@ -104,7 +110,7 @@ namespace TennisApplication.Controllers
             }
             else
             {
-                tournamentDto.Completed = true;
+                tournament.Completed = true;
                 _tournamentRepository.SaveChanges();
                 return RedirectToAction(nameof(CompletedTournamentDetail), new {id = tournamentDto.Id} );
                 

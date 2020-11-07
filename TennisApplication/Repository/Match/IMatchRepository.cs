@@ -11,5 +11,6 @@ namespace TennisApplication.Repository.Match
         List<Models.Match> GetMatchesByUserId(int id);
         bool IsAnyMatchInTheTournament(int id);
         int GetTournamentRound(int tournamentId);
+        void DetachLocal(Models.Match match, int id);
     }
 }

@@ -11,6 +11,7 @@ namespace TennisApplication.Profiles.User
             CreateMap<UserCreateDto, UserReadDto>();
             CreateMap<Models.User, UserEditDto>();
             CreateMap<Models.User, UserReadDto>();
+            CreateMap<UserReadDto, Models.User>();
         }
 
     }

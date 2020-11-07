@@ -11,6 +11,7 @@ namespace TennisApplication.Profiles.Tournament
             CreateMap<Models.Tournament, TournamentReadDto>();
             CreateMap<TournamentCreateDto, Models.Tournament>();
             CreateMap<Models.Tournament, TournamentCreateDto>();
+            CreateMap<TournamentReadDto, Models.Tournament>();
 
         }
     }

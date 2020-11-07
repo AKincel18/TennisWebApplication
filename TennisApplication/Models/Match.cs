@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TennisApplication.Others;
 
 namespace TennisApplication.Models
 {
-    public class Match
+    public class Match : IIdentifier
     {
         [Key]
         public int Id { get; set; }

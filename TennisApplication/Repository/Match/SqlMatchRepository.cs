@@ -66,5 +66,10 @@ namespace TennisApplication.Repository.Match
         {
             return _context.Matches.Where(m => m.Tournament.Id == tournamentId).Max(m => m.Round);
         }
+
+        public void DetachLocal(Models.Match match, int id)
+        {
+            Others.DetachLocal.Detach(_context, match, id);
+        }
     }
 }
