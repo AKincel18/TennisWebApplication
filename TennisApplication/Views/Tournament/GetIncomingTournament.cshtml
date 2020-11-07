@@ -1,7 +1,7 @@
 ﻿@using TennisApplication.Dtos.User
 @using TennisApplication.Others
 @using Microsoft.AspNetCore.Http
-@model List<TennisApplication.Dtos.Enrolment.TournamentUserReadDto>
+@model List<TennisApplication.Others.TournamentParticipants>
 @{
     ViewData["Title"] = "Incoming tournament";
     DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
@@ -24,14 +24,14 @@
 <div id="accordion">
     @foreach (var tournamentUser in Model)
     {
-        var id = tournamentUser.Tournament.Id;
+        var id = tournamentUser.TournamentDto.Id;
         var bodyId = "Body" + id;
 
         <div class="card">
             <div class="card-header" id="@id">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
-                        @tournamentUser.Tournament.Name
+                        @tournamentUser.TournamentDto.Name
                     </button>
                 </h5>
             </div>
@@ -45,13 +45,13 @@
                             @if (!tournamentUser.IsRegistered && loggedUser.Role == Role.Player)
                             {
                                 <p>
-                                    <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.Tournament.Id">Save me</a>
+                                    <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.TournamentDto.Id">Save me</a>
                                 </p>
                             }
                             @if (loggedUser.Role == Role.TournamentDirector)
                             {
                                 <p>
-                                    <a asp-controller="CourseTournament" asp-action="StartTournament" asp-route-id="@tournamentUser.Tournament.Id">
+                                    <a asp-controller="CourseTournament" asp-action="StartTournament" asp-route-id="@tournamentUser.TournamentDto.Id">
                                         Start the tournament
                                     </a>
                                 </p>
@@ -67,7 +67,7 @@
                             <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">
                                 Detail
                             </button>
-                            <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.Tournament"/>
+                            <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.TournamentDto"/>
                         
 
                         <table class="table">

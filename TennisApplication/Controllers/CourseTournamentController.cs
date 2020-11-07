@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TennisApplication.Dtos.Match;
 using TennisApplication.Dtos.Tournament;
+using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 using TennisApplication.Others;
 using TennisApplication.Repository.Match;
@@ -34,11 +35,11 @@ namespace TennisApplication.Controllers
         [HttpGet("/ongoing/{id}")]
         public IActionResult StartTournament(int id)
         {
-            var tournament = _tournamentRepository.GetTournamentById(id);
-            var users = _userRepository.GetUsersByTournament(id);
-            var byeUser = _userRepository.GetByePlayer();
+            var tournamentDto = _mapper.Map<TournamentReadDto>(_tournamentRepository.GetTournamentById(id));
+            var usersDto = _mapper.Map<List<UserReadDto>>(_userRepository.GetUsersByTournament(id));
+            var byeUser = _mapper.Map<UserReadDto>(_userRepository.GetByePlayer());
 
-            TournamentCourse tournamentCourse = new TournamentCourse(users, tournament, byeUser);
+            TournamentCourse tournamentCourse = new TournamentCourse(usersDto, tournamentDto, byeUser);
 
             var matches = tournamentCourse.GetMatchesInCurrentRound()
                 .Select(match => _mapper.Map<Match>(match)).ToList();
@@ -56,11 +57,11 @@ namespace TennisApplication.Controllers
         public IActionResult GetResultsTournament([FromForm] TournamentCourse tournamentCourse)
         {
             var tournamentId = int.Parse(Request.Form["TournamentId"]);
-            Tournament tournament = _tournamentRepository.GetTournamentById(tournamentId);
+            TournamentReadDto tournamentDto = _mapper.Map<TournamentReadDto>(_tournamentRepository.GetTournamentById(tournamentId));
             
             if (tournamentCourse.Matches == null) //from /ongoingAll
             {
-                tournamentCourse.Tournament = tournament;
+                tournamentCourse.TournamentDto = tournamentDto;
                 tournamentCourse.Matches = _repository.GetMatchesByTournamentId(tournamentId)
                     .Select(match => _mapper.Map<MatchDto>(match)).ToList();
                 tournamentCourse.updateOngoing();
@@ -79,11 +80,13 @@ namespace TennisApplication.Controllers
                 
                 _repository.SaveChanges(); //update finished matches
                 round = match.Round; //last round 
-                tournamentCourse.UpdateMatches(id, tournament, match.Player1, match.Player2, match.Round, match.Winner, match.Result);
+                
+                MatchDto matchDto = _mapper.Map<MatchDto>(match);
+                tournamentCourse.UpdateMatches(id, tournamentDto, matchDto.Player1, matchDto.Player2, match.Round, match.Winner, match.Result);
 
             }
 
-            tournamentCourse.UpdateOthers(tournament, round);
+            tournamentCourse.UpdateOthers(tournamentDto, round);
             if (!tournamentCourse.IsFinished)
             {
                 var matches = tournamentCourse.GetMatchesInCurrentRound()
@@ -101,9 +104,9 @@ namespace TennisApplication.Controllers
             }
             else
             {
-                tournament.Completed = true;
+                tournamentDto.Completed = true;
                 _tournamentRepository.SaveChanges();
-                return RedirectToAction(nameof(CompletedTournamentDetail), new {id = tournament.Id} );
+                return RedirectToAction(nameof(CompletedTournamentDetail), new {id = tournamentDto.Id} );
                 
             }
             
@@ -114,17 +117,17 @@ namespace TennisApplication.Controllers
         public ActionResult CompletedTournamentView()
         {
             List<Tournament> tournaments = _tournamentRepository.GetCompletedTournaments();
-            var tournamentReadDtos = tournaments.Select(tournament => _mapper.Map<TournamentReadDto>(tournament));
+            var tournamentReadDto = tournaments.Select(tournament => _mapper.Map<TournamentReadDto>(tournament));
 
-            return View(tournamentReadDtos);
+            return View(tournamentReadDto);
         }
 
         [HttpGet("/results/{id}")]
         public ActionResult CompletedTournamentDetail(int id)
         {
-            Tournament tournament = _tournamentRepository.GetTournamentById(id);
+            TournamentReadDto tournamentDto = _mapper.Map<TournamentReadDto>(_tournamentRepository.GetTournamentById(id));
             
-            TournamentCourse tournamentCourse = new TournamentCourse(tournament);
+            TournamentCourse tournamentCourse = new TournamentCourse(tournamentDto);
             List<Match> matches = _repository.GetMatchesByTournamentId(id);
             
             foreach (var match in matches)
@@ -134,16 +137,17 @@ namespace TennisApplication.Controllers
             }
 
             tournamentCourse.Matches =  matches.Select(match => _mapper.Map<MatchDto>(match)).ToList();
-            tournamentCourse.RoundsNumber = (int)Math.Ceiling(Math.Log2(tournament.PlayersNumber));
-            tournamentCourse.IsFinished = tournament.Completed;
-            tournamentCourse.CurrentRound = _repository.GetTournamentRound(tournament.Id);
+            tournamentCourse.RoundsNumber = (int)Math.Ceiling(Math.Log2(tournamentDto.PlayersNumber));
+            tournamentCourse.IsFinished = tournamentDto.Completed;
+            tournamentCourse.CurrentRound = _repository.GetTournamentRound(tournamentDto.Id);
             
             return View(tournamentCourse);
         }
         [HttpGet("/ongoingAll")]
         public ActionResult OngoingAllView()
         {
-            return View(_tournamentRepository.GetOngoingTournaments());
+            return View(_mapper.Map<IEnumerable<TournamentReadDto>>
+                (_tournamentRepository.GetOngoingTournaments()));
         }
         
         

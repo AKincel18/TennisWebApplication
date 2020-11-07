@@ -1,4 +1,6 @@
 ﻿using System;
+using TennisApplication.Dtos.Tournament;
+using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 
 namespace TennisApplication.Dtos.Match
@@ -8,11 +10,11 @@ namespace TennisApplication.Dtos.Match
     {
         public int Id { get; set; }
         
-        public Models.Tournament Tournament { get; set; }
+        public TournamentReadDto TournamentDto { get; set; }
         
-        public Models.User Player1 { get; set; }
+        public UserReadDto Player1 { get; set; }
         
-        public Models.User Player2 { get; set; }
+        public UserReadDto Player2 { get; set; }
         
         public Winner Winner { get; set; }
         
@@ -24,19 +26,19 @@ namespace TennisApplication.Dtos.Match
         {
         }
 
-        public MatchDto(Models.Tournament tournament, Models.User player1, Models.User player2, int round)
+        public MatchDto(TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, int round)
         {
-            Tournament = tournament;
+            TournamentDto = tournamentDto;
             Player1 = player1;
             Player2 = player2;
             Round = round;
         }
 
-        public MatchDto(int id, Models.Tournament tournament, Models.User player1, Models.User player2, 
+        public MatchDto(int id, TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, 
             Winner winner, string result, int round)
         {
             Id = id;
-            Tournament = tournament;
+            TournamentDto = tournamentDto;
             Player1 = player1;
             Player2 = player2;
             Winner = winner;

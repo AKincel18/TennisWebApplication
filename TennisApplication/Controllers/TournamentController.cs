@@ -210,18 +210,20 @@ namespace TennisApplication.Controllers
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }*/
             
-            var tournaments = _repository.GetIncomingTournament();
-            List<TournamentUserReadDto> tournamentUserReadDtos = new List<TournamentUserReadDto>();
+            IEnumerable<TournamentReadDto> tournamentsReadDto =
+                _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetIncomingTournament());
             
-            foreach (var tournament in tournaments)
+            List<TournamentParticipants> tournamentUserReadDtos = new List<TournamentParticipants>();
+            
+            foreach (var tournamentDto in tournamentsReadDto)
             {
-                var users = _userRepository.GetUsersByTournament(tournament.Id);
+                var usersDto = _mapper.Map<List<UserReadDto>>(_userRepository.GetUsersByTournament(tournamentDto.Id));
                 var isRegistered = loggedUser != null && _userRepository.IsUserRegisteredForTournamentById(loggedUser.Id,
-                    tournament.Id);
+                    tournamentDto.Id);
                 
-                if (!_matchRepository.IsAnyMatchInTheTournament(tournament.Id))
+                if (!_matchRepository.IsAnyMatchInTheTournament(tournamentDto.Id))
                 {
-                    tournamentUserReadDtos.Add(new TournamentUserReadDto(tournament, users, isRegistered));
+                    tournamentUserReadDtos.Add(new TournamentParticipants(tournamentDto, usersDto, isRegistered));
                 }
             }
             

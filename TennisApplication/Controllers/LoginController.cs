@@ -95,20 +95,16 @@ namespace TennisApplication.Controllers
                     var image = Image.Load(upload.OpenReadStream());
                     image.Mutate(x => x.Resize(256, 256));
                     
-                    //using var ms = new MemoryStream();
                     MemoryStream stream = new MemoryStream();
                     image.SaveAsPng(stream);
-                    //var _IMemoryGroup = image.Ge
-                    //var _MemoryGroup = _IMemoryGroup.ToArray()[0];
-                    //var PixelData = MemoryMarshal.AsBytes(_MemoryGroup.Span).ToArray();
-                    
-                    //upload.CopyTo(ms);
                     user.Photo = stream.ToArray();
                     
                 }
                 
                 _repository.SaveChanges();
-                HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(_mapper.Map<UserReadDto>(user)));
+                var userSession = _mapper.Map<UserReadDto>(user);
+                userSession.AvatarPhoto();
+                HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(userSession));
             }
             
             return RedirectToAction("Index", "Home", new {area = ""});

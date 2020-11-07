@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using TennisApplication.Dtos.Match;
+using TennisApplication.Dtos.Tournament;
+using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 
 namespace TennisApplication.Others
@@ -11,31 +13,31 @@ namespace TennisApplication.Others
     {
         public List<MatchDto> Matches { get; set; }
         
-        public List<User> Users { get; set; } 
+        public List<UserReadDto> UsersDto { get; set; } 
         public int CurrentRound { get; set; }
-        public Tournament Tournament { get; set; }
+        public TournamentReadDto TournamentDto { get; set; }
         public bool IsFinished { get; set; }
         public List<string> RoundsName { get; set; }
         public int RoundsNumber { get; set; }
-        private User _byeUser;
+        private UserReadDto _byeUser;
 
         public TournamentCourse()
         {
         }
 
-        public TournamentCourse(Tournament tournament)
+        public TournamentCourse(TournamentReadDto tournamentDto)
         {
-            Tournament = tournament;
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            TournamentDto = tournamentDto;
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
             InitNameOfRound();
         }
 
-        public TournamentCourse(List<User> users, Tournament tournament, User byeUser)
+        public TournamentCourse(List<UserReadDto> users, TournamentReadDto tournamentDto, UserReadDto byeUser)
         {
-            Users = users;
-            Tournament = tournament;
+            UsersDto = users;
+            TournamentDto = tournamentDto;
             _byeUser = byeUser;
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
             InitNameOfRound();
             DrawFirstRound();
         }
@@ -45,22 +47,22 @@ namespace TennisApplication.Others
         {
             CurrentRound = 1;
             int sizeDraw = (int) Math.Pow(2.0, RoundsNumber);
-            List<User> draw = new List<User>();
+            List<UserReadDto> draw = new List<UserReadDto>();
             
             for (int i = 0; i < sizeDraw; i++)
             {
-                draw.Add(new User(-1));
+                draw.Add(new UserReadDto(-1));
             }
             
-            for (int i = Users.Count; i < sizeDraw; i++)
+            for (int i = UsersDto.Count; i < sizeDraw; i++)
             {
-                Users.Add(new User(-1));
+                UsersDto.Add(new UserReadDto(-1));
             }
             
             List<MatchDto> matchesTmp = new List<MatchDto>();
             for (int i = 0; i < sizeDraw / 2; i++)
             {
-                matchesTmp.Add(new MatchDto(Tournament, Users[i], Users[Users.Count - 1 - i], CurrentRound));
+                matchesTmp.Add(new MatchDto(TournamentDto, UsersDto[i], UsersDto[UsersDto.Count - 1 - i], CurrentRound));
             }
             
 
@@ -88,9 +90,9 @@ namespace TennisApplication.Others
             Matches = new List<MatchDto>();
             for (int i = 0; i < draw.Count; i += 2)
             {
-                User p1 = draw[i].Id == - 1 ? _byeUser : draw[i];
-                User p2 = draw[i + 1].Id == - 1 ? _byeUser : draw[i + 1];
-                Matches.Add(new MatchDto(Tournament, p1, p2, CurrentRound));
+                UserReadDto p1 = draw[i].Id == - 1 ? _byeUser : draw[i];
+                UserReadDto p2 = draw[i + 1].Id == - 1 ? _byeUser : draw[i + 1];
+                Matches.Add(new MatchDto(TournamentDto, p1, p2, CurrentRound));
             }
             
             
@@ -102,18 +104,18 @@ namespace TennisApplication.Others
             Matches[pos].Id = id;
         }
 
-        public void UpdateMatches(int id, Tournament tournament, User player1, User player2,
+        public void UpdateMatches(int id, TournamentReadDto tournament, UserReadDto player1, UserReadDto player2,
             int round, Winner winner, string result)
         {
             Matches.Add(new MatchDto(id, tournament, player1, player2, winner, result, round));
         }
 
-        public void UpdateOthers(Tournament tournament, int round)
+        public void UpdateOthers(TournamentReadDto tournament, int round)
         {
             Matches.RemoveAll(m => m.Id == 0);
-            Tournament = tournament;
+            TournamentDto = tournament;
             CurrentRound = round;
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
             InitNameOfRound();
             if (CurrentRound == RoundsNumber) //tournament finished
             {
@@ -132,23 +134,23 @@ namespace TennisApplication.Others
             CurrentRound += 1;
             for (int i = 0; i < matchesPrevRound.Count; i += 2)
             {
-                User winner1 = matchesPrevRound[i].Winner == Winner.One
+                UserReadDto winner1 = matchesPrevRound[i].Winner == Winner.One
                     ? matchesPrevRound[i].Player1
                     : matchesPrevRound[i].Player2;
                 
-                User winner2 = matchesPrevRound[i + 1].Winner == Winner.One
+                UserReadDto winner2 = matchesPrevRound[i + 1].Winner == Winner.One
                     ? matchesPrevRound[i + 1].Player1
                     : matchesPrevRound[i + 1].Player2;
                 
-                Matches.Add(new MatchDto(Tournament, winner1, winner2, CurrentRound));
+                Matches.Add(new MatchDto(TournamentDto, winner1, winner2, CurrentRound));
             }
         }
 
-        public void SetTournament(Tournament tournament, List<MatchDto> matchesInRound)
+        public void SetTournament(TournamentReadDto tournament, List<MatchDto> matchesInRound)
         {
             foreach (var matchDto in matchesInRound)
             {
-                matchDto.Tournament = tournament;
+                matchDto.TournamentDto = tournament;
             }
         }
 
@@ -189,7 +191,7 @@ namespace TennisApplication.Others
 
         public void updateOngoing()
         {
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(Tournament.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
             InitNameOfRound();
             CurrentRound = Matches.Max(m => m.Round);
         }

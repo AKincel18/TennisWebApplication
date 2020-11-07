@@ -3,12 +3,12 @@ using TennisApplication.Dtos.User;
 
 namespace TennisApplication.Dtos.Enrolment
 {
-    public class EnrolmentWriteDto
+    public class EnrolmentDto
     {
         public int TournamentId { get; set; }
         public int UserId { get; set; }
 
-        public EnrolmentWriteDto(int tournamentId, int userId)
+        public EnrolmentDto(int tournamentId, int userId)
         {
             TournamentId = tournamentId;
             UserId = userId;

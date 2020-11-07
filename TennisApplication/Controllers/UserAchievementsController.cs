@@ -53,8 +53,15 @@ namespace TennisApplication.Controllers
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }
-            List<Match> matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);
-            return View(_mapper.Map<List<MatchDto>>(matches));
+            var matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);
+            var model = _mapper.Map<List<MatchDto>>(matches);
+            
+            //problem with autoMapper (not mapping tournament)
+            for (int i = 0; i < model.Count; i++)
+            {
+                model[i].TournamentDto = _mapper.Map<TournamentReadDto>(matches[i].Tournament);
+            }
+            return View(model);
         }
     }
 }

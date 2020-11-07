@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TennisApplication.Dtos.Tournament
 {
+    [Serializable]
     public class TournamentReadDto
     {
         public int Id { get; set; }

@@ -28,7 +28,7 @@
     @using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
     {
     
-        @Html.Hidden("TournamentId", tournamentCourse.Tournament.Id)
+        @Html.Hidden("TournamentId", tournamentCourse.TournamentDto.Id)
 @for (int round = 0; round < tournamentCourse.CurrentRound; round++)
 {
 

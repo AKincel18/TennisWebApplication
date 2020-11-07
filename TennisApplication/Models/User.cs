@@ -34,11 +34,7 @@ namespace TennisApplication.Models
 
         public User()
         {
-        }
-
-        public User(int id)
-        {
-            Id = id;
+            
         }
     }
 }

@@ -34,8 +34,8 @@ namespace TennisApplication.Controllers
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }
             
-            var enrolmentWriteDto = new EnrolmentWriteDto(id, loggedUser.Id);
-            var enrolmentModel = _mapper.Map<Enrolment>(enrolmentWriteDto);
+            var enrolmentDto = new EnrolmentDto(id, loggedUser.Id);
+            var enrolmentModel = _mapper.Map<Enrolment>(enrolmentDto);
             _repository.SaveEnrolment(enrolmentModel);
             _repository.SaveChanges();
             

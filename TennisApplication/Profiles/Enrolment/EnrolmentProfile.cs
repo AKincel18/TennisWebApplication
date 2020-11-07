@@ -7,7 +7,7 @@ namespace TennisApplication.Profiles.Enrolment
     {
         public EnrolmentProfile()
         {
-            CreateMap<EnrolmentWriteDto, Models.Enrolment>();
+            CreateMap<EnrolmentDto, Models.Enrolment>();
         }
     }
 }

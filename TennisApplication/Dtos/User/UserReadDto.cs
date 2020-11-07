@@ -13,6 +13,8 @@ namespace TennisApplication.Dtos.User
         
         public string FirstName { get; set; }
         
+        public string LastName { get; set; }
+        
         [DataType(DataType.Password)]  
         [Required]
         public string Password { get; set; }
@@ -34,6 +36,11 @@ namespace TennisApplication.Dtos.User
             Password = password;
             EMail = eMail;
             Role = role;
+        }
+
+        public UserReadDto(int id)
+        {
+            Id = id;
         }
 
         public void AvatarPhoto()
