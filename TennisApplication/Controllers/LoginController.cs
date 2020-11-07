@@ -51,7 +51,9 @@ namespace TennisApplication.Controllers
                 return View("/Views/Login/LoginView.cshtml", userReadDto);
             }
 
-            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(_mapper.Map<UserReadDto>(user)));
+            UserReadDto toSaving = _mapper.Map<UserReadDto>(user);
+            toSaving.AvatarPhoto();
+            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(toSaving));
             return RedirectToAction("Index", "Home", new {area = ""});
             
         }

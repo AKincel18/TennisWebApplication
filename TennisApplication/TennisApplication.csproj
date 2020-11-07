@@ -15,7 +15,8 @@
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.2" />
-      <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0001" />
+      <!--<PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-rc0001" />-->
+      <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0010" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="wwwroot\img\NoAvatarPhoto.jpg" />
       <None Include="wwwroot\js\fileScript.js" />
     </ItemGroup>
 

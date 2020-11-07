@@ -8,7 +8,11 @@
 <ul class="navbar-nav">
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Hello @loggedUser?.FirstName!
+            @*Hello @loggedUser?.FirstName!*@
+            @if(loggedUser != null){
+                <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(loggedUser.Photo)"/>
+            }
+            
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" asp-area="" asp-controller="Login" asp-action="EditAccountView">Edit account</a>
