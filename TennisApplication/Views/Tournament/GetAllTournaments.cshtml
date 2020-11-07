@@ -41,97 +41,103 @@
         <a asp-controller="Tournament" asp-action="CreateTournamentView">Create New</a>
     </p>
 }
-@if (!ViewData.ModelState.IsValid)
+@*@if (!ViewData.ModelState.IsValid)
 {
     <span class="text-danger">
         @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage
         <br>
     </span>
-}
-<body>
-<div class="container">
-    <table class="table sortable">
-        <thead class="thead-dark">
+    
+}*@
+ <body>
+ <div class="container">
+     <table class="table sortable">
+         <thead class="thead-dark">
 
 
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Place)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlayersNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Completed)
-            </th>
-            <th>
+         <tr>
+             <th>
+                 @Html.DisplayNameFor(model => model.Name)
+             </th>
+             <th>
+                 @Html.DisplayNameFor(model => model.Place)
+             </th>
+             <th>
+                 @Html.DisplayNameFor(model => model.Date)
+             </th>
+             <th>
+                 @Html.DisplayNameFor(model => model.PlayersNumber)
+             </th>
+             <th>
+                 @Html.DisplayNameFor(model => model.Completed)
+             </th>
+             <th>
                 
-            </th>
+             </th>
 
-        </tr>
+         </tr>
     
-        </thead>
+         </thead>
     
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Place)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlayersNumber)
-                </td>
-                <td>
-                    @Html.DisplayName(item.Completed ? "Yes" : "No")
-                </td>
-                <td>
-                    @if (item.Completed)
-                    {
-                        <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Detail</a>
-                    }
-                    else
-                    {
-                        @if (item.Started)
-                        {
-                            <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Live</a>
-                        }
-                        else
-                        {
-                            @if (isUserWithPlayerRole && item.Date > DateTime.Now)
-                            {
-                                <a asp-controller="Tournament" asp-action="GetIncomingTournament">Go to the enrolments</a>
-                            }
-                        }
-                    }
+         <tbody>
+         @foreach (var item in Model)
+         {
+             <tr>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Name)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Place)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.Date)
+                 </td>
+                 <td>
+                     @Html.DisplayFor(modelItem => item.PlayersNumber)
+                 </td>
+                 <td>
+                     @Html.DisplayName(item.Completed ? "Yes" : "No")
+                 </td>
+                 <td>
+                     @if (item.Completed)
+                     {
+                         <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Detail</a>
+                     }
+                     else
+                     {
+                         @if (item.Started)
+                         {
+                             <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Live</a>
+                         }
+                         else
+                         {
+                             @if (isUserWithPlayerRole && item.Date > DateTime.Now)
+                             {
+                                 <a asp-controller="Tournament" asp-action="GetIncomingTournament">Go to the enrolments</a>
+                             }
+                         }
+                     }
 
                     
-                    @if (isUserWithTournamentDirectorRole)
-                    {
-                        <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
-                        <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
-                    }
-
-
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                     @if (isUserWithTournamentDirectorRole)
+                     {
+                         <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
+                         <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
+                         @if (!ViewData.ModelState.IsValid && @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage == item.Id.ToString())
+                         {
+                             <partial name="CannotDeleteTournamentModal" model="@item.Place"/>
     
-</div>
-</body>
+                         }
+                     }
 
+
+                 </td>
+             </tr>
+         }
+         </tbody>
+     </table>
+    
+ </div>
+ </body>
+ 
 </html>

@@ -188,8 +188,7 @@ namespace TennisApplication.Controllers
 
             if (_matchRepository.IsAnyMatchInTheTournament(id))
             {
-                ModelState.AddModelError("CantDelete", "Cannot delete tournament: '" + 
-                                                       tournamentModelFromRepository.Name + "' with matches!");
+                ModelState.AddModelError("CantDelete", tournamentModelFromRepository.Id.ToString());
                 //return RedirectToAction(nameof(GetAllTournaments));
                 return View("GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetAllTournaments()));
             }
