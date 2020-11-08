@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TennisApplication.Database;
 
 namespace TennisApplication.Repository.Enrolment
@@ -25,6 +26,21 @@ namespace TennisApplication.Repository.Enrolment
             }
 
             _context.Enrolments.Add(enrolment);
+        }
+
+        public Models.Enrolment FindEnrolment(int userId, int tournamentId)
+        { 
+            return _context.Enrolments.FirstOrDefault(e => e.User.Id == userId && e.Tournament.Id == tournamentId);
+        }
+
+        public void DeleteEnrolment(Models.Enrolment enrolment)
+        {
+            if (enrolment == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            _context.Enrolments.Remove(enrolment);
         }
     }
 }

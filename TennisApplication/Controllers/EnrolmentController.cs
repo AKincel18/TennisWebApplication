@@ -24,7 +24,7 @@ namespace TennisApplication.Controllers
             _mapper = mapper;
         }
         
-        [HttpGet("{id}")]
+        [HttpGet("enrol/{id}")]
         public IActionResult EnrolTournament(int id)
         {            
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
@@ -42,6 +42,23 @@ namespace TennisApplication.Controllers
             return RedirectToAction("GetIncomingTournament","Tournament");
             
 
+        }
+
+        [HttpGet("withdraw/{id}")]
+        public IActionResult WithdrawTournament(int id)
+        {
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
+            if (loggedUser == null)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""}); 
+            }
+
+            var enrolment = _repository.FindEnrolment(loggedUser.Id, id);
+            _repository.DeleteEnrolment(enrolment);
+            _repository.SaveChanges();
+
+            return RedirectToAction("GetIncomingTournament","Tournament");
         }
     }
 }

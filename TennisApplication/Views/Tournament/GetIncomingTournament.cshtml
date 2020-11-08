@@ -49,6 +49,12 @@
                                     <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.TournamentDto.Id">Save me</a>
                                 </p>
                             }
+                            @if (tournamentUser.IsRegistered && loggedUser.Role == Role.Player)
+                            {
+                                <p>
+                                    <a asp-controller="Enrolment" asp-action="WithdrawTournament" asp-route-id="@tournamentUser.TournamentDto.Id">Withdraw</a>
+                                </p>
+                            }
                             @if (loggedUser.Role == Role.TournamentDirector && numberOfParticipants > 1)
                             {
                                 <p>
