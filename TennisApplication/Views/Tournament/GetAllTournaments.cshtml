@@ -41,6 +41,12 @@
         <a asp-controller="Tournament" asp-action="CreateTournamentView">Create New</a>
     </p>
 }
+ @if (TempData.ContainsKey("deleted"))
+ {
+     var name = TempData["deleted"].ToString();
+     <partial name="TournamentDeletedModal" model="@name"/>
+ }
+           
 @*@if (!ViewData.ModelState.IsValid)
 {
     <span class="text-danger">
@@ -126,7 +132,6 @@
                          @if (!ViewData.ModelState.IsValid && @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage == item.Id.ToString())
                          {
                              <partial name="CannotDeleteTournamentModal" model="@item.Place"/>
-    
                          }
                      }
 

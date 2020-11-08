@@ -195,7 +195,7 @@ namespace TennisApplication.Controllers
             
             _repository.DeleteTournament(tournamentModelFromRepository);
             _repository.SaveChanges();
-
+            TempData["deleted"] = tournamentModelFromRepository.Name;
             return RedirectToAction(nameof(GetAllTournaments)); //return to GetAllTournaments
         }
 
