@@ -70,57 +70,71 @@
                             </button>
                             <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.TournamentDto"/>
                         
-
-                        <h4>Players signed up</h4>
-                        <table class="table">
-                            <thead class="thead-dark">
-                            <tr>                                
-                                <th>
-                                    <label>#</label>
-                                </th>
-                                <th>
-                                    <label>First name</label>
-                                </th>
-                                <th>
-                                    <label>Last name</label>
-                                </th>
-                                <th>
-                                    <label>Player matches</label>
-                                </th>
-                                </tr>
-
-                            <thead class="thead-dark">
-                            <tbody>
-
-                            @{
-                                var i = 1;
-                            }
-                            @foreach (var user in tournamentUser.Users)
+                        @{
+                            if (tournamentUser.Users != null && tournamentUser.Users.Count == 0)
                             {
-                                <tr>
-                                    <td>
-                                        @i
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => user.FirstName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => user.LastName)
-                                    </td>
-                                    <td>
-                                                                     
-                                        <a asp-controller="UserAchievements" asp-action="PlayerMatches" asp-route-id="@user.Id">See player matches</a>
-                                        
-                                    </td>
-                                    </tr>
-                                i++;
+                                <h4>No player signed up</h4>
                             }
+                            else
+                            {
+                                <h4>Players signed up</h4>
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                    <tr>                                
+                                        <th>
+                                            <label>#</label>
+                                        </th>
+                                        <th>
+                                            <label>First name</label>
+                                        </th>
+                                        <th>
+                                            <label>Last name</label>
+                                        </th>
+                                        <th>
+                                            <label>Player matches</label>
+                                        </th>
+                                    </tr>
+
+                                    <thead class="thead-dark">
+                                    <tbody>
+
+                                    @{
+                                        var i = 1;
+                                    }
+
+                                    @if (tournamentUser.Users != null)
+                                    {
+                                        foreach (var user in tournamentUser.Users)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @i
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => user.FirstName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => user.LastName)
+                                                </td>
+                                                <td>
+
+                                                    <a asp-controller="UserAchievements" asp-action="PlayerMatches" asp-route-id="@user.Id">See player matches</a>
+
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
 
 
 
 
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
+                                
+                            }
+                        }
+                        
 
                     </div>
                 </div>
