@@ -19,7 +19,7 @@ namespace TennisApplication.Models
         [Required]
         public DateTime Date { get; set; }
         
-        public int PlayersNumber { get; set; }
+        public int DrawSize { get; set; }
         
         public bool Completed { get; set; }
     }

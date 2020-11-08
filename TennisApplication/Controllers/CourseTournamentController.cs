@@ -162,7 +162,7 @@ namespace TennisApplication.Controllers
             }
 
             tournamentCourse.Matches =  matches.Select(match => _mapper.Map<MatchDto>(match)).ToList();
-            tournamentCourse.RoundsNumber = (int)Math.Ceiling(Math.Log2(tournamentDto.PlayersNumber));
+            tournamentCourse.RoundsNumber = (int)Math.Ceiling(Math.Log2(tournamentDto.DrawSize));
             tournamentCourse.IsFinished = tournamentDto.Completed;
             tournamentCourse.CurrentRound = _repository.GetTournamentRound(tournamentDto.Id);
             

@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PlayersNumber)
+                @Html.DisplayNameFor(model => model.DrawSize)
             </th>
             <th></th>
         </tr>
@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PlayersNumber)
+                    @Html.DisplayFor(modelItem => item.DrawSize)
                 </td>
                 <td>
                     <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Details</a>

@@ -28,7 +28,7 @@ namespace TennisApplication.Others
         public TournamentCourse(TournamentReadDto tournamentDto)
         {
             TournamentDto = tournamentDto;
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.DrawSize));
             InitNameOfRound();
         }
 
@@ -37,7 +37,7 @@ namespace TennisApplication.Others
             UsersDto = users;
             TournamentDto = tournamentDto;
             _byeUser = byeUser;
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.DrawSize));
             InitNameOfRound();
             DrawFirstRound();
         }
@@ -46,7 +46,7 @@ namespace TennisApplication.Others
         private void DrawFirstRound()
         {
             CurrentRound = 1;
-            int sizeDraw = (int) Math.Pow(2.0, RoundsNumber);
+            int sizeDraw = TournamentDto.DrawSize;
             List<UserReadDto> draw = new List<UserReadDto>();
             
             for (int i = 0; i < sizeDraw; i++)
@@ -119,7 +119,7 @@ namespace TennisApplication.Others
             Matches.RemoveAll(m => m.Id == 0);
             TournamentDto = tournament;
             CurrentRound = round;
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.DrawSize));
             InitNameOfRound();
             if (CurrentRound == RoundsNumber) //tournament finished
             {
@@ -195,7 +195,7 @@ namespace TennisApplication.Others
 
         public void updateOngoing()
         {
-            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.PlayersNumber));
+            RoundsNumber = (int)Math.Ceiling(Math.Log2(TournamentDto.DrawSize));
             InitNameOfRound();
             CurrentRound = Matches.Max(m => m.Round);
         }

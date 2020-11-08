@@ -9,6 +9,15 @@
         ViewData["Title"] = "Create new tournament";
     }
 }
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}
+<html>
+<body>
+
 @using (Html.BeginForm("CreateTournament", "Tournament", FormMethod.Post, new
 {
     @class="text-center border border-light w-50 p-3"
@@ -66,14 +75,15 @@
     </div>
     <div class="form-group">
         <div class="form-row mb-4">
-            @Html.Label("Number of players")
-            @Html.TextBoxFor(t => t.PlayersNumber, new
+            @Html.Label("Draw size")
+            @Html.TextBoxFor(t => t.DrawSize, new
             {
-                @type = "number", 
+                type = "number", 
                 required = string.Empty,
                 @class = "form-control", 
-                placeholder = "Number of players"
+                placeholder = "Enter draw size"
             })
+            @Html.ValidationMessageFor(t => t.DrawSize, "", new {@class = "text-danger"})
         </div>
     </div>
     <div class="form-group">
@@ -89,3 +99,6 @@
     </div>
 
 }
+
+</body>
+</html>

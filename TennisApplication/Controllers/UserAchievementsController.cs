@@ -11,6 +11,7 @@ using TennisApplication.Models;
 using TennisApplication.Others;
 using TennisApplication.Repository.Match;
 using TennisApplication.Repository.Tournament;
+using TennisApplication.Repository.User;
 
 namespace TennisApplication.Controllers
 {
@@ -20,12 +21,14 @@ namespace TennisApplication.Controllers
         private readonly IMapper _mapper;
         private readonly ITournamentRepository _tournamentRepository;
         private readonly IMatchRepository _matchRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserAchievementsController(IMapper mapper, ITournamentRepository tournamentRepository, IMatchRepository matchRepository)
+        public UserAchievementsController(IMapper mapper, ITournamentRepository tournamentRepository, IMatchRepository matchRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
             _tournamentRepository = tournamentRepository;
             _matchRepository = matchRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet("/myTournaments")]
@@ -44,24 +47,30 @@ namespace TennisApplication.Controllers
                 _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
         }
 
-        [HttpGet("/myMatches")]
-        public ActionResult MyMatches()
+        [HttpGet("/matches/{id}")]
+        public ActionResult PlayerMatches(int id)
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            if (loggedUser == null || loggedUser.Role == Role.TournamentDirector)
+            if (loggedUser == null && id == -1)
             {
                 return RedirectToAction("Index", "Home", new {area = ""}); 
             }
-            var matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);
-            var model = _mapper.Map<List<MatchDto>>(matches);
+
+            id = id == -1 ? loggedUser.Id : id;
+            var matches = _matchRepository.GetMatchesByUserId(id);
+            var player = _mapper.Map<UserReadDto>(_userRepository.GetUserById(id));
+            
+            var matchesDto = _mapper.Map<List<MatchDto>>(matches);
             
             //problem with autoMapper (not mapping tournament)
-            for (int i = 0; i < model.Count; i++)
+            for (int i = 0; i < matchesDto.Count; i++)
             {
-                model[i].TournamentDto = _mapper.Map<TournamentReadDto>(matches[i].Tournament);
+                matchesDto[i].TournamentDto = _mapper.Map<TournamentReadDto>(matches[i].Tournament);
             }
-            return View(model);
+
+            return matchesDto.Count == 0 ? View("NoMatches", player) : View(new UserMatchesDto(matchesDto, player));
         }
+
     }
 }

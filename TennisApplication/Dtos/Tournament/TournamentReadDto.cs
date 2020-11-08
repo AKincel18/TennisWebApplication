@@ -16,8 +16,8 @@ namespace TennisApplication.Dtos.Tournament
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
         
-        [Display(Name = "Number of player")]
-        public int PlayersNumber { get; set; }
+        [Display(Name = "Draw size")]
+        public int DrawSize { get; set; }
         
         public bool Completed { get; set; }
         

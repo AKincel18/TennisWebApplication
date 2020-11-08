@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using TennisApplication.Dtos.Enrolment;
 using TennisApplication.Dtos.Tournament;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
@@ -104,7 +101,7 @@ namespace TennisApplication.Controllers
                 tournament.Name = tournamentCreateDto.Name;
                 tournament.Date = tournamentCreateDto.Date;
                 tournament.Place = tournamentCreateDto.Place;
-                tournament.PlayersNumber = tournamentCreateDto.PlayersNumber;
+                tournament.DrawSize = tournamentCreateDto.DrawSize;
             }
             else
             {
@@ -190,7 +187,8 @@ namespace TennisApplication.Controllers
             {
                 ModelState.AddModelError("CantDelete", tournamentModelFromRepository.Id.ToString());
                 //return RedirectToAction(nameof(GetAllTournaments));
-                return View("GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetAllTournaments()));
+                return RedirectToAction(nameof(GetAllTournaments));
+                //return View("GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetAllTournaments()));
             }
             
             _repository.DeleteTournament(tournamentModelFromRepository);
