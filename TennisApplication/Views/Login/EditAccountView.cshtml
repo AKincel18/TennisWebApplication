@@ -1,4 +1,5 @@
-﻿@model TennisApplication.Dtos.User.UserEditDto
+﻿@using TennisApplication.Others
+@model TennisApplication.Dtos.User.UserEditDto
 
 @{
     ViewData["Title"] = "Edit account";
@@ -80,6 +81,12 @@
     </small>*@
     @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
 
+    @Html.TextBox( "none",Model.Role == Role.Player ? "Player" : "Tournament director", new
+    {
+        @class = "form-control mb-4",
+        disabled = "true"
+    })
+    
 
     @if (Model.Photo.Length != 0)
     {

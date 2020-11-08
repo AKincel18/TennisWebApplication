@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TennisApplication.Models;
 
 namespace TennisApplication.Dtos.User
 {
@@ -18,7 +19,7 @@ namespace TennisApplication.Dtos.User
         [DataType(DataType.Password)]  
         [NotMapped]
         public string ConfirmPassword { get; set; }
-        
+        public Role Role { get; set; }
         public byte[] Photo { get; set; }
         
     }
