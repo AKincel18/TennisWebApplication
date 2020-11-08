@@ -74,19 +74,38 @@ namespace TennisApplication.Controllers
             }
             int round = 0;
             int numberOfMatches = tournamentCourse.Matches.Count;
+            int currentRound = _repository.GetTournamentRound(tournamentId);
             for (int i = 0; i < numberOfMatches; i++)
             {
                 int id = int.Parse(Request.Form["MatchDto[" + i + "].Id"]);
                 
                 Match match = _repository.GetMatchById(id);
-                match.Result = tournamentCourse.Matches[i].Result;
-                match.Winner = tournamentCourse.Matches[i].Winner;
+                if (currentRound == match.Round)
+                {
+                    if (match.Player1.Id == -1)
+                    {
+                        match.Winner = Winner.Two;
+                    }
+                    else if (match.Player2.Id == -1)
+                    {
+                        match.Winner = Winner.One;
+                    }
+                    else
+                    {
+                        match.Winner = tournamentCourse.Matches[i].Winner;
+                    }
                 
-                _repository.SaveChanges(); //update finished matches
-                round = match.Round; //last round 
+                    match.Result = tournamentCourse.Matches[i].Result;
+
+                
+                    _repository.SaveChanges(); //update finished matches
+                    round = match.Round; //last round 
+                }
+
                 
                 MatchDto matchDto = _mapper.Map<MatchDto>(match);
-                tournamentCourse.UpdateMatches(id, tournamentDto, matchDto.Player1, matchDto.Player2, match.Round, match.Winner, match.Result);
+                matchDto.TournamentDto = tournamentDto;
+                tournamentCourse.Matches.Add(matchDto);
 
             }
 

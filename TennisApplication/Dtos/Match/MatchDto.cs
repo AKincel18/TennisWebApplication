@@ -34,6 +34,12 @@ namespace TennisApplication.Dtos.Match
             Round = round;
         }
 
+        public MatchDto(TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, int round, Winner winner) 
+            : this(tournamentDto, player1, player2, round)
+        {
+            Winner = winner;
+        }
+
         public MatchDto(int id, TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, 
             Winner winner, string result, int round)
         {

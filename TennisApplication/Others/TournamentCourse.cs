@@ -93,22 +93,26 @@ namespace TennisApplication.Others
                 UserReadDto p1 = draw[i].Id == - 1 ? _byeUser : draw[i];
                 UserReadDto p2 = draw[i + 1].Id == - 1 ? _byeUser : draw[i + 1];
                 Matches.Add(new MatchDto(TournamentDto, p1, p2, CurrentRound));
+                
             }
             
             
-        }
-        
-        
+        } 
         public void UpdateIds(int pos, int id)
         {
             Matches[pos].Id = id;
         }
 
-        public void UpdateMatches(int id, TournamentReadDto tournament, UserReadDto player1, UserReadDto player2,
+        /*public void UpdateMatches(int id, TournamentReadDto tournament, UserReadDto player1, UserReadDto player2,
             int round, Winner winner, string result)
         {
             Matches.Add(new MatchDto(id, tournament, player1, player2, winner, result, round));
         }
+        
+        public void UpdateMatches(MatchDto matchDto)
+        {
+            Matches.Add(matchDto);
+        }*/
 
         public void UpdateOthers(TournamentReadDto tournament, int round)
         {
@@ -195,5 +199,7 @@ namespace TennisApplication.Others
             InitNameOfRound();
             CurrentRound = Matches.Max(m => m.Round);
         }
+
+
     }
 }

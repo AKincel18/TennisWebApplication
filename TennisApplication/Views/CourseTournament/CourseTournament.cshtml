@@ -83,7 +83,9 @@
                               + " " + tournamentCourse.Matches[iterator].Player1.LastName;
                 var player2 = tournamentCourse.Matches[iterator].Player2.FirstName 
                               + " " + tournamentCourse.Matches[iterator].Player2.LastName;
-                        
+                bool isPlayer1Bye = tournamentCourse.Matches[iterator].Player1.Id == -1;
+                bool isPlayer2Bye = tournamentCourse.Matches[iterator].Player2.Id == -1;
+                
                 @Html.Hidden("MatchDto[" + iterator + "].Id", tournamentCourse.Matches[iterator].Id)
 
                 <tr>
@@ -101,18 +103,40 @@
                     </td>
 
                     <td>
-                        @if (editable)
-                        {
-                            <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
-                                    class="form-control mb-4" >
-                            </select>
-                        }
-                        else
+
+                        @if (!editable)
                         {
                             <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
                                     class="form-control mb-4" disabled>
                             </select>
                         }
+                        else
+                        {
+                            @if (isPlayer1Bye || isPlayer2Bye)
+                            {
+                            
+                                if ((isPlayer1Bye && isPlayer2Bye) || (isPlayer2Bye))
+                                {
+                                    <select asp-for="Matches[iterator].Winner" asp-items="new SelectList(new List<int> {1})"
+                                            class="form-control mb-4" disabled>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select asp-for="Matches[iterator].Winner" asp-items="new SelectList(new List<int> {2})"
+                                            class="form-control mb-4" disabled>
+                                    </select>
+                                }
+
+                            }
+                            else
+                            {
+                                <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
+                                        class="form-control mb-4">
+                                </select>
+                            }
+                        }
+
 
 
 
