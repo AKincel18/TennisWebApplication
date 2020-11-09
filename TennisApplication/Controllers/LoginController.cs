@@ -32,7 +32,7 @@ namespace TennisApplication.Controllers
         {
             return View();
         }
-        
+
         [HttpGet("/out")]
         public ActionResult LoggedOut()
         {
@@ -41,7 +41,7 @@ namespace TennisApplication.Controllers
             return RedirectToAction("Index", "Home", new {area = ""});
         }
 
-        [HttpPost("/in")]
+        [HttpPost("/failed")]
         public ActionResult LoggedIn([FromForm] UserReadDto userReadDto)
         {
             var user = _repository.GetUserByEMail(userReadDto.EMail);

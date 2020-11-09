@@ -52,10 +52,11 @@
                     <td>
 
                         @*<a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Detail</a>*@
-                        <button type="button" class="btn btn-info btn-block mb-2" data-toggle="modal" data-target="#exampleModal">
+                        @*<button type="button" class="btn btn-info btn-block mb-2" data-toggle="modal" data-target="#exampleModal">
                             Detail
                         </button>
-                        <partial name="/Views/Tournament/TournamentDetailPopup.cshtml" id="exampleModal" model="@item"/>
+                        <partial name="/Views/Tournament/TournamentDetailPopup.cshtml" id="exampleModal" model="@item"/>*@
+                        <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Live</a>
                         @if (loggedUser != null && loggedUser.Role == Role.TournamentDirector)
                         {
                             <input type="submit" class="btn btn-info btn-block" value="Resume tournament">

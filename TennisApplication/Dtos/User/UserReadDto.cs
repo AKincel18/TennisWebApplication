@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -7,6 +8,7 @@ using TennisApplication.Others;
 
 namespace TennisApplication.Dtos.User
 {
+    [Serializable]
     public class UserReadDto
     {
         public int Id { get; set; }

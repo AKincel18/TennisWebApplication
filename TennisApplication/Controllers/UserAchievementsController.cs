@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,21 +44,15 @@ namespace TennisApplication.Controllers
             
             IEnumerable<Tournament> tournaments =  _tournamentRepository.GetTournamentByUserId(loggedUser.Id);
 
-            return View("/Views/Tournament/GetAllTournaments.cshtml",
-                _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
+            return tournaments.Any()
+                ? View("/Views/Tournament/GetAllTournaments.cshtml",
+                    _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments))
+                : View("NoTournaments", loggedUser);
         }
 
         [HttpGet("/matches/{id}")]
         public ActionResult PlayerMatches(int id)
         {
-            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
-            UserReadDto loggedUser = deserializable.GetLoggedUser();
-            if (loggedUser == null && id == -1)
-            {
-                return RedirectToAction("Index", "Home", new {area = ""}); 
-            }
-
-            id = id == -1 ? loggedUser.Id : id;
             var matches = _matchRepository.GetMatchesByUserId(id);
             var player = _mapper.Map<UserReadDto>(_userRepository.GetUserById(id));
             
@@ -72,5 +67,27 @@ namespace TennisApplication.Controllers
             return matchesDto.Count == 0 ? View("NoMatches", player) : View(new UserMatchesDto(matchesDto, player));
         }
 
+        [HttpGet("/myMatches")]
+        public IActionResult MyMatches()
+        {
+            DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+            UserReadDto loggedUser = deserializable.GetLoggedUser();
+            if (loggedUser == null)
+            {
+                return RedirectToAction("Index", "Home", new {area = ""}); 
+            }
+            
+            var matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);
+            var matchesDto = _mapper.Map<List<MatchDto>>(matches);
+            
+            //problem with autoMapper (not mapping tournament)
+            for (int i = 0; i < matchesDto.Count; i++)
+            {
+                matchesDto[i].TournamentDto = _mapper.Map<TournamentReadDto>(matches[i].Tournament);
+            }
+
+            return matchesDto.Count == 0 ? 
+                View("NoMatches", loggedUser) : View("/Views/UserAchievements/PlayerMatches.cshtml",new UserMatchesDto(matchesDto, loggedUser));
+        }
     }
 }

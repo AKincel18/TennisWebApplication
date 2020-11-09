@@ -46,6 +46,11 @@
      var name = TempData["deleted"].ToString();
      <partial name="TournamentDeletedModal" model="@name"/>
  }
+ @if (TempData.ContainsKey("CantDelete"))
+ {
+     var name = TempData["CantDelete"].ToString();
+     <partial name="CannotDeleteTournamentModal" model="@name"/>
+ }
            
 @*@if (!ViewData.ModelState.IsValid)
 {
@@ -107,7 +112,7 @@
                  <td>
                      @if (item.Completed)
                      {
-                         <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Detail</a>
+                         <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Results</a>
                      }
                      else
                      {
@@ -129,10 +134,10 @@
                      {
                          <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
                          <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
-                         @if (!ViewData.ModelState.IsValid && @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage == item.Id.ToString())
+                         @*@if (!ViewData.ModelState.IsValid && @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage == item.Id.ToString())
                          {
                              <partial name="CannotDeleteTournamentModal" model="@item.Place"/>
-                         }
+                         }*@
                      }
 
 

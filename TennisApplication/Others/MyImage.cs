@@ -14,7 +14,7 @@ namespace TennisApplication.Others
     {
         public static Image ConvertToAvatarPhoto(Image image)
         {
-            return image.Clone(x => x.ConvertToAvatar(new Size(50, 50), 30));
+            return image.Clone(x => x.ConvertToAvatar(new Size(50, 50), 20));
         }
         
         // Implements a full image mutating pipeline operating on IImageProcessingContext

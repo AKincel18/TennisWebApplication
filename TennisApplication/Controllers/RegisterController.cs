@@ -53,7 +53,9 @@ namespace TennisApplication.Controllers
             _repository.CreateUser(userModel);
             _repository.SaveChanges();
 
-            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(_mapper.Map<UserReadDto>(userModel)));
+            UserReadDto userSession = _mapper.Map<UserReadDto>(userModel);
+            userSession.AvatarPhoto();
+            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(userSession));
 
             return RedirectToAction("Index", "Home", new {area = ""});
 

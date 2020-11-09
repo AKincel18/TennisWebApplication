@@ -74,7 +74,8 @@
                             <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">
                                 Detail
                             </button>
-                            <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.TournamentDto"/>
+                        <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.TournamentDto"/>
+                        
                         
                         @{
                             if (tournamentUser.Users != null && tournamentUser.Users.Count == 0)

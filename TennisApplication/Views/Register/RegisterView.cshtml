@@ -13,111 +13,117 @@
 
 <html>
 <body>
-@using (Html.BeginForm("CreateUser", "Register", FormMethod.Post, new
-{
-    enctype = "multipart/form-data",
-    /*@class="text-center border border-light p-5",*/
-    @class="text-center border border-light w-50 p-3"
-    /*@class = "row align-items-center justify-content-center"*/
-}))
-{
-    
-    <p class="h4 mb-4">Sign up</p>
-    <div class="form-row mb-4">
-        <div class="col">
-            @Html.TextBoxFor(u => u.FirstName, new { 
-                required = string.Empty, 
-                @class = "form-control",
-                placeholder= "First name"
-            
-            })
-        </div>
-        <div class="col">
-            @Html.TextBoxFor(u => u.LastName, new
-            {
-                required = string.Empty,
-                @class = "form-control",
-                placeholder= "Last name"
-            })
-        </div>
-    </div>
-      
-                                                                                                    
-    @Html.TextBoxFor(u => u.EMail, new
-    {
-        required = string.Empty,
-        @class = "form-control mb-4",
-        placeholder = "E-mail"
-    })
-    @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
-    if (!ViewData.ModelState.IsValid)
-    {
-        <span class="text-danger">
-            @ViewData.ModelState["EMailExists"].Errors[0].ErrorMessage
-        </span>
-    }
-       
-    @Html.PasswordFor(u => u.Password, new
-    {
-        required = string.Empty,
-        @class = "form-control mb-4",
-        placeholder = "Password",
-        aria_describedby="defaultRegisterFormPasswordHelpBlock"
-
-    })
-    @*<small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
-        To do
-    </small>*@
-    @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
-    
-    @Html.PasswordFor(u => u.ConfirmPassword, new
-    {
-        required = string.Empty,
-        @class = "form-control mb-4",
-        placeholder = "Confirm password",
-        aria_describedby="defaultRegisterFormPasswordHelpBlock2"
-
-    })
-    @*<small id="defaultRegisterFormPasswordHelpBlock2" class="form-text text-muted mb-4">
-        To do 2
-    </small>*@
-    @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
-    
-    <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Role>()" class="form-control mb-4">
-                
-    </select>
-    
-
-    @*@Html.DropDownListFor(u => u.Role, Enum.GetNames(typeof(Role)).Select(name => new SelectListItem()
-    {
-        Text = name, 
-        Value = name
-    }), new
-    {
-        @class = "form-control mb-4"
-    })*@
-    
-    <div class="text-left">
-           <div class="btn btn-outline-secondary">
-                <label for="upload" id="choose-file-label">
-                    Choose photo
-                </label>
-                <input type="file" id="upload" style="display: none" name="upload"/>
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="col-md-12 border border-light p-5">
+                @using (Html.BeginForm("CreateUser", "Register", FormMethod.Post, new
+                {
+                    enctype = "multipart/form-data"
+                }))
+                {
+                    <div class="form-group">
+                        <h3 class="text-center text-info">Sign up</h3>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col">
+                            @Html.TextBoxFor(u => u.FirstName, new { 
+                                required = string.Empty, 
+                                @class = "form-control mb-4",
+                                placeholder= "First name"
+                                    
+                            })
+                        </div>
+                        <div class="col">
+                            @Html.TextBoxFor(u => u.LastName, new
+                            {
+                                required = string.Empty,
+                                @class = "form-control mb-4",
+                                placeholder= "Last name"
+                            })
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        @Html.TextBoxFor(u => u.EMail, new
+                        {
+                            required = string.Empty,
+                            @class = "form-control mb-4",
+                            placeholder = "E-mail"
+                        })
+                        @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <span class="text-danger">
+                                @ViewData.ModelState["EMailExists"].Errors[0].ErrorMessage
+                            </span>
+                        }
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(u => u.Password, new
+                        {
+                            required = string.Empty,
+                            @class = "form-control mb-4",
+                            placeholder = "Password",
+                            aria_describedby="defaultRegisterFormPasswordHelpBlock"
+                        
+                        })
+                        @*<small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+                                To do
+                            </small>*@
+                        @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(u => u.ConfirmPassword, new
+                        {
+                            required = string.Empty,
+                            @class = "form-control mb-4",
+                            placeholder = "Confirm password",
+                            aria_describedby="defaultRegisterFormPasswordHelpBlock2"
+                        
+                        })
+                        @*<small id="defaultRegisterFormPasswordHelpBlock2" class="form-text text-muted mb-4">
+                                To do 2
+                            </small>*@
+                        @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Role>()" class="form-control mb-4">
+                                        
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="text-left">
+                            <div class="btn btn-outline-secondary btn-block">
+                                <label for="upload" id="choose-file-label">
+                                    Choose photo
+                                </label>
+                                <input type="file" id="upload" style="display: none" name="upload"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="imgPreview" class="thumbnail" style="display:none">
+                            <img class="img-responsive" id="targetImg" />
+                            <div class="caption">
+                                <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
+                                <span id="description"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-info my-4 btn-block" value="Sign up"> 
+                    </div>
+                    
+                }
             </div>
-    </div>
-    <br>
-    
-    <div id="imgPreview" class="thumbnail" style="display:none">
-        <img class="img-responsive" id="targetImg" />
-        <div class="caption">
-            <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
-            <span id="description"></span>
         </div>
     </div>
-    
-<input type="submit" class="btn btn-info my-4 btn-block" value="Sign in">  
-                                           
-       
-}
+</div>
+
+
 </body>
+
 </html>

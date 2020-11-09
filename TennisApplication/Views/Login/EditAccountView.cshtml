@@ -1,11 +1,11 @@
-﻿@using TennisApplication.Others
-@model TennisApplication.Dtos.User.UserEditDto
+﻿@model TennisApplication.Dtos.User.UserEditDto
 
 @{
     ViewData["Title"] = "Edit account";
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
 <script src="js/fileScript.js"></script>
 
 
@@ -15,7 +15,126 @@
     <title></title>
 </head>
 <body>
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="col-md-12 border border-light p-5">
+                @using (Html.BeginForm("EditAccount", "Login", FormMethod.Post, new
+                {
+                    enctype = "multipart/form-data"
+                }))
+                {
+                    
+                    <div class="form-group">
+                        <h3 class="text-center text-info">Edit account</h3>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col">
+                            @Html.TextBoxFor(u => u.FirstName, new { 
+                                required = string.Empty, 
+                                @class = "form-control mb-4",
+                                placeholder= "First name"
+                                    
+                            })
+                        </div>
+                        <div class="col">
+                            @Html.TextBoxFor(u => u.LastName, new
+                            {
+                                required = string.Empty,
+                                @class = "form-control mb-4",
+                                placeholder= "Last name"
+                            })
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        @Html.TextBoxFor(u => u.EMail, new
+                        {
+                            required = string.Empty,
+                            @class = "form-control mb-4",
+                            placeholder = "E-mail"
+                        })
+                        @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <span class="text-danger">
+                                @ViewData.ModelState["EMailExists"].Errors[0].ErrorMessage
+                            </span>
+                        }
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(u => u.Password, new
+                        {
+                            @class = "form-control mb-4",
+                            placeholder = "Password",
+                        
+                        })
+                        @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
+                    </div>
+                    <div class="form-group">
+                        @Html.PasswordFor(u => u.ConfirmPassword, new
+                        {
+                            @class = "form-control mb-4",
+                            placeholder = "Confirm password"
+                        
+                        })
+                        @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBox( "none",Model.Role == Role.Player ? "Player" : "Tournament director", new
+                        {
+                            @class = "form-control mb-4",
+                            disabled = "true"
+                        })
+                    </div>
+                    <div class="form-group">
+                        @if (Model.Photo.Length != 0)
+                        {
+                            <div class="text-left">
+                                <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Photo)"/>
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <div class="text-left">
+                            <div class="btn btn-outline-secondary btn-block">
+                                <label for="upload" id="choose-file-label">
+                                    Choose photo
+                                </label>
+                                <input type="file" id="upload" style="display: none" name="upload"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="imgPreview" class="thumbnail" style="display:none">
+                            <img class="img-responsive" id="targetImg" />
+                            <div class="caption">
+                                <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
+                                <span id="description"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-info my-4 btn-block" value="Edit account"> 
+                    </div>
+                    
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
+
+
+
+
+
+
+
+
+@*
 @using (Html.BeginForm("EditAccount", "Login", FormMethod.Post, new
 {
     enctype = "multipart/form-data",
@@ -64,9 +183,9 @@
         aria_describedby="defaultRegisterFormPasswordHelpBlock"
 
     })
-    @*<small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+    $1$<small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
         To do
-    </small>*@
+    </small>#1#
     @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
 
     @Html.PasswordFor(u => u.ConfirmPassword, new
@@ -76,9 +195,9 @@
         aria_describedby="defaultRegisterFormPasswordHelpBlock2"
 
     })
-    @*<small id="defaultRegisterFormPasswordHelpBlock2" class="form-text text-muted mb-4">
+    $1$<small id="defaultRegisterFormPasswordHelpBlock2" class="form-text text-muted mb-4">
         To do 2
-    </small>*@
+    </small>#1#
     @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
 
     @Html.TextBox( "none",Model.Role == Role.Player ? "Player" : "Tournament director", new
@@ -123,9 +242,6 @@
 
     <input type="submit" class="btn btn-info my-4 btn-block" value="Edit account">
 
-}
-
-
-
+}*@
 </body>
 </html>
