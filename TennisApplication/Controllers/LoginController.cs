@@ -93,7 +93,7 @@ namespace TennisApplication.Controllers
                 if (upload != null)
                 {
                     var image = Image.Load(upload.OpenReadStream());
-                    image.Mutate(x => x.Resize(256, 256));
+                    //image.Mutate(x => x.Resize(256, 256));
                     
                     MemoryStream stream = new MemoryStream();
                     image.SaveAsPng(stream);

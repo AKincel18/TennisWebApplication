@@ -30,26 +30,29 @@
                         <div class="col">
                             @Html.TextBoxFor(u => u.FirstName, new { 
                                 required = string.Empty, 
-                                @class = "form-control mb-4",
+                                @class = "form-control mt-4",
                                 placeholder= "First name"
                                     
                             })
+                            @Html.ValidationMessageFor(u => u.FirstName, "", new {@class = "text-danger"})
                         </div>
                         <div class="col">
                             @Html.TextBoxFor(u => u.LastName, new
                             {
                                 required = string.Empty,
-                                @class = "form-control mb-4",
+                                @class = "form-control mt-4",
                                 placeholder= "Last name"
                             })
+                            @Html.ValidationMessageFor(u => u.LastName, "", new {@class = "text-danger"})
                         </div>
+                        
                     </div>
                     
                     <div class="form-group">
                         @Html.TextBoxFor(u => u.EMail, new
                         {
                             required = string.Empty,
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             placeholder = "E-mail"
                         })
                         @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
@@ -64,7 +67,7 @@
                         @Html.PasswordFor(u => u.Password, new
                         {
                             required = string.Empty,
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             placeholder = "Password",
                             aria_describedby="defaultRegisterFormPasswordHelpBlock"
                         
@@ -78,7 +81,7 @@
                         @Html.PasswordFor(u => u.ConfirmPassword, new
                         {
                             required = string.Empty,
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             placeholder = "Confirm password",
                             aria_describedby="defaultRegisterFormPasswordHelpBlock2"
                         
@@ -89,13 +92,13 @@
                         @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
                     </div>
                     <div class="form-group">
-                        <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Role>()" class="form-control mb-4">
+                        <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Role>()" class="form-control mt-4">
                                         
                         </select>
                     </div>
                     <div class="form-group">
                         <div class="text-left">
-                            <div class="btn btn-outline-secondary btn-block">
+                            <div class="btn btn-outline-secondary btn-block mt-4">
                                 <label for="upload" id="choose-file-label">
                                     Choose photo
                                 </label>
@@ -105,7 +108,7 @@
                     </div>
                     <div class="form-group">
                         <div id="imgPreview" class="thumbnail" style="display:none">
-                            <img class="img-responsive" id="targetImg" />
+                            <img class="img-thumbnail" id="targetImg" />
                             <div class="caption">
                                 <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
                                 <span id="description"></span>
@@ -114,7 +117,7 @@
                         
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-info my-4 btn-block" value="Sign up"> 
+                        <input type="submit" class="btn btn-info my-4 btn-block mt-4" value="Sign up"> 
                     </div>
                     
                 }

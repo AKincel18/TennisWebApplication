@@ -35,23 +35,28 @@
                     }
                     
                     <div class="form-group">
-                        @Html.Label("Name of the tournament")
+                        <div class="mt-4">
+                            @Html.Label("Name of the tournament")
+                        </div>
                         @Html.TextBoxFor(t => t.Name, new
                         {
                             required = string.Empty,
-                            @class = "form-control mb-4",
+                            @class = "form-control",
                             placeholder = "Enter tournament name"
                         })
+                        @Html.ValidationMessageFor(t => t.Name, "", new {@class = "text-danger"})
                     </div>
                     
                     <div class="form-group">
+                        <div class="mt-4">
                         @Html.Label("Tournament address")
+                        </div>
                         @Html.TextBoxFor(t => t.Place, new
                         {
                             required = string.Empty,
-                            @class = "form-control mb-4", placeholder = "Enter tournament address"
+                            @class = "form-control", placeholder = "Enter tournament address"
                         })
-
+                        @Html.ValidationMessageFor(t => t.Place, "", new {@class = "text-danger"})
                         @if (!ViewData.ModelState.IsValid)
                         {
                             <span class="text-danger">
@@ -60,30 +65,36 @@
                         }
                     </div>
                     
+                    
                     <div class="form-group">
+                        <div class="mt-4">
                         @Html.Label("Date of the tournament")
+                        </div>
                         @if (Model != null)
                         {
                             @Html.EditorFor(model => model.Date, new
                             {
-                                htmlAttributes = new {@class = "form-control mb-4"}
+                                htmlAttributes = new {@class = "form-control"}
                             })
                         }
                         else
                         {
                             @Html.EditorFor(model => model.Date, new
                             {
-                                htmlAttributes = new {required = string.Empty, @class = "form-control mb-4"}
+                                htmlAttributes = new {required = string.Empty, @class = "form-control"}
                             })
                         }
+                        @Html.ValidationMessageFor(t => t.Date, "", new {@class = "text-danger"})
                     </div>
                     <div>
+                        <div class="mt-4">
                         @Html.Label("Draw size")
+                        </div>
                         @Html.TextBoxFor(t => t.DrawSize, new
                         {
                             type = "number",
                             required = string.Empty,
-                            @class = "form-control mb-4",
+                            @class = "form-control",
                             placeholder = "Enter draw size"
                         })
                         @Html.ValidationMessageFor(t => t.DrawSize, "", new {@class = "text-danger"})
@@ -91,11 +102,11 @@
                     <div>
                         @if (Model != null)
                         {
-                            <input type="submit" class="btn btn-info my-4 btn-block" value="Edit tournament">   
+                            <input type="submit" class="btn btn-info my-4 btn-block mt-4" value="Edit tournament">   
                         }
                         else
                         {
-                            <input type="submit" class="btn btn-info my-4 btn-block" value="Create tournament">   
+                            <input type="submit" class="btn btn-info my-4 btn-block mt-4" value="Create tournament">   
                         }
                     </div>
                     
@@ -105,84 +116,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-@*@using (Html.BeginForm("CreateTournament", "Tournament", FormMethod.Post, new
-{
-    @class="text-center border border-light w-50 p-3"
-}))
-{
-
-
-    <div class="form-group">
-        <div class="form-row mb-4">
-            @Html.Label("Name of the tournament")
-            @Html.TextBoxFor(t => t.Name, new
-            {
-                required = string.Empty,
-                @class = "form-control", placeholder = "Enter tournament name"
-            })
-       
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-row mb-4">
-            @Html.Label("Tournament address")
-            @Html.TextBoxFor(t => t.Place, new
-            {
-                required = string.Empty,
-                @class = "form-control", placeholder = "Enter tournament address"
-            })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-row mb-4">
-            @Html.Label("Date of the tournament")
-            @if (Model != null)
-            {
-                @Html.EditorFor(model => model.Date, new
-                {
-                    htmlAttributes = new {@class = "form-control"}
-                })
-            }
-            else
-            {
-                @Html.EditorFor(model => model.Date, new
-                {
-                    htmlAttributes = new {required = string.Empty, @class = "form-control"}
-                })
-            }
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-row mb-4">
-            @Html.Label("Draw size")
-            @Html.TextBoxFor(t => t.DrawSize, new
-            {
-                type = "number", 
-                required = string.Empty,
-                @class = "form-control", 
-                placeholder = "Enter draw size"
-            })
-            @Html.ValidationMessageFor(t => t.DrawSize, "", new {@class = "text-danger"})
-        </div>
-    </div>
-    <div class="form-group">
-                @if (Model != null)
-                {
-                    <input type="submit" class="btn btn-info my-4 btn-block" value="Edit tournament">   
-                }
-                else
-                {
-                    <input type="submit" class="btn btn-info my-4 btn-block" value="Create tournament">   
-                }
-        
-    </div>
-
-}*@
 
 </body>
 </html>
