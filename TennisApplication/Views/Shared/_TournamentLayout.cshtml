@@ -1,4 +1,4 @@
-﻿@using TennisApplication.Dtos.User
+@using TennisApplication.Dtos.User
 @using Microsoft.AspNetCore.Http
 @using TennisApplication.Others
 @inject IHttpContextAccessor HttpContextAccessor
@@ -15,17 +15,17 @@
 
         @if (loggedUser != null && loggedUser.Role.Equals(Role.TournamentDirector))
         {
-            <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create new tournament</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="CreateTournamentView">Create tournament</a>
         }
         <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">All tournaments</a>
 
 
-        <a class="dropdown-item" asp-area="" asp-controller="CourseTournament" asp-action="CompletedTournamentView">Completed tournament</a>
+        <a class="dropdown-item" asp-area="" asp-controller="CourseTournament" asp-action="CompletedTournamentView">Completed tournaments</a>
 
 
-        <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetIncomingTournament">Incoming tournament</a>
+        <a class="dropdown-item" asp-area="" asp-controller="Tournament" asp-action="GetIncomingTournament">Incoming tournaments</a>
 
-        <a class="dropdown-item" asp-area="" asp-controller="CourseTournament" asp-action="OngoingAllView">Ongoing tournament</a>
+        <a class="dropdown-item" asp-area="" asp-controller="CourseTournament" asp-action="OngoingAllView">Ongoing tournaments</a>
 
     </div>
 </li>

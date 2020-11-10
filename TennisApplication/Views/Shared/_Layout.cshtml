@@ -15,15 +15,26 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TennisApplication</a>
+            @{
+                DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
+                UserReadDto loggedUser = deserializable.GetLoggedUser();
+                if (loggedUser == null)
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="Login" asp-action="LoginView">TennisApplication</a>
+                }
+                else
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">TennisApplication</a>
+                }
+            }
+            
             @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>*@
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 @{
-                    DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
-                    UserReadDto loggedUser = deserializable.GetLoggedUser();
+
                     if (loggedUser != null)
                     {
                         <partial name="_LoginPartial"/>
@@ -35,18 +46,11 @@
                 }
 
                 <ul class="navbar-nav flex-grow-1">
-                    @*<li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>*@
                     <partial name="_TournamentLayout"/>
                     @if (loggedUser != null && loggedUser.Role == Role.Player)
                     {
                         <partial name="_PlayerLayout"/>
                     }
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -60,7 +64,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2020 - TennisApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2020 - TennisApplication
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

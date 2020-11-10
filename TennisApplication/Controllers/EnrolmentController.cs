@@ -31,7 +31,7 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""}); 
             }
             
             var enrolmentDto = new EnrolmentDto(id, loggedUser.Id);
@@ -51,7 +51,7 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""}); 
             }
 
             var enrolment = _repository.FindEnrolment(loggedUser.Id, id);

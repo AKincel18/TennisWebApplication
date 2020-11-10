@@ -33,7 +33,7 @@
                         <div class="col">
                             @Html.TextBoxFor(u => u.FirstName, new { 
                                 required = string.Empty, 
-                                @class = "form-control mb-4",
+                                @class = "form-control mt-4",
                                 placeholder= "First name"
                                     
                             })
@@ -43,7 +43,7 @@
                             @Html.TextBoxFor(u => u.LastName, new
                             {
                                 required = string.Empty,
-                                @class = "form-control mb-4",
+                                @class = "form-control mt-4",
                                 placeholder= "Last name"
                             })
                             @Html.ValidationMessageFor(u => u.LastName, "", new {@class = "text-danger"})
@@ -54,7 +54,7 @@
                         @Html.TextBoxFor(u => u.EMail, new
                         {
                             required = string.Empty,
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             placeholder = "E-mail"
                         })
                         @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
@@ -68,7 +68,7 @@
                     <div class="form-group">
                         @Html.PasswordFor(u => u.Password, new
                         {
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             placeholder = "Password",
                         
                         })
@@ -77,7 +77,7 @@
                     <div class="form-group">
                         @Html.PasswordFor(u => u.ConfirmPassword, new
                         {
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             placeholder = "Confirm password"
                         
                         })
@@ -86,7 +86,7 @@
                     <div class="form-group">
                         @Html.TextBox( "none",Model.Role == Role.Player ? "Player" : "Tournament director", new
                         {
-                            @class = "form-control mb-4",
+                            @class = "form-control mt-4",
                             disabled = "true"
                         })
                     </div>
@@ -113,7 +113,7 @@
                             <img class="img-thumbnail" id="targetImg" />
                             <div class="caption">
                                 <a href="#" onclick="ClearPreview()"><i class="glyphicon glyphicon-trash"></i></a>
-                                <span id="description"></span>
+                                @*<span id="description"></span>*@
                             </div>
                         </div>
                         

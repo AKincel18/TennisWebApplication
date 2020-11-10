@@ -57,7 +57,7 @@ namespace TennisApplication.Controllers
             userSession.AvatarPhoto();
             HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(userSession));
 
-            return RedirectToAction("Index", "Home", new {area = ""});
+            return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
 
         }
 

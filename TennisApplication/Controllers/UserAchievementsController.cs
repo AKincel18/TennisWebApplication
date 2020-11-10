@@ -37,9 +37,14 @@ namespace TennisApplication.Controllers
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            if (loggedUser == null || loggedUser.Role == Role.TournamentDirector)
+            if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+            }
+
+            if (loggedUser.Role == Role.TournamentDirector)
+            {
+                return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""}); 
             }
             
             IEnumerable<Tournament> tournaments =  _tournamentRepository.GetTournamentByUserId(loggedUser.Id);
@@ -74,7 +79,12 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+            }
+
+            if (loggedUser.Role == Role.TournamentDirector)
+            {
+                return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""}); 
             }
             
             var matches = _matchRepository.GetMatchesByUserId(loggedUser.Id);

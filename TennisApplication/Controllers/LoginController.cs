@@ -1,12 +1,9 @@
 ﻿using System.IO;
-using System.Runtime.InteropServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
-using SixLabors.ImageSharp.Processing;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
 using TennisApplication.Others;
@@ -38,7 +35,7 @@ namespace TennisApplication.Controllers
         {
             HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(null,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore}));
-            return RedirectToAction("Index", "Home", new {area = ""});
+            return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
         }
 
         [HttpPost("/failed")]
@@ -54,7 +51,7 @@ namespace TennisApplication.Controllers
             UserReadDto toSaving = _mapper.Map<UserReadDto>(user);
             toSaving.AvatarPhoto();
             HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(toSaving));
-            return RedirectToAction("Index", "Home", new {area = ""});
+            return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
             
         }
 
@@ -65,7 +62,7 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("Index", "Home", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""}); 
             }
             User user = _repository.GetUserById(loggedUser.Id);
             return View(_mapper.Map<UserEditDto>(user));
@@ -107,7 +104,7 @@ namespace TennisApplication.Controllers
                 HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(userSession));
             }
             
-            return RedirectToAction("Index", "Home", new {area = ""});
+            return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
         }
     }
 }

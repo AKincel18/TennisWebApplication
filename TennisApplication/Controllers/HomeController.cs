@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TennisApplication.Models;
 
 namespace TennisApplication.Controllers
 {
@@ -16,12 +14,7 @@ namespace TennisApplication.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return RedirectToAction("GetAllTournaments", "Tournament");
         }
 
     }
