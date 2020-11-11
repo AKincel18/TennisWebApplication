@@ -78,3 +78,89 @@ body {
   padding: 6px 12px;
   cursor: pointer;
 }
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
+
+thead th {
+  background-color: #17a2b8;
+  color: white;
+}
+
+tbody td {
+  background-color: #EEEEEE;
+}
+
+tr td:first-child,
+tr th:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+tr td:last-child,
+tr th:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.yes_color{
+  color: green;
+}
+
+.no-color {
+  color: red;  
+}
+.during-color {
+  color: blue;
+}
+.my-text-color{
+  color: #17a2b8 ;
+}
+.my-text-color2 {
+  color: #3acead;
+}
+
+.my-button{
+  width: available;
+  height: available;
+  background-color: #17a2b8;
+  color: white;
+  border: 0 none;
+  padding: 10px 10px 10px 10px;
+}
+.my-accordion-card{
+  width: available;
+  height: available;
+  background-color: #3ACEAD;
+  color: white;
+  border: 0 none;
+  padding: 10px 10px 10px 10px;
+}
+button:focus{
+  outline: 0;
+}
+.img-thumbnail {
+  padding: 0.25rem;
+  border-color: #17a2b8;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  max-width: 100%;
+  height: auto;
+}
+
+.header {
+  text-align: center;
+  background: #1abc9c;
+  color: #1abc9c;
+}
+
+.navbar-light .navbar-brand {
+  color: #17a2b8 !important;
+  font-weight: bold;
+}
+
+nav .navbar-nav li a{
+  color: #17a2b8 !important;
+}

@@ -18,20 +18,16 @@
             @{
                 DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
                 UserReadDto loggedUser = deserializable.GetLoggedUser();
-                if (loggedUser == null)
-                {
-                    <a class="navbar-brand" asp-area="" asp-controller="Login" asp-action="LoginView">TennisApplication</a>
-                }
-                else
-                {
-                    <a class="navbar-brand" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">TennisApplication</a>
-                }
+                    @if (loggedUser == null)
+                    {
+                        
+                        <a class="navbar-brand" asp-area="" asp-controller="Login" asp-action="LoginView">TennisApplication</a>
+                    }
+                    else
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Tournament" asp-action="GetAllTournaments">TennisApplication</a>
+                    }
             }
-            
-            @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>*@
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 @{
 
@@ -64,7 +60,10 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2020 - TennisApplication
+        <div class="my-text-color font-weight-bold">
+            &copy; 2020 - TennisApplication
+        </div>
+        
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -6,7 +6,7 @@
 
 }
 
-<h1>Ongoing tournament</h1>
+<h2 class="my-text-color">Ongoing tournament</h2>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -38,10 +38,10 @@
     var openCollapse = tournamentCourse.CurrentRound - 1 == round ? "collapse show" : "collapse";
     var test = editable ? "true" : "false";
 
-    <div class="card">
-        <div class="card-header" id="@round">
+    <div class="card mb-1">
+        <div class="card-header" style="background: #3acead" id="@round">
             <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
+                <button class="my-accordion-card btn-block" style="text-align: left" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
                     @header
                 </button>
             </h5>
@@ -53,117 +53,120 @@
         <div class="card-body">
         <div>
             <table class="table">
-            <tr>
-                <th style="width: 30%">
-                    <label>Player 1</label>
-                </th>
-                <th style="width: 30%">
-                    <label>Player 2</label>
-                </th>
-                <th style="width: 10%">
-                    <label>Winner</label>
-                </th>
-                <th style="width: 30%">
-                    <label>Result</label>
-                </th>
-            </tr>
-            <tbody>
-
-
-
-
-            @{
-                var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
-            }
-
-            @for (int i = 0; i < matchesInRound; i++)
-            {
-
-                var player1 = tournamentCourse.Matches[iterator].Player1.FirstName 
-                              + " " + tournamentCourse.Matches[iterator].Player1.LastName;
-                var player2 = tournamentCourse.Matches[iterator].Player2.FirstName 
-                              + " " + tournamentCourse.Matches[iterator].Player2.LastName;
-                bool isPlayer1Bye = tournamentCourse.Matches[iterator].Player1.Id == -1;
-                bool isPlayer2Bye = tournamentCourse.Matches[iterator].Player2.Id == -1;
-                
-                @Html.Hidden("MatchDto[" + iterator + "].Id", tournamentCourse.Matches[iterator].Id)
-
+                <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => player1, new
-                        {
-                            @class = "form-control mb-4"
-                        })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => player2, new
-                        {
-                            @class = "form-control mb-4"
-                        })
-                    </td>
+                    <th style="width: 30%">
+                        <label>Player 1</label>
+                    </th>
+                    <th style="width: 30%">
+                        <label>Player 2</label>
+                    </th>
+                    <th style="width: 10%">
+                        <label>Winner</label>
+                    </th>
+                    <th style="width: 30%">
+                        <label>Result</label>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
 
-                    <td>
 
-                        @if (!editable)
-                        {
-                            <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
-                                    class="form-control mb-4" disabled>
-                            </select>
-                        }
-                        else
-                        {
-                            @if (isPlayer1Bye || isPlayer2Bye)
+
+
+                @{
+                    var matchesInRound = tournamentCourse.Matches.Where(m => m.Round == round + 1).ToList().Count;
+                }
+
+                @for (int i = 0; i < matchesInRound; i++)
+                {
+
+                    var player1 = tournamentCourse.Matches[iterator].Player1.FirstName
+                                  + " " + tournamentCourse.Matches[iterator].Player1.LastName;
+                    var player2 = tournamentCourse.Matches[iterator].Player2.FirstName
+                                  + " " + tournamentCourse.Matches[iterator].Player2.LastName;
+                    bool isPlayer1Bye = tournamentCourse.Matches[iterator].Player1.Id == -1;
+                    bool isPlayer2Bye = tournamentCourse.Matches[iterator].Player2.Id == -1;
+
+                    @Html.Hidden("MatchDto[" + iterator + "].Id", tournamentCourse.Matches[iterator].Id)
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => player1, new
                             {
-                            
-                                if ((isPlayer1Bye && isPlayer2Bye) || (isPlayer2Bye))
-                                {
-                                    <select asp-for="Matches[iterator].Winner" asp-items="new SelectList(new List<int> {1})"
-                                            class="form-control mb-4" disabled>
-                                    </select>
-                                }
-                                else
-                                {
-                                    <select asp-for="Matches[iterator].Winner" asp-items="new SelectList(new List<int> {2})"
-                                            class="form-control mb-4" disabled>
-                                    </select>
-                                }
+                                @class = "form-control mb-4"
+                            })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => player2, new
+                            {
+                                @class = "form-control mb-4"
+                            })
+                        </td>
 
+                        <td>
+
+                            @if (!editable)
+                            {
+                                <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
+                                        class="form-control mb-4" disabled>
+                                </select>
                             }
                             else
                             {
-                                <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
-                                        class="form-control mb-4">
-                                </select>
+                                @if (isPlayer1Bye || isPlayer2Bye)
+                                {
+
+                                    if ((isPlayer1Bye && isPlayer2Bye) || (isPlayer2Bye))
+                                    {
+                                        <select asp-for="Matches[iterator].Winner" asp-items="new SelectList(new List<int> {1})"
+                                                class="form-control mb-4" disabled>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select asp-for="Matches[iterator].Winner" asp-items="new SelectList(new List<int> {2})"
+                                                class="form-control mb-4" disabled>
+                                        </select>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <select asp-for="Matches[iterator].Winner" asp-items="@Html.GetEnumSelectList<Winner>()"
+                                            class="form-control mb-4">
+                                    </select>
+                                }
                             }
-                        }
 
 
 
 
 
-                    </td>
-                        
-                    <td>
-                        @Html.TextBoxFor(modelItem => modelItem.Matches[iterator].Result,
-                            new {
-                                type = "string", 
-                                required = string.Empty, 
-                                @class="form-control mb-4"
+                        </td>
 
-                            }
-                            )
+                        <td>
+                            @Html.TextBoxFor(modelItem => modelItem.Matches[iterator].Result,
+                                new
+                                {
+                                    type = "string",
+                                    required = string.Empty,
+                                    @class = "form-control mb-4"
 
-                    </td>
-                </tr>
-                
-                        iterator++;
-                    }
+                                }
+                                )
+
+                        </td>
+                    </tr>
+
+                    iterator++;
+                }
 
 
 
 
-                    </tbody>
-                </table>
+                </tbody>
+            </table>
             </div>
         </div>
     </div>
@@ -174,7 +177,7 @@
 }
         @if (!tournamentCourse.IsFinished)
         {
-            <input type="submit" class="btn btn-info my-4 btn-block" value="Save results">
+            <input type="submit" class="btn btn-info my-4 btn-block" style="border-radius: 10px" value="Save results">
         }
     }
 </div>

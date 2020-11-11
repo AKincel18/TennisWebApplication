@@ -4,11 +4,9 @@
     ViewData["Title"] = "Completed tournament";
 }
 
-<h2>Tournament results</h2>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>accordion demo</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.12.4.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -16,6 +14,7 @@
 
 <body>
 
+<h2 class="my-text-color">Tournament results</h2>
 @{
     var iterator = 0;
     var tournamentCourse = Model;
@@ -26,10 +25,10 @@
     {
         var bodyId = "Body" + round;
         
-        <div class="card">
-            <div class="card-header" id="@round">
+        <div class="card mb-1">
+            <div class="card-header" style="background: #3acead" id="@round">
                 <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
+                    <button class="my-accordion-card btn-block" style="text-align: left" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
                         @tournamentCourse.RoundsName[round]
                     </button>
                 </h5>
@@ -43,7 +42,7 @@
                     <div>
                     
                         <table class="table">
-                            <thead class="thead-dark">
+                            <thead>
                             <tr>
                                 <th>
                                     <label>Player 1</label>
@@ -58,7 +57,7 @@
                                     <label>Result</label>
                                 </th>
                             </tr>
-                            <thead class="thead-dark">
+                            </thead>
                             <tbody>
                     
                     
@@ -113,10 +112,6 @@
     }
 
 </div>
-   
-<script>
-//$( "#accordion" ).accordion();
-</script>
 
 </body>
 </html>

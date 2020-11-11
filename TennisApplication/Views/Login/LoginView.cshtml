@@ -16,7 +16,8 @@
                         {
                             required = string.Empty,
                             @class = "form-control mb-3",
-                            placeholder = "E-mail"
+                            placeholder = "E-mail",
+                            style="border-color: #17a2b8"
                         })
                     </div>
                     <div class="form-group">
@@ -24,7 +25,8 @@
                         {
                             required = string.Empty,
                             @class = "form-control mb-3",
-                            placeholder = "Password"
+                            placeholder = "Password",
+                            style="border-color: #17a2b8"
                         })
                                         
                         @if (!ViewData.ModelState.IsValid)
@@ -35,7 +37,7 @@
                         }
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-info my-4 btn-block" value="Sign in">
+                        <input type="submit" class="btn btn-info my-4 btn-block" style="border-radius: 10px" value="Sign in">
                     </div>
                     <div id="register-link" class="text-right">
                         <a href="@Url.Action("RegisterView", "Register")" class="text-info">Register here</a>

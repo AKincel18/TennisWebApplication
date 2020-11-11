@@ -34,7 +34,8 @@
                             @Html.TextBoxFor(u => u.FirstName, new { 
                                 required = string.Empty, 
                                 @class = "form-control mt-4",
-                                placeholder= "First name"
+                                placeholder= "First name",
+                                style="border-color: #17a2b8"
                                     
                             })
                             @Html.ValidationMessageFor(u => u.FirstName, "", new {@class = "text-danger"})
@@ -44,7 +45,8 @@
                             {
                                 required = string.Empty,
                                 @class = "form-control mt-4",
-                                placeholder= "Last name"
+                                placeholder= "Last name",
+                                style="border-color: #17a2b8"
                             })
                             @Html.ValidationMessageFor(u => u.LastName, "", new {@class = "text-danger"})
                         </div>
@@ -55,7 +57,8 @@
                         {
                             required = string.Empty,
                             @class = "form-control mt-4",
-                            placeholder = "E-mail"
+                            placeholder = "E-mail",
+                            style="border-color: #17a2b8"
                         })
                         @Html.ValidationMessageFor(u => u.EMail, "", new {@class = "text-danger"})
                         @if (!ViewData.ModelState.IsValid)
@@ -70,6 +73,7 @@
                         {
                             @class = "form-control mt-4",
                             placeholder = "Password",
+                            style="border-color: #17a2b8"
                         
                         })
                         @Html.ValidationMessageFor(u => u.Password, "", new {@class = "text-danger"})
@@ -78,7 +82,8 @@
                         @Html.PasswordFor(u => u.ConfirmPassword, new
                         {
                             @class = "form-control mt-4",
-                            placeholder = "Confirm password"
+                            placeholder = "Confirm password",
+                            style="border-color: #17a2b8"
                         
                         })
                         @Html.ValidationMessageFor(u => u.ConfirmPassword, "", new {@class = "text-danger"})
@@ -87,7 +92,8 @@
                         @Html.TextBox( "none",Model.Role == Role.Player ? "Player" : "Tournament director", new
                         {
                             @class = "form-control mt-4",
-                            disabled = "true"
+                            disabled = "true",
+                            style="border-color: #17a2b8"
                         })
                     </div>
                     <div class="form-group">
@@ -100,8 +106,8 @@
                     </div>
                     <div class="form-group">
                         <div class="text-left">
-                            <div class="btn btn-outline-secondary btn-block">
-                                <label for="upload" id="choose-file-label">
+                            <div class="btn btn-outline-secondary btn-block" style="border-color: #17a2b8">
+                                <label for="upload" class="my-text-color" id="choose-file-label">
                                     Choose photo
                                 </label>
                                 <input type="file" id="upload" style="display: none" name="upload"/>
@@ -119,7 +125,7 @@
                         
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-info my-4 btn-block" value="Edit account"> 
+                        <input type="submit" class="btn btn-info my-4 btn-block" style = "border-radius: 10px" value="Edit account"> 
                     </div>
                     
                 }

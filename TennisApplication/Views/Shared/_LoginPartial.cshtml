@@ -10,7 +10,7 @@
         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @*Hello @loggedUser?.FirstName!*@
             @if(loggedUser != null){
-                <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(loggedUser.Photo)"/>
+                <img class="img-responsive full-width" src="data:image/jpeg;base64,@Convert.ToBase64String(loggedUser.Photo)" alt=""/>
             }
             
         </a>

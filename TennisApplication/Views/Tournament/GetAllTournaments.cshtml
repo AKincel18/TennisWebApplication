@@ -4,6 +4,7 @@
 @using TennisApplication.Others
 @inject IHttpContextAccessor HttpContextAccessor
 @model IEnumerable<TennisApplication.Dtos.Tournament.TournamentReadDto>
+
 @{
     ViewData["Title"] = "Tournaments";
     DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
@@ -19,27 +20,24 @@
 }
 <!DOCTYPE html>
  <head>
- 
-     @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-     <link rel="stylesheet" href="https://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css" />
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
-     <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
-     $1$<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">#1#*@
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
-      <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+     <script src="https://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
  </head>
  <html>
-<h1>Tournaments</h1>
+<h2 class="my-text-color">Tournaments</h2>
 
 @if (isUserWithTournamentDirectorRole)
 {
     <p>
-        <a asp-controller="Tournament" asp-action="CreateTournamentView">Create New</a>
-    </p>
+        <a href='@Url.Action("CreateTournamentView", "Tournament")'>
+            <button class="my-button" style="border-radius: 10px">Create a new tournament</button>
+        </a>
+     </p>
+    
+
+    
 }
  @if (TempData.ContainsKey("deleted"))
  {
@@ -51,21 +49,12 @@
      var name = TempData["CantDelete"].ToString();
      <partial name="CannotDeleteTournamentModal" model="@name"/>
  }
-           
-@*@if (!ViewData.ModelState.IsValid)
-{
-    <span class="text-danger">
-        @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage
-        <br>
-    </span>
-    
-}*@
  <body>
- <div class="container">
      <table class="table sortable">
-         <thead class="thead-dark">
-
-
+         
+             
+         
+         <thead>
          <tr>
              <th>
                  @Html.DisplayNameFor(model => model.Name)
@@ -83,16 +72,17 @@
                  @Html.DisplayNameFor(model => model.Completed)
              </th>
              <th>
-                
+
              </th>
 
          </tr>
-    
          </thead>
-    
+
          <tbody>
          @foreach (var item in Model)
          {
+             // 0 -> completed, 1 -> during, 2 -> not started
+             int tournamentPhase = item.Completed ? 0 : item.Started ? 1 : 2;
              <tr>
                  <td>
                      @Html.DisplayFor(modelItem => item.Name)
@@ -107,39 +97,52 @@
                      @Html.DisplayFor(modelItem => item.DrawSize)
                  </td>
                  <td>
-                     @Html.DisplayName(item.Completed ? "Yes" : "No")
+                     @{
+                         switch (tournamentPhase)
+                         {
+                             case 0:
+                                 <div class="yes_color">
+                                     Yes
+                                 </div>
+                                 break;
+                             case 1:
+                                 <div class="during-color">
+                                     During
+                                 </div>
+                                 break;
+                             case 2:
+                                 <div class="no-color">
+                                     No
+                                 </div>
+                                 break;
+                         }
+                     }
+                     
+
+
                  </td>
                  <td>
-                     @if (item.Completed)
+                     @switch (tournamentPhase)
                      {
-                         <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Results</a>
+                         case 0:
+                             <a asp-controller="CourseTournament" 
+                                asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Results</a>
+                             break;
+                         case 1:
+                             <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" 
+                                asp-route-id="@item.Id">Live</a>
+                             break;
+                         case 2:
+                             <a asp-controller="Tournament" asp-action="GetIncomingTournament">
+                                 Enrolments
+                             </a>
+                             break;
                      }
-                     else
-                     {
-                         @if (item.Started)
-                         {
-                             <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Live</a>
-                         }
-                         else
-                         {
-                             @if (isUserWithPlayerRole && item.Date > DateTime.Now)
-                             {
-                                 <a asp-controller="Tournament" asp-action="GetIncomingTournament">Go to the enrolments</a>
-                             }
-                         }
-                     }
-
-                    
                      @if (isUserWithTournamentDirectorRole)
                      {
                          <a asp-controller="Tournament" asp-action="UpdateTournamentView" asp-route-id="@item.Id">Edit</a>
                          <a asp-controller="Tournament" asp-action="DeleteTournament" asp-route-id="@item.Id">Delete</a>
-                         @*@if (!ViewData.ModelState.IsValid && @ViewData.ModelState["CantDelete"].Errors[0].ErrorMessage == item.Id.ToString())
-                         {
-                             <partial name="CannotDeleteTournamentModal" model="@item.Place"/>
-                         }*@
                      }
-
 
                  </td>
              </tr>
@@ -147,7 +150,6 @@
          </tbody>
      </table>
     
- </div>
  </body>
  
 </html>

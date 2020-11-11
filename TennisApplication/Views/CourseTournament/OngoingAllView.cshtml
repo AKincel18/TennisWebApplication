@@ -9,62 +9,67 @@
     UserReadDto loggedUser = deserializable.GetLoggedUser();
 }
 
-<h2>Ongoing tournaments</h2>
-<div class="container">
+<h2 class="my-text-color">Ongoing tournaments</h2>
 
-    <table class="table">
-        <thead class="table-info">
-        <tr>
-            <th style="width: 30%">
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th style="width: 30%">
-                @Html.DisplayNameFor(model => model.Place)
-            </th>
-            <th style="width: 20%">
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th style="width: 20%">
-                @Html.DisplayNameFor(model => model.DrawSize)
-            </th>
-            <th></th>
-        </tr>
-        <tbody>
+<table class="table">
+    <thead class="table-info">
+    <tr>
+        <th style="width: 30%">
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th style="width: 30%">
+            @Html.DisplayNameFor(model => model.Place)
+        </th>
+        <th style="width: 20%">
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th style="width: 20%">
+            @Html.DisplayNameFor(model => model.DrawSize)
+        </th>
+        <th></th>
+    </tr>
+    <tbody>
 
-        @foreach (var item in Model)
+    @foreach (var item in Model)
+    {
+        @using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
         {
-            @using (Html.BeginForm("GetResultsTournament", "CourseTournament", FormMethod.Post))
-            {
-                @Html.Hidden("TournamentId", item.Id)
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Place)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DrawSize)
-                    </td>
-                    <td>
+            @Html.Hidden("TournamentId", item.Id)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Place)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DrawSize)
+                </td>
+                <td>
 
-                        @*<a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Detail</a>*@
-                        @*<button type="button" class="btn btn-info btn-block mb-2" data-toggle="modal" data-target="#exampleModal">
+                    @*<a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@item.Id">Detail</a>*@
+                    @*<button type="button" class="btn btn-info btn-block mb-2" data-toggle="modal" data-target="#exampleModal">
                             Detail
                         </button>
                         <partial name="/Views/Tournament/TournamentDetailPopup.cshtml" id="exampleModal" model="@item"/>*@
+
+                    <div class="ml-3">
                         <a asp-controller="CourseTournament" asp-action="CompletedTournamentDetail" asp-route-id="@item.Id">Live</a>
-                        @if (loggedUser != null && loggedUser.Role == Role.TournamentDirector)
-                        {
-                            <input type="submit" class="btn btn-info btn-block" value="Resume tournament">
-                        }
-                    </td>
-                </tr>
-            }
+                    </div>
+
+                    @if (loggedUser != null && loggedUser.Role == Role.TournamentDirector)
+                    {
+                        <input type="submit" class="btn btn-link" value="Resume tournament">
+                    }
+
+
+
+                </td>
+            </tr>
         }
-        </tbody>
-    </table>
-</div>
+    }
+    </tbody>
+</table>

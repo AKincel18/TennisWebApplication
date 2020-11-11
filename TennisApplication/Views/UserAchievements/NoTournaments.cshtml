@@ -1,6 +1,7 @@
 ﻿@model TennisApplication.Dtos.User.UserReadDto
 
 @{
-    ViewData["Title"] = "No matches";
+    ViewData["Title"] = "No tournaments";
 }
-<h3>No found tournaments for @Model.FirstName @Model.LastName</h3>
+<h2 class="my-text-color" style="display: inline-block">No found tournaments for:</h2>
+<h2 class="my-text-color2 font-weight-bold" style="display:inline-block">@Model.FirstName @Model.LastName</h2>

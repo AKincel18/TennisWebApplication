@@ -8,13 +8,12 @@
     UserReadDto loggedUser = deserializable.GetLoggedUser();
 }
 
-<h1>Incoming tournaments</h1>
+<h2 class="my-text-color">Incoming tournaments</h2>
 
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>accordion demo</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.12.4.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -28,10 +27,10 @@
         var bodyId = "Body" + id;
 
         
-        <div class="card mb-1">
-            <div class="card-header" id="@id">
+        <div class="card mb-1" >
+            <div class="card-header" style="background: #3acead" id="@id">
                 <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
+                    <button class="my-accordion-card btn-block" style="text-align: left" data-toggle="collapse" data-target="#@bodyId" aria-expanded="true" aria-controls="@bodyId">
                         @tournamentUser.TournamentDto.Name
                     </button>
                 </h5>
@@ -40,54 +39,62 @@
             <div id="@bodyId" class="collapse" aria-labelledby="@id" data-parent="#accordion">
                 <div class="card-body">
                     <div>
-
-                        @if (loggedUser!=null )
-                        {
-                            int numberOfParticipants = tournamentUser.Users?.Count ?? 0;
-                            @if (!tournamentUser.IsRegistered && loggedUser.Role == Role.Player && numberOfParticipants < tournamentUser.TournamentDto.DrawSize)
+                        <p>
+                            @if (loggedUser!=null )
                             {
-                                <p>
-                                    <a asp-controller="Enrolment" asp-action="EnrolTournament" asp-route-id="@tournamentUser.TournamentDto.Id">Save me</a>
-                                </p>
-                            }
-                            @if (tournamentUser.IsRegistered && loggedUser.Role == Role.Player)
-                            {
-                                <p>
-                                    <a asp-controller="Enrolment" asp-action="WithdrawTournament" asp-route-id="@tournamentUser.TournamentDto.Id">Withdraw</a>
-                                </p>
-                            }
-                            @if (loggedUser.Role == Role.TournamentDirector && numberOfParticipants > 1)
-                            {
-                                <p>
-                                    <a asp-controller="CourseTournament" asp-action="StartTournament" asp-route-id="@tournamentUser.TournamentDto.Id">
-                                        Start the tournament
+                                int numberOfParticipants = tournamentUser.Users?.Count ?? 0;
+                                @if (!tournamentUser.IsRegistered && loggedUser.Role == Role.Player && 
+                                     numberOfParticipants < tournamentUser.TournamentDto.DrawSize)
+                                {
+                                    
+                                    <a href='@Url.Action("EnrolTournament", "Enrolment", new 
+                                             {
+                                                 id = @tournamentUser.TournamentDto.Id
+                                             })'>
+                                        <button class="my-button mr-2" style="border-radius: 10px">Save me</button>
                                     </a>
-                                </p>
-                            }
-                        }
-
-
-
+                                    
                                 
-                                @*<a asp-controller="Tournament" asp-action="GetTournamentById" asp-route-id="@tournamentUser.Tournament.Id">
-                                Tournament detail
-                            </a>*@
-                            <button type="button" class="btn btn-info mb-2" data-toggle="modal" data-target="#exampleModal">
+                                }
+                                @if (tournamentUser.IsRegistered && loggedUser.Role == Role.Player)
+                                {
+                                    <a href='@Url.Action("WithdrawTournament", "Enrolment", new 
+                                             {
+                                                 id = @tournamentUser.TournamentDto.Id
+                                             })'>
+                                        <button class="my-button mr-2" style="border-radius: 10px">Withdraw</button>
+                                    </a>
+                                
+                                }
+                                @if (loggedUser.Role == Role.TournamentDirector && numberOfParticipants > 1)
+                                {
+                                    <a href='@Url.Action("StartTournament", "CourseTournament", new 
+                                             {
+                                                 id = @tournamentUser.TournamentDto.Id
+                                             })'>
+                                        <button class="my-button mr-2" style="border-radius: 10px">Start the tournament</button>
+                                    </a>
+
+                                }
+                            }
+                            <button type="button" class="my-button mb-3" style="border-radius: 10px" data-toggle="modal" data-target="#exampleModal">
                                 Detail
                             </button>
+                        </p>
+                        
                         <partial name="TournamentDetailPopup" id = "exampleModal" model="@tournamentUser.TournamentDto"/>
                         
                         
                         @{
                             if (tournamentUser.Users != null && tournamentUser.Users.Count == 0)
                             {
-                                <h4>No player signed up</h4>
+                                <h4 class="my-text-color2">No player signed up</h4>
                             }
                             else
                             {
-                                <h4>Players signed up</h4>
+                                <h4 class="my-text-color2">Players signed up</h4>
                                 <table class="table">
-                                    <thead class="thead-dark">
+                                    <thead>
                                     <tr>                                
                                         <th>
                                             <label>#</label>
@@ -103,7 +110,7 @@
                                         </th>
                                     </tr>
 
-                                    <thead class="thead-dark">
+                                    </thead>
                                     <tbody>
 
                                     @{
