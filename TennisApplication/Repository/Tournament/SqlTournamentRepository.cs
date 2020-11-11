@@ -104,9 +104,11 @@ namespace TennisApplication.Repository.Tournament
                     where match == null select tournament)
                 .ToList();
         }
-        /*public void UpdateTournament(Tournament tournament)
+
+        public bool IsTournamentStarted(int tournamentId)
         {
-            
-        }*/
+            List<Models.Match> match = _context.Matches.Where(m => m.Tournament.Id == tournamentId).ToList();
+            return match.Any() ? true : false;
+        }
     }
 }

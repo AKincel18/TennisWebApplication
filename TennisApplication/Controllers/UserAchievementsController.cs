@@ -47,8 +47,12 @@ namespace TennisApplication.Controllers
                 return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""}); 
             }
             
-            IEnumerable<Tournament> tournaments =  _tournamentRepository.GetTournamentByUserId(loggedUser.Id);
-
+            List<TournamentReadDto> tournaments =  _mapper.Map<List<TournamentReadDto>>(
+                _tournamentRepository.GetTournamentByUserId(loggedUser.Id).ToList());
+            foreach (var tournament in tournaments.Where(tournament => !tournament.Completed))
+            {
+                tournament.Started = _tournamentRepository.IsTournamentStarted(tournament.Id);
+            }
             return tournaments.Any()
                 ? View("/Views/Tournament/GetAllTournaments.cshtml",
                     _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments))
