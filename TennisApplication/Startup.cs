@@ -31,32 +31,29 @@ namespace TennisApplication
         {
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseMySql(
                 Configuration.GetConnectionString("DatabaseConnection")));
-            
-            
+
+
             services.AddControllersWithViews().AddNewtonsoftJson(s =>
             {
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
-            
+
             //services.AddScoped<ITournamentRepository, TournamentRepositoryImpl>();
 
             services.AddScoped<ITournamentRepository, SqlTournamentRepository>();
             services.AddScoped<IUserRepository, SqlUserRepository>();
             services.AddScoped<IEnrolmentRepository, SqlEnrolmentRepository>();
             services.AddScoped<IMatchRepository, SqlMatchRepository>();
-            
+
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            
+
             services.AddRazorPages().AddViewOptions(options =>
             {
                 options.HtmlHelperOptions.ClientValidationEnabled = true;
             });
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(3600);
-            });
+            services.AddSession(options => { options.IdleTimeout = TimeSpan.FromSeconds(3600); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,21 +12,21 @@ namespace TennisApplication.Dtos.User
     public class UserReadDto
     {
         public int Id { get; set; }
-        
+
         public string FirstName { get; set; }
-        
+
         public string LastName { get; set; }
-        
-        [DataType(DataType.Password)]  
+
+        [DataType(DataType.Password)]
         [Required]
         public string Password { get; set; }
-        
-        [Required]
-        public string EMail { get; set; }
-        
+
+        [Required] public string EMail { get; set; }
+
         public Role Role { get; set; }
-        
+
         public byte[] Photo { get; set; }
+
         public UserReadDto()
         {
         }
@@ -58,11 +58,10 @@ namespace TennisApplication.Dtos.User
                 image = Image.Load(Path.Combine(StringConst.DirImg, StringConst.NameImg));
                 image = MyImage.ConvertToAvatarPhoto(image);
             }
-                    
+
             MemoryStream stream = new MemoryStream();
             image.SaveAsPng(stream);
             Photo = stream.ToArray();
-            
         }
     }
 }

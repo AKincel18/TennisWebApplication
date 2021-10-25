@@ -8,7 +8,9 @@ namespace TennisApplication.Repository.Tournament
         IEnumerable<Models.Tournament> GetAllTournaments();
         Models.Tournament GetTournamentById(int id);
         void CreateTournament(Models.Tournament tournament);
+
         void DeleteTournament(Models.Tournament tournament);
+
         //void UpdateTournament(Tournament tournament);
         IEnumerable<Models.Tournament> GetIncomingTournament();
 
@@ -16,7 +18,7 @@ namespace TennisApplication.Repository.Tournament
 
         IEnumerable<Models.Tournament> GetTournamentByUserId(int id);
         IEnumerable<Models.Tournament> GetOngoingTournaments();
-        
+
         IEnumerable<Models.Tournament> GetNotStartedTournaments();
         bool IsTournamentStarted(int tournamentId);
     }

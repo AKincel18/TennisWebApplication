@@ -16,6 +16,5 @@ namespace TennisApplication.Controllers
         {
             return RedirectToAction("GetAllTournaments", "Tournament");
         }
-
     }
 }

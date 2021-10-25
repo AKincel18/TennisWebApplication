@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TennisApplication.Models;
 
@@ -9,23 +8,18 @@ namespace TennisApplication.Dtos.User
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
+
         [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Please enter valid Email")]
         public string EMail { get; set; }
-        
-        //[Required(ErrorMessage = "Please provide Password", AllowEmptyStrings = true)]  
-        [DataType(DataType.Password)]  
-        //[StringLength(50, MinimumLength = 6, ErrorMessage = "Password must be 6 char long.")]
-        //[DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string Password { get; set; }
-        
-        [Compare("Password", ErrorMessage = "Confirm password dose not match.")]  
-        [DataType(DataType.Password)]  
+
+        [DataType(DataType.Password)] public string Password { get; set; }
+
+        [Compare("Password", ErrorMessage = "Confirm password dose not match.")]
+        [DataType(DataType.Password)]
         [NotMapped]
         public string ConfirmPassword { get; set; }
+
         public Role Role { get; set; }
         public byte[] Photo { get; set; }
-
-        
     }
 }

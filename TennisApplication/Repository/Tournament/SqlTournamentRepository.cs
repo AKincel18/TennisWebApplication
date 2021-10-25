@@ -79,8 +79,6 @@ namespace TennisApplication.Repository.Tournament
                 select new {Tournament = tournament};
 
             return query.Select(t => t.Tournament);
-
-
         }
 
         public IEnumerable<Models.Tournament> GetOngoingTournaments()
@@ -88,9 +86,11 @@ namespace TennisApplication.Repository.Tournament
             List<Models.Tournament> tournaments = _context.Tournaments
                 .Where(t => t.Completed == false).ToList();
 
-            return (from tournament in tournaments let match = _context.Matches
-                .FirstOrDefault(m => m.Tournament == tournament) 
-                where match != null select tournament)
+            return (from tournament in tournaments
+                    let match = _context.Matches
+                        .FirstOrDefault(m => m.Tournament == tournament)
+                    where match != null
+                    select tournament)
                 .ToList();
         }
 
@@ -99,9 +99,11 @@ namespace TennisApplication.Repository.Tournament
             List<Models.Tournament> tournaments = _context.Tournaments
                 .Where(t => t.Completed == false).ToList();
 
-            return (from tournament in tournaments let match = _context.Matches
-                        .FirstOrDefault(m => m.Tournament == tournament) 
-                    where match == null select tournament)
+            return (from tournament in tournaments
+                    let match = _context.Matches
+                        .FirstOrDefault(m => m.Tournament == tournament)
+                    where match == null
+                    select tournament)
                 .ToList();
         }
 

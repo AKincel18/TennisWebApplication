@@ -9,16 +9,17 @@ namespace TennisApplication.Others
     /*
      * https://github.com/SixLabors/Samples/blob/master/ImageSharp/AvatarWithRoundedCorner/Program.cs
      */
-    
+
     public static class MyImage
     {
         public static Image ConvertToAvatarPhoto(Image image)
         {
             return image.Clone(x => x.ConvertToAvatar(new Size(50, 50), 20));
         }
-        
+
         // Implements a full image mutating pipeline operating on IImageProcessingContext
-        private static IImageProcessingContext ConvertToAvatar(this IImageProcessingContext processingContext, Size size, float cornerRadius)
+        private static IImageProcessingContext ConvertToAvatar(this IImageProcessingContext processingContext,
+            Size size, float cornerRadius)
         {
             return processingContext.Resize(new ResizeOptions
             {
@@ -38,15 +39,18 @@ namespace TennisApplication.Others
             ctx.SetGraphicsOptions(new GraphicsOptions()
             {
                 Antialias = true,
-                AlphaCompositionMode = PixelAlphaCompositionMode.DestOut // enforces that any part of this shape that has color is punched out of the background
+                AlphaCompositionMode =
+                    PixelAlphaCompositionMode
+                        .DestOut // enforces that any part of this shape that has color is punched out of the background
             });
-            
+
             // mutating in here as we already have a cloned original
             // use any color (not Transparent), so the corners will be clipped
             foreach (var c in corners)
             {
                 ctx = ctx.Fill(Color.Red, c);
             }
+
             return ctx;
         }
 

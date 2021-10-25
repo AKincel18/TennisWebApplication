@@ -9,6 +9,7 @@ namespace TennisApplication.Others
         public TournamentReadDto TournamentDto { get; set; }
         public List<UserReadDto> Users { get; set; }
         public bool IsRegistered { get; set; }
+
         public TournamentParticipants(TournamentReadDto tournament, List<UserReadDto> users, bool isRegistered)
         {
             TournamentDto = tournament;

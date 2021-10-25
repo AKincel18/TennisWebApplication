@@ -8,7 +8,7 @@ using TennisApplication.Models;
 using TennisApplication.Repository.User;
 
 namespace TennisApplication.Controllers
-{   
+{
     [Route("/register")]
     [ApiController]
     public class RegisterController : Controller
@@ -29,7 +29,7 @@ namespace TennisApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser([FromForm] UserCreateDto userCreateDto, IFormFile  upload)
+        public ActionResult CreateUser([FromForm] UserCreateDto userCreateDto, IFormFile upload)
         {
             if (upload != null)
             {
@@ -55,12 +55,9 @@ namespace TennisApplication.Controllers
 
             UserReadDto userSession = _mapper.Map<UserReadDto>(userModel);
             userSession.AvatarPhoto();
-            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(userSession));
+            HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(userSession));
 
             return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
-
         }
-
-
     }
 }

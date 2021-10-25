@@ -10,7 +10,7 @@ using TennisApplication.Others;
 using TennisApplication.Repository.User;
 
 namespace TennisApplication.Controllers
-{    
+{
     [Route("/login")]
     [ApiController]
     public class LoginController : Controller
@@ -34,7 +34,7 @@ namespace TennisApplication.Controllers
         public ActionResult LoggedOut()
         {
             HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(null,
-                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore}));
+                new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore}));
             return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
         }
 
@@ -50,9 +50,8 @@ namespace TennisApplication.Controllers
 
             UserReadDto toSaving = _mapper.Map<UserReadDto>(user);
             toSaving.AvatarPhoto();
-            HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(toSaving));
+            HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(toSaving));
             return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
-            
         }
 
         [HttpGet("/edit")]
@@ -62,8 +61,9 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""});
             }
+
             User user = _repository.GetUserById(loggedUser.Id);
             return View(_mapper.Map<UserEditDto>(user));
         }
@@ -73,37 +73,36 @@ namespace TennisApplication.Controllers
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            
+
             if (loggedUser != null)
             {
                 User user = _repository.GetUserById(loggedUser.Id);
                 user.FirstName = userEditDto.FirstName;
                 user.LastName = userEditDto.LastName;
                 user.EMail = userEditDto.EMail;
-            
+
                 if (userEditDto.Password != null)
                 {
                     user.Password = userEditDto.Password;
                 }
-                
-                
+
+
                 if (upload != null)
                 {
                     var image = Image.Load(upload.OpenReadStream());
                     //image.Mutate(x => x.Resize(256, 256));
-                    
+
                     MemoryStream stream = new MemoryStream();
                     image.SaveAsPng(stream);
                     user.Photo = stream.ToArray();
-                    
                 }
-                
+
                 _repository.SaveChanges();
                 var userSession = _mapper.Map<UserReadDto>(user);
                 userSession.AvatarPhoto();
-                HttpContext.Session.SetString("SessionUser",JsonConvert.SerializeObject(userSession));
+                HttpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(userSession));
             }
-            
+
             return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
         }
     }

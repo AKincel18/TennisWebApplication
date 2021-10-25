@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using TennisApplication.Dtos.User;
 
-
 namespace TennisApplication.Others
 {
     public class DeserializeUser
     {
-
         private readonly IHttpContextAccessor _contextAccessor;
 
         public DeserializeUser(IHttpContextAccessor contextAccessor)
@@ -22,15 +20,15 @@ namespace TennisApplication.Others
             try
             {
                 loggedUser =
-                    JsonConvert.DeserializeObject<UserReadDto>(_contextAccessor.HttpContext.Session.GetString("SessionUser"));
+                    JsonConvert.DeserializeObject<UserReadDto>(
+                        _contextAccessor.HttpContext.Session.GetString("SessionUser"));
             }
             catch (ArgumentNullException)
             {
                 return null;
             }
-            
+
             return loggedUser;
         }
-
     }
 }

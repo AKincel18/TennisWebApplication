@@ -9,17 +9,17 @@ namespace TennisApplication.Dtos.Match
     public class MatchDto
     {
         public int Id { get; set; }
-        
+
         public TournamentReadDto TournamentDto { get; set; }
-        
+
         public UserReadDto Player1 { get; set; }
-        
+
         public UserReadDto Player2 { get; set; }
-        
+
         public Winner Winner { get; set; }
-        
+
         public string Result { get; set; }
-        
+
         public int Round { get; set; }
 
         public MatchDto()
@@ -34,13 +34,14 @@ namespace TennisApplication.Dtos.Match
             Round = round;
         }
 
-        public MatchDto(TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, int round, Winner winner) 
+        public MatchDto(TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, int round,
+            Winner winner)
             : this(tournamentDto, player1, player2, round)
         {
             Winner = winner;
         }
 
-        public MatchDto(int id, TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2, 
+        public MatchDto(int id, TournamentReadDto tournamentDto, UserReadDto player1, UserReadDto player2,
             Winner winner, string result, int round)
         {
             Id = id;
