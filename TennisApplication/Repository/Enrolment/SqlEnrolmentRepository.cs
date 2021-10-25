@@ -29,7 +29,7 @@ namespace TennisApplication.Repository.Enrolment
         }
 
         public Models.Enrolment FindEnrolment(int userId, int tournamentId)
-        { 
+        {
             return _context.Enrolments.FirstOrDefault(e => e.User.Id == userId && e.Tournament.Id == tournamentId);
         }
 

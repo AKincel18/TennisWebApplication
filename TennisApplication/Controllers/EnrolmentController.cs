@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using TennisApplication.Dtos.Enrolment;
 using TennisApplication.Dtos.User;
 using TennisApplication.Models;
@@ -14,7 +13,6 @@ namespace TennisApplication.Controllers
     [ApiController]
     public class EnrolmentController : Controller
     {
-        
         private readonly IEnrolmentRepository _repository;
         private readonly IMapper _mapper;
 
@@ -23,25 +21,23 @@ namespace TennisApplication.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-        
+
         [HttpGet("enrol/{id}")]
         public IActionResult EnrolTournament(int id)
-        {            
+        {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""});
             }
-            
+
             var enrolmentDto = new EnrolmentDto(id, loggedUser.Id);
             var enrolmentModel = _mapper.Map<Enrolment>(enrolmentDto);
             _repository.SaveEnrolment(enrolmentModel);
             _repository.SaveChanges();
-            
-            return RedirectToAction("GetIncomingTournament","Tournament");
-            
 
+            return RedirectToAction("GetIncomingTournament", "Tournament");
         }
 
         [HttpGet("withdraw/{id}")]
@@ -51,14 +47,14 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""});
             }
 
             var enrolment = _repository.FindEnrolment(loggedUser.Id, id);
             _repository.DeleteEnrolment(enrolment);
             _repository.SaveChanges();
 
-            return RedirectToAction("GetIncomingTournament","Tournament");
+            return RedirectToAction("GetIncomingTournament", "Tournament");
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using TennisApplication.Dtos.Enrolment;
 using TennisApplication.Dtos.Match;
 
 namespace TennisApplication.Profiles.Match

@@ -23,7 +23,7 @@ namespace TennisApplication.Controllers
         private readonly IMatchRepository _matchRepository;
         private readonly IMapper _mapper;
 
-        public TournamentController(ITournamentRepository repository, IMapper mapper, 
+        public TournamentController(ITournamentRepository repository, IMapper mapper,
             IUserRepository userRepository, IMatchRepository matchRepository)
         {
             _repository = repository;
@@ -31,13 +31,12 @@ namespace TennisApplication.Controllers
             _userRepository = userRepository;
             _matchRepository = matchRepository;
         }
-        
-        
+
+
         //GET /tournaments
         [HttpGet]
         public ActionResult<IEnumerable<TournamentReadDto>> GetAllTournaments()
         {
-            //var tournaments = _repository.GetAllTournaments();
             var ongoing = _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetOngoingTournaments());
             var notStarted = _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetNotStartedTournaments());
             var completed = _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetCompletedTournaments());
@@ -47,20 +46,20 @@ namespace TennisApplication.Controllers
                 tournamentReadDto.Started = true;
                 all.Add(tournamentReadDto);
             }
-            
+
             foreach (var tournamentReadDto in notStarted)
             {
                 tournamentReadDto.Started = false;
                 all.Add(tournamentReadDto);
             }
+
             foreach (var tournamentReadDto in completed)
             {
                 tournamentReadDto.Started = true;
                 all.Add(tournamentReadDto);
             }
-            
+
             return View(all);
-            //return RedirectToPage("./GetAllTournaments", _mapper.Map<IEnumerable<TournamentReadDto>>(tournaments));
         }
 
         [HttpGet("/createTournament")]
@@ -72,14 +71,15 @@ namespace TennisApplication.Controllers
             {
                 return RedirectToAction("LoginView", "Login");
             }
+
             if (loggedUser.Role == Role.Player)
             {
                 return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
             }
+
             return View();
-            
-            
         }
+
         //GET /tournaments/{id}
         [HttpGet("{id}", Name = "GetTournamentById")]
         public ActionResult<TournamentReadDto> GetTournamentById(int id)
@@ -87,17 +87,15 @@ namespace TennisApplication.Controllers
             var tournament = _repository.GetTournamentById(id);
             if (tournament != null)
             {
-
-                //return View("/Views/Tournament/TournamentDetail.cshtml",_mapper.Map<TournamentReadDto>(tournament) );
                 return Ok(_mapper.Map<TournamentReadDto>(tournament));
             }
+
             return NotFound();
         }
-        
+
         //POST /tournaments
-        
         [HttpPost]
-        public ActionResult<TournamentReadDto> CreateTournament([FromForm]TournamentCreateDto tournamentCreateDto)
+        public ActionResult<TournamentReadDto> CreateTournament([FromForm] TournamentCreateDto tournamentCreateDto)
         {
             Tournament tournament;
             if (tournamentCreateDto.Id != 0)
@@ -113,29 +111,27 @@ namespace TennisApplication.Controllers
                 tournament = _mapper.Map<Tournament>(tournamentCreateDto);
                 _repository.CreateTournament(tournament);
             }
-            _repository.SaveChanges();
 
-            //var tournamentReadDto = _mapper.Map<TournamentReadDto>(tournamentModel);
-            
-            //return CreatedAtRoute(nameof(GetTournamentById), new {tournamentReadDto.Id}, tournamentReadDto); //create resource -> 201
+            _repository.SaveChanges();
             return RedirectToAction(nameof(GetAllTournaments)); //return to GetAllTournaments
         }
-        
+
         //PUT /tournaments/{id}
         [HttpGet("/edit/{id}")]
-        public ActionResult UpdateTournamentView(int id /*[FromForm] TournamentCreateDto tournamentCreateDto*/)
+        public ActionResult UpdateTournamentView(int id)
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""});
             }
 
             if (loggedUser.Role == Role.Player)
             {
-                return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""}); 
+                return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
             }
+
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
             {
@@ -143,18 +139,13 @@ namespace TennisApplication.Controllers
             }
 
             TournamentCreateDto tournamentCreateDto = _mapper.Map<TournamentCreateDto>(tournamentModelFromRepository);
-            
-            //_mapper.Map(tournamentCreateDto, tournamentModelFromRepository); //updating
-            
-            //_repository.UpdateTournament(tournamentModelFromRepository);
-            //_repository.SaveChanges();
-
             return View("CreateTournamentView", tournamentCreateDto);
         }
-        
+
         //PATCH /tournaments/{id}
         [HttpPatch]
-        public ActionResult PartialTournamentUpdate(int id, [FromForm] JsonPatchDocument<TournamentReadDto> patchDocument)
+        public ActionResult PartialTournamentUpdate(int id,
+            [FromForm] JsonPatchDocument<TournamentReadDto> patchDocument)
         {
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
@@ -164,18 +155,18 @@ namespace TennisApplication.Controllers
 
             var tournamentToPatch = _mapper.Map<TournamentReadDto>(tournamentModelFromRepository);
             patchDocument.ApplyTo(tournamentToPatch, ModelState);
-            
+
             if (!TryValidateModel(tournamentToPatch))
             {
                 return ValidationProblem(ModelState);
             }
-            
+
             _mapper.Map(tournamentToPatch, tournamentModelFromRepository); //patching
             _repository.SaveChanges();
 
             return NoContent();
         }
-        
+
         //DELETE /tournaments/{id}
         [HttpGet("/delete/{id}")]
         public ActionResult DeleteTournament(int id)
@@ -184,14 +175,14 @@ namespace TennisApplication.Controllers
             UserReadDto loggedUser = deserializable.GetLoggedUser();
             if (loggedUser == null)
             {
-                return RedirectToAction("LoginView", "Login", new {area = ""}); 
+                return RedirectToAction("LoginView", "Login", new {area = ""});
             }
 
             if (loggedUser.Role == Role.Player)
             {
-                return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""}); 
+                return RedirectToAction("GetAllTournaments", "Tournament", new {area = ""});
             }
-            
+
             var tournamentModelFromRepository = _repository.GetTournamentById(id);
             if (tournamentModelFromRepository == null)
             {
@@ -203,7 +194,7 @@ namespace TennisApplication.Controllers
                 TempData["CantDelete"] = tournamentModelFromRepository.Name;
                 return RedirectToAction(nameof(GetAllTournaments));
             }
-            
+
             _repository.DeleteTournament(tournamentModelFromRepository);
             _repository.SaveChanges();
             TempData["deleted"] = tournamentModelFromRepository.Name;
@@ -215,28 +206,26 @@ namespace TennisApplication.Controllers
         {
             DeserializeUser deserializable = new DeserializeUser(new HttpContextAccessor());
             UserReadDto loggedUser = deserializable.GetLoggedUser();
-            
+
             IEnumerable<TournamentReadDto> tournamentsReadDto =
                 _mapper.Map<IEnumerable<TournamentReadDto>>(_repository.GetIncomingTournament());
-            
+
             List<TournamentParticipants> tournamentUserReadDtos = new List<TournamentParticipants>();
-            
+
             foreach (var tournamentDto in tournamentsReadDto)
             {
                 var usersDto = _mapper.Map<List<UserReadDto>>(_userRepository.GetUsersByTournament(tournamentDto.Id));
-                var isRegistered = loggedUser != null && _userRepository.IsUserRegisteredForTournamentById(loggedUser.Id,
+                var isRegistered = loggedUser != null && _userRepository.IsUserRegisteredForTournamentById(
+                    loggedUser.Id,
                     tournamentDto.Id);
-                
+
                 if (!_matchRepository.IsAnyMatchInTheTournament(tournamentDto.Id))
                 {
                     tournamentUserReadDtos.Add(new TournamentParticipants(tournamentDto, usersDto, isRegistered));
                 }
             }
-            
-            //return View((_mapper.Map<IEnumerable<TournamentReadDto>>(tournaments)));
+
             return View(tournamentUserReadDtos);
         }
-        
-
     }
 }
